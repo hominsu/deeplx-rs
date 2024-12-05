@@ -1,0 +1,33 @@
+on: [ push, pull_request ]
+
+name: CI
+
+env:
+  RUSTTOOLCHAIN: "stable"
+
+jobs:
+  deeplx:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install stable toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: ${{ env.RUSTTOOLCHAIN }}
+          components: rustfmt, clippy
+
+      - name: Run cargo check
+        run: cargo check --all-targets
+
+      - name: Run cargo test
+        run: cargo test --all-targets
+
+      - name: Run cargo fmt
+        run: cargo fmt --all -- --check
+
+      - name: Run cargo clippy
+        run: cargo clippy --all-targets -- -D warnings

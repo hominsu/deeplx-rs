@@ -7,6 +7,7 @@
 <a href="https://github.com/hominsu/deeplx-rs/stargazers"><img src="https://img.shields.io/github/stars/hominsu/deeplx-rs.svg?style=for-the-badge" alt="Stargazers"></a>
 <a href="https://github.com/hominsu/deeplx-rs/issues"><img src="https://img.shields.io/github/issues/hominsu/deeplx-rs.svg?style=for-the-badge" alt="Issues"></a>
 <a href="https://github.com/hominsu/deeplx-rs/blob/master/LICENSE"><img src="https://img.shields.io/github/license/hominsu/deeplx-rs.svg?style=for-the-badge" alt="License"></a>
+<a href="https://github.com/hominsu/deeplx-rs/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/hominsu/deeplx-rs/ci.yml?branch=main&style=for-the-badge" alt="Build"></a>
 </p>
 
 
