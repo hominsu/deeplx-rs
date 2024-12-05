@@ -6,6 +6,8 @@ authors = [
     "Homing So <i@homing.so>"
 ]
 description = "A Rust package for unlimited DeepL translation"
+license = "MIT"
+readme = "README.md"
 repository = "https://github.com/hominsu/deeplx-rs"
 
 [dependencies]
