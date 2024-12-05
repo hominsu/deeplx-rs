@@ -9,6 +9,7 @@ description = "A Rust package for unlimited DeepL translation"
 license = "MIT"
 readme = "README.md"
 repository = "https://github.com/hominsu/deeplx-rs"
+exclude = [".*"]
 
 [dependencies]
 rand = { version = "0.8" }
