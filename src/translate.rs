@@ -3,8 +3,8 @@ use crate::data::{
 };
 use crate::utils::{get_i_count, get_random_number, get_timestamp, is_rich_text};
 use reqwest::header::{
-    HeaderMap, HeaderValue, ACCEPT, ACCEPT_LANGUAGE, AUTHORIZATION, CACHE_CONTROL,
-    CONTENT_TYPE, COOKIE, DNT, ORIGIN, PRAGMA, REFERER, USER_AGENT,
+    HeaderMap, HeaderValue, ACCEPT, ACCEPT_LANGUAGE, AUTHORIZATION, CACHE_CONTROL, CONTENT_TYPE,
+    COOKIE, DNT, ORIGIN, PRAGMA, REFERER, USER_AGENT,
 };
 use reqwest::{Client, Proxy};
 use std::error::Error;
@@ -210,7 +210,7 @@ impl DeepLX {
             params: Params {
                 common_job_params: CommonJobParams {
                     mode: "translate",
-                    regional_variant: has_regional_variant.then(|| target_lang),
+                    regional_variant: has_regional_variant.then_some(target_lang),
                 },
                 lang: Lang {
                     source_lang_computed: Some(source_lang_detached.as_str()),

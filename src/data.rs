@@ -1,6 +1,6 @@
 use serde::{Deserialize, Serialize};
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub(crate) struct Lang<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -10,31 +10,12 @@ pub(crate) struct Lang<'a> {
     pub lang_user_selected: Option<&'a str>,
 }
 
-impl Default for Lang<'_> {
-    fn default() -> Self {
-        Lang {
-            source_lang_computed: None,
-            target_lang: "",
-            lang_user_selected: None,
-        }
-    }
-}
-
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub(crate) struct CommonJobParams<'a> {
     pub mode: &'a str,
     #[serde(rename = "regionalVariant", skip_serializing_if = "Option::is_none")]
     pub regional_variant: Option<&'a str>,
-}
-
-impl Default for CommonJobParams<'_> {
-    fn default() -> Self {
-        CommonJobParams {
-            mode: "",
-            regional_variant: None,
-        }
-    }
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -55,7 +36,7 @@ pub(crate) struct Job<'a> {
     pub sentences: Vec<Sentence<'a>>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Default, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub(crate) struct Params<'a> {
     #[serde(rename = "commonJobParams")]
@@ -71,20 +52,6 @@ pub(crate) struct Params<'a> {
     pub priority: Option<i32>,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub timestamp: Option<i64>,
-}
-
-impl Default for Params<'_> {
-    fn default() -> Self {
-        Params {
-            common_job_params: CommonJobParams::default(),
-            lang: Lang::default(),
-            texts: None,
-            text_type: None,
-            jobs: None,
-            priority: None,
-            timestamp: None,
-        }
-    }
 }
 
 #[derive(Debug, Serialize, Deserialize)]
