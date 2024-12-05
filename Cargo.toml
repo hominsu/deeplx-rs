@@ -1,0 +1,29 @@
+[package]
+name = "deeplx"
+version = "0.1.0"
+edition = "2021"
+authors = [
+    "Homing So <i@homing.so>"
+]
+description = "A Rust package for unlimited DeepL translation"
+repository = "https://github.com/hominsu/deeplx-rs"
+
+[dependencies]
+rand = { version = "0.8" }
+chrono = { version = "0.4" }
+
+brotli = { version = "7" }
+serde = { version = "1", features = ["derive"] }
+serde_json = { version = "1" }
+
+isolang = { version = "2.4.0" }
+whatlang = { version = "0.16" }
+
+reqwest = { version = "0.12", features = ["json", "brotli"] }
+
+[dev-dependencies]
+lazy_static = { version = "1" }
+tokio = { version = "1", features = ["macros"] }
+
+[[test]]
+name = "translate"
