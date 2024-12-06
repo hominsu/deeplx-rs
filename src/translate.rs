@@ -11,6 +11,11 @@ use std::error::Error;
 use std::io::Read;
 use std::sync::Arc;
 
+/// The main entry point for interacting with the DeepL translation service.
+///
+/// `DeepLX` provides methods to create a translation client and perform translation
+/// requests. You can optionally specify a proxy, choose source and target languages, and
+/// handle text with or without HTML/XML tags.
 #[derive(Clone)]
 pub struct DeepLX {
     client: Arc<Client>,
@@ -19,6 +24,24 @@ pub struct DeepLX {
 }
 
 impl DeepLX {
+    /// Constructs a new `DeepLX` instance.
+    ///
+    /// # Parameters
+    ///
+    /// * `proxy` - An optional proxy URL, e.g. `"http://127.0.0.1:8080"`. If `None`, no proxy is used.
+    ///
+    /// # Panics
+    ///
+    /// This method will panic if the provided proxy string is invalid.
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use deeplx::DeepLX;
+    ///
+    /// let translator = DeepLX::new(None);
+    /// let translator_with_proxy = DeepLX::new(Some("http://localhost:8080"));
+    /// ```
     pub fn new(proxy: Option<&str>) -> Self {
         let builder = Client::builder();
         let client = match proxy {
@@ -157,6 +180,40 @@ impl DeepLX {
             .collect()
     }
 
+    /// Translates the given text from a source language to a target language.
+    ///
+    /// This method automatically handles splitting the text into translation jobs,
+    /// detecting the source language (if set to "auto"), and returning the translated text.
+    ///
+    /// # Parameters
+    ///
+    /// * `source_lang` - The source language code, e.g. `"en"`. Use `"auto"` to let the system detect the language.
+    /// * `target_lang` - The target language code, e.g. `"zh"` or `"EN-GB"` for a regional variant.
+    /// * `text` - The text to translate. Cannot be empty.
+    /// * `tag_handling` - An optional parameter specifying the handling of tags, e.g. `"html"`, `"xml"`, or `None`.
+    /// * `deepl_session` - An optional session string. If `None`, the "Free" method is used; otherwise "Pro".
+    ///
+    /// # Returns
+    ///
+    /// On success, returns a `DeepLXTranslationResult` containing the translated text and alternatives.
+    /// On failure, returns an `Err` containing the underlying error.
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use deeplx::DeepLX;
+    ///
+    /// #[tokio::main]
+    /// async fn main() {
+    ///     let translator = DeepLX::new(None);
+    ///     match translator
+    ///         .translate("auto", "zh", "Hello, world!", None, None)
+    ///         .await {
+    ///         Ok(res) => println!("Translated: {}", res.data),
+    ///         Err(e) => eprintln!("Error: {}", e),
+    ///     }
+    /// }
+    /// ```
     pub async fn translate(
         &self,
         source_lang: &str,
@@ -276,9 +333,9 @@ impl DeepLX {
             source_lang: source_lang_detached,
             target_lang: target_lang.to_string(),
             method: if deepl_session.is_none() {
-                "Pro"
-            } else {
                 "Free"
+            } else {
+                "Pro"
             }
             .to_string(),
             ..Default::default()
