@@ -1,5 +1,6 @@
 use crate::data::{
     CommonJobParams, DeepLXTranslationResult, Job, Lang, Params, PostData, Sentence,
+    SplitTextResponse, TranslationResponse,
 };
 use crate::utils::{get_i_count, get_random_number, get_timestamp, is_rich_text};
 use reqwest::header::{
@@ -63,7 +64,7 @@ impl DeepLX {
         post_data: &PostData<'_>,
         method: &str,
         deepl_session: Option<&str>,
-    ) -> Result<serde_json::Value, Box<dyn Error>> {
+    ) -> Result<Vec<u8>, Box<dyn Error>> {
         let full_url = format!(
             "{}?client=chrome-extension,1.28.0&method={}",
             self.base_url, method
@@ -110,7 +111,7 @@ impl DeepLX {
             full.to_vec()
         };
 
-        serde_json::from_slice(&bytes).map_err(|e| e.into())
+        Ok(bytes)
     }
 
     async fn split_text(
@@ -118,7 +119,7 @@ impl DeepLX {
         text: &str,
         tag_handling: bool,
         deepl_session: Option<&str>,
-    ) -> Result<serde_json::Value, Box<dyn Error>> {
+    ) -> Result<Vec<u8>, Box<dyn Error>> {
         let post_data = PostData {
             json_rpc: "2.0",
             method: "LMT_split_text",
@@ -145,22 +146,20 @@ impl DeepLX {
             .await
     }
 
-    fn extract_jobs<'a>(&self, split_result: &'a serde_json::Value) -> Vec<Job<'a>> {
-        let chunks = split_result["result"]["texts"][0]["chunks"]
-            .as_array()
-            .unwrap();
+    fn extract_jobs<'a>(&self, split_result: &'a SplitTextResponse) -> Vec<Job<'a>> {
+        let chunks = &split_result.result.texts[0].chunks;
         chunks
             .iter()
             .enumerate()
             .map(|(idx, chunk)| {
-                let sentence = &chunk["sentences"][0];
+                let sentence = &chunk.sentences[0];
                 let context_before = if idx > 0 {
-                    vec![chunks[idx - 1]["sentences"][0]["text"].as_str().unwrap()]
+                    vec![chunks[idx - 1].sentences[0].text.as_ref()]
                 } else {
                     vec![]
                 };
                 let context_after = if idx < chunks.len() - 1 {
-                    vec![chunks[idx + 1]["sentences"][0]["text"].as_str().unwrap()]
+                    vec![chunks[idx + 1].sentences[0].text.as_ref()]
                 } else {
                     vec![]
                 };
@@ -171,9 +170,9 @@ impl DeepLX {
                     raw_en_context_before: context_before,
                     raw_en_context_after: context_after,
                     sentences: vec![Sentence {
-                        prefix: sentence["prefix"].as_str().unwrap(),
-                        text: sentence["text"].as_str().unwrap(),
-                        id: (idx + 1) as i32,
+                        prefix: sentence.prefix.clone(),
+                        text: sentence.text.clone(),
+                        id: Some((idx + 1) as i32),
                     }],
                 }
             })
@@ -230,14 +229,14 @@ impl DeepLX {
             });
         }
 
-        let split_result = self
+        let bytes = self
             .split_text(
                 text,
                 matches!(tag_handling, Some("html" | "xml")),
                 deepl_session,
             )
             .await?;
-
+        let split_result: SplitTextResponse = serde_json::from_slice(&bytes)?;
         let jobs = self.extract_jobs(&split_result);
 
         let source_lang_detached = match source_lang {
@@ -281,41 +280,34 @@ impl DeepLX {
             },
         };
 
-        let resp = self
+        let bytes = &self
             .make_request(&post_data, "LMT_handle_jobs", deepl_session)
             .await?;
+        let resp: TranslationResponse = serde_json::from_slice(bytes)?;
 
         let mut alternatives = Vec::new();
         let mut translated_text = String::new();
-        if let Some(translations) = resp["result"]["translations"].as_array() {
-            if !translations.is_empty() {
-                let num_beams = translations[0]["beams"]
-                    .as_array()
-                    .map_or(0, |beams| beams.len());
-                for idx in 0..num_beams {
-                    let mut alt_text = String::new();
-                    for translation in translations {
-                        if let Some(beams) = translation["beams"].as_array() {
-                            if idx < beams.len() {
-                                if let Some(text) = beams[idx]["sentences"][0]["text"].as_str() {
-                                    alt_text.push_str(text)
-                                }
-                            }
-                        }
-                    }
-                    if !alt_text.is_empty() {
-                        alternatives.push(alt_text);
+        let translations = resp.result.translations;
+        if !translations.is_empty() {
+            let num_beams = translations[0].beams.len();
+            for idx in 0..num_beams {
+                let mut alt_text = String::new();
+                for translation in &translations {
+                    let beams = &translation.beams;
+                    if idx < beams.len() {
+                        alt_text.push_str(&beams[idx].sentences[0].text);
                     }
                 }
-                for translation in translations {
-                    if let Some(text) = translation["beams"][0]["sentences"][0]["text"].as_str() {
-                        translated_text.push_str(text);
-                        translated_text.push(' ');
-                    }
+                if !alt_text.is_empty() {
+                    alternatives.push(alt_text);
                 }
-                translated_text = translated_text.trim().to_string();
             }
-        };
+            for translation in &translations {
+                translated_text.push_str(&translation.beams[0].sentences[0].text);
+                translated_text.push(' ');
+            }
+        }
+        translated_text = translated_text.trim().to_string();
 
         if translated_text.is_empty() {
             return Ok(DeepLXTranslationResult {

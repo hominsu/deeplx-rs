@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
+use std::borrow::Cow;
 
-#[derive(Debug, Default, Serialize, Deserialize)]
+#[derive(Debug, Default, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub(crate) struct Lang<'a> {
     #[serde(skip_serializing_if = "Option::is_none")]
@@ -10,7 +11,7 @@ pub(crate) struct Lang<'a> {
     pub lang_user_selected: Option<&'a str>,
 }
 
-#[derive(Debug, Default, Serialize, Deserialize)]
+#[derive(Debug, Default, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub(crate) struct CommonJobParams<'a> {
     pub mode: &'a str,
@@ -21,12 +22,14 @@ pub(crate) struct CommonJobParams<'a> {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub(crate) struct Sentence<'a> {
-    pub prefix: &'a str,
-    pub text: &'a str,
-    pub id: i32,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub prefix: Option<Cow<'a, str>>,
+    pub text: Cow<'a, str>,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub id: Option<i32>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub(crate) struct Job<'a> {
     pub kind: &'a str,
@@ -36,7 +39,7 @@ pub(crate) struct Job<'a> {
     pub sentences: Vec<Sentence<'a>>,
 }
 
-#[derive(Debug, Default, Serialize, Deserialize)]
+#[derive(Debug, Default, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub(crate) struct Params<'a> {
     #[serde(rename = "commonJobParams")]
@@ -54,7 +57,7 @@ pub(crate) struct Params<'a> {
     pub timestamp: Option<i64>,
 }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub(crate) struct PostData<'a> {
     #[serde(rename = "jsonrpc")]
@@ -66,8 +69,8 @@ pub(crate) struct PostData<'a> {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
-pub(crate) struct SplitTextResponseResultLang<'a> {
-    pub detected: &'a str,
+pub(crate) struct SplitTextResponseResultLang {
+    pub detected: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -87,8 +90,7 @@ pub(crate) struct SplitTextResponseResultText<'a> {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub(crate) struct SplitTextResponseResult<'a> {
-    #[serde(borrow)]
-    pub lang: SplitTextResponseResultLang<'a>,
+    pub lang: SplitTextResponseResultLang,
     #[serde(borrow)]
     pub texts: Vec<SplitTextResponseResultText<'a>>,
 }
@@ -97,7 +99,7 @@ pub(crate) struct SplitTextResponseResult<'a> {
 #[serde(rename_all = "snake_case")]
 pub(crate) struct SplitTextResponse<'a> {
     #[serde(rename = "jsonrpc")]
-    pub json_rpc: &'a str,
+    pub json_rpc: String,
     pub id: i64,
     #[serde(borrow)]
     pub result: SplitTextResponseResult<'a>,
@@ -132,6 +134,7 @@ pub(crate) struct TranslationResponse<'a> {
     #[serde(rename = "jsonrpc")]
     pub json_rpc: &'a str,
     pub id: i64,
+    #[serde(borrow)]
     pub result: TranslationResponseResult<'a>,
 }
 
@@ -139,7 +142,7 @@ pub(crate) struct TranslationResponse<'a> {
 ///
 /// This struct aggregates all necessary information after a translation request,
 /// including the translated text, alternatives, source language, target language, and more.
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub struct DeepLXTranslationResult {
     /// The HTTP-like status code. `200` indicates success, other values indicate various errors or failure states.
