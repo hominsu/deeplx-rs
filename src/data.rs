@@ -1,5 +1,4 @@
 use serde::{Deserialize, Serialize};
-use std::borrow::Cow;
 
 #[derive(Debug, Default, Serialize)]
 #[serde(rename_all = "snake_case")]
@@ -21,10 +20,10 @@ pub(crate) struct CommonJobParams<'a> {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
-pub(crate) struct Sentence<'a> {
+pub(crate) struct Sentence {
     #[serde(skip_serializing_if = "Option::is_none")]
-    pub prefix: Option<Cow<'a, str>>,
-    pub text: Cow<'a, str>,
+    pub prefix: Option<String>,
+    pub text: String,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub id: Option<i32>,
 }
@@ -36,7 +35,7 @@ pub(crate) struct Job<'a> {
     pub preferred_num_beams: i32,
     pub raw_en_context_before: Vec<&'a str>,
     pub raw_en_context_after: Vec<&'a str>,
-    pub sentences: Vec<Sentence<'a>>,
+    pub sentences: Vec<Sentence>,
 }
 
 #[derive(Debug, Default, Serialize)]
@@ -75,55 +74,48 @@ pub(crate) struct SplitTextResponseResultLang {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
-pub(crate) struct SplitTextResponseResultChunk<'a> {
-    #[serde(borrow)]
-    pub sentences: Vec<Sentence<'a>>,
+pub(crate) struct SplitTextResponseResultChunk {
+    pub sentences: Vec<Sentence>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
-pub(crate) struct SplitTextResponseResultText<'a> {
-    #[serde(borrow)]
-    pub chunks: Vec<SplitTextResponseResultChunk<'a>>,
+pub(crate) struct SplitTextResponseResultText {
+    pub chunks: Vec<SplitTextResponseResultChunk>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
-pub(crate) struct SplitTextResponseResult<'a> {
+pub(crate) struct SplitTextResponseResult {
     pub lang: SplitTextResponseResultLang,
-    #[serde(borrow)]
-    pub texts: Vec<SplitTextResponseResultText<'a>>,
+    pub texts: Vec<SplitTextResponseResultText>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
-pub(crate) struct SplitTextResponse<'a> {
+pub(crate) struct SplitTextResponse {
     #[serde(rename = "jsonrpc")]
     pub json_rpc: String,
     pub id: i64,
-    #[serde(borrow)]
-    pub result: SplitTextResponseResult<'a>,
+    pub result: SplitTextResponseResult,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
-pub(crate) struct TranslationResponseResultBeam<'a> {
-    #[serde(borrow)]
-    pub sentences: Vec<Sentence<'a>>,
+pub(crate) struct TranslationResponseResultBeam {
+    pub sentences: Vec<Sentence>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
-pub(crate) struct TranslationResponseResultTranslation<'a> {
-    #[serde(borrow)]
-    pub beams: Vec<TranslationResponseResultBeam<'a>>,
+pub(crate) struct TranslationResponseResultTranslation {
+    pub beams: Vec<TranslationResponseResultBeam>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "snake_case")]
 pub(crate) struct TranslationResponseResult<'a> {
-    #[serde(borrow)]
-    pub translations: Vec<TranslationResponseResultTranslation<'a>>,
+    pub translations: Vec<TranslationResponseResultTranslation>,
     pub source_lang: &'a str,
     pub target_lang: &'a str,
 }

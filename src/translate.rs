@@ -295,7 +295,7 @@ impl DeepLX {
                 for translation in &translations {
                     let beams = &translation.beams;
                     if idx < beams.len() {
-                        alt_text.push_str(&beams[idx].sentences[0].text);
+                        alt_text.push_str(beams[idx].sentences[0].text.as_ref());
                     }
                 }
                 if !alt_text.is_empty() {
@@ -303,7 +303,7 @@ impl DeepLX {
                 }
             }
             for translation in &translations {
-                translated_text.push_str(&translation.beams[0].sentences[0].text);
+                translated_text.push_str(translation.beams[0].sentences[0].text.as_ref());
                 translated_text.push(' ');
             }
         }
