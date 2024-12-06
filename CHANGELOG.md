@@ -5,11 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## v0.1.2 (2024-12-06)
+## v0.1.3 (2024-12-06)
 
 ### Refactor
 
- - <csr-id-00ce8653b58562bfe39901889a542c3faae15e8f/> serialize data into struct
+ - <csr-id-68e63558cfaaa04ab33970aa26afa90f9a7712d4/> String is enough for this case
 
 ### Commit Statistics
 
@@ -26,6 +26,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - String is enough for this case ([`68e6355`](https://github.com/hominsu/deeplx-rs/commit/68e63558cfaaa04ab33970aa26afa90f9a7712d4))
+</details>
+
+## v0.1.2 (2024-12-06)
+
+<csr-id-00ce8653b58562bfe39901889a542c3faae15e8f/>
+
+### Refactor
+
+ - <csr-id-00ce8653b58562bfe39901889a542c3faae15e8f/> serialize data into struct
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 2 commits contributed to the release.
+ - 1 commit was understood as [conventional](https://www.conventionalcommits.org).
+ - 0 issues like '(#ID)' were seen in commit messages
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **Uncategorized**
+    - Release deeplx v0.1.2 ([`6118c58`](https://github.com/hominsu/deeplx-rs/commit/6118c58ac4a7028f9b28460dc5d70114cea5a394))
     - Serialize data into struct ([`00ce865`](https://github.com/hominsu/deeplx-rs/commit/00ce8653b58562bfe39901889a542c3faae15e8f))
 </details>
 
