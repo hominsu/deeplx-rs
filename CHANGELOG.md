@@ -5,7 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v0.1.2 (2024-12-06)
+
+### Refactor
+
+ - <csr-id-00ce8653b58562bfe39901889a542c3faae15e8f/> serialize data into struct
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 1 commit contributed to the release.
+ - 1 commit was understood as [conventional](https://www.conventionalcommits.org).
+ - 0 issues like '(#ID)' were seen in commit messages
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **Uncategorized**
+    - Serialize data into struct ([`00ce865`](https://github.com/hominsu/deeplx-rs/commit/00ce8653b58562bfe39901889a542c3faae15e8f))
+</details>
+
 ## v0.1.1 (2024-12-06)
+
+<csr-id-7fa3532f7169fecc232d0957c41d2442750bc7d2/>
 
 ### Chore
 
@@ -19,7 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <csr-read-only-do-not-edit/>
 
- - 2 commits contributed to the release.
+ - 3 commits contributed to the release.
  - 2 commits were understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
 
@@ -30,6 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Release deeplx v0.1.1 ([`481e1de`](https://github.com/hominsu/deeplx-rs/commit/481e1de2a77af922d79d391fe2c1eadde96756c7))
     - More metadate ([`7fa3532`](https://github.com/hominsu/deeplx-rs/commit/7fa3532f7169fecc232d0957c41d2442750bc7d2))
     - Add more docs ([`be15438`](https://github.com/hominsu/deeplx-rs/commit/be1543807e28738be3fc0891a2c72aee6c23bea4))
 </details>
