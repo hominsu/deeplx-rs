@@ -13,6 +13,10 @@ keywords = ["deeplx", "translation"]
 categories = ["text-processing", "internationalization"]
 exclude = [".*"]
 
+[features]
+default = ["proxy"]
+proxy = []
+
 [package.metadata.docs.rs]
 all-features = true
 

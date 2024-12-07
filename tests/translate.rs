@@ -3,8 +3,14 @@ mod tests {
     use deeplx::DeepLX;
     use lazy_static::lazy_static;
 
+    #[cfg(feature = "proxy")]
     lazy_static! {
         static ref TRANSLATOR: DeepLX = DeepLX::new(None);
+    }
+
+    #[cfg(not(feature = "proxy"))]
+    lazy_static! {
+        static ref TRANSLATOR: DeepLX = DeepLX::new();
     }
 
     #[tokio::test]

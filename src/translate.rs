@@ -7,16 +7,19 @@ use reqwest::header::{
     HeaderMap, HeaderValue, ACCEPT, ACCEPT_LANGUAGE, AUTHORIZATION, CACHE_CONTROL, CONTENT_TYPE,
     COOKIE, DNT, ORIGIN, PRAGMA, REFERER, USER_AGENT,
 };
-use reqwest::{Client, Proxy};
+use reqwest::Client;
 use std::error::Error;
 use std::io::Read;
 use std::sync::Arc;
 
+#[cfg(feature = "proxy")]
+use reqwest::Proxy;
+
 /// The main entry point for interacting with the DeepL translation service.
 ///
 /// `DeepLX` provides methods to create a translation client and perform translation
-/// requests. You can optionally specify a proxy, choose source and target languages, and
-/// handle text with or without HTML/XML tags.
+/// requests. You can optionally specify a proxy (with default feature `proxy`),
+/// choose source and target languages, and handle text with or without HTML/XML tags.
 #[derive(Clone)]
 pub struct DeepLX {
     client: Arc<Client>,
@@ -29,7 +32,7 @@ impl DeepLX {
     ///
     /// # Parameters
     ///
-    /// * `proxy` - An optional proxy URL, e.g. `"http://127.0.0.1:8080"`. If `None`, no proxy is used.
+    /// * `proxy` - An optional proxy URL, e.g. `"http://pro.xy"`. If `None`, no proxy is used.
     ///
     /// # Panics
     ///
@@ -41,8 +44,9 @@ impl DeepLX {
     /// use deeplx::DeepLX;
     ///
     /// let translator = DeepLX::new(None);
-    /// let translator_with_proxy = DeepLX::new(Some("http://localhost:8080"));
+    /// let translator_with_proxy = DeepLX::new(Some("http://pro.xy"));
     /// ```
+    #[cfg(feature = "proxy")]
     pub fn new(proxy: Option<&str>) -> Self {
         let builder = Client::builder();
         let client = match proxy {
@@ -51,6 +55,26 @@ impl DeepLX {
         }
         .build()
         .unwrap();
+
+        Self {
+            client: Arc::new(client),
+            base_url: "https://www2.deepl.com/jsonrpc",
+            headers: headers(),
+        }
+    }
+
+    /// Constructs a new `DeepLX` instance.
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use deeplx::DeepLX;
+    ///
+    /// let translator = DeepLX::new();
+    /// ```
+    #[cfg(not(feature = "proxy"))]
+    pub fn new() -> Self {
+        let client = Client::builder().build().unwrap();
 
         Self {
             client: Arc::new(client),
