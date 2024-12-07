@@ -5,11 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## v0.1.5 (2024-12-07)
+## v0.1.6 (2024-12-07)
 
-### New Features
+### Bug Fixes
 
- - <csr-id-52b2c96cf1a4241489795108b651d8f080fca5e6/> add `Config` to configure `DeepLX`
+ - <csr-id-4cb9afa234f7e1bdacda61309804afd6e2fc7a7f/> error in `DeepLX::new`
 
 ### Commit Statistics
 
@@ -26,6 +26,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Error in `DeepLX::new` ([`4cb9afa`](https://github.com/hominsu/deeplx-rs/commit/4cb9afa234f7e1bdacda61309804afd6e2fc7a7f))
+</details>
+
+## v0.1.5 (2024-12-07)
+
+### New Features
+
+ - <csr-id-52b2c96cf1a4241489795108b651d8f080fca5e6/> add `Config` to configure `DeepLX`
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 2 commits contributed to the release.
+ - 1 commit was understood as [conventional](https://www.conventionalcommits.org).
+ - 0 issues like '(#ID)' were seen in commit messages
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **Uncategorized**
+    - Release deeplx v0.1.5 ([`a626ba8`](https://github.com/hominsu/deeplx-rs/commit/a626ba85a4ed174a459e69dec0aef12257553c9c))
     - Add `Config` to configure `DeepLX` ([`52b2c96`](https://github.com/hominsu/deeplx-rs/commit/52b2c96cf1a4241489795108b651d8f080fca5e6))
 </details>
 
