@@ -5,11 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## v0.1.4 (2024-12-07)
+## v0.1.5 (2024-12-07)
 
 ### New Features
 
- - <csr-id-7c437e823e0e1845b60c2e99fb53685e790d9839/> use proxy as default feature
+ - <csr-id-52b2c96cf1a4241489795108b651d8f080fca5e6/> add `Config` to configure `DeepLX`
 
 ### Commit Statistics
 
@@ -26,6 +26,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Add `Config` to configure `DeepLX` ([`52b2c96`](https://github.com/hominsu/deeplx-rs/commit/52b2c96cf1a4241489795108b651d8f080fca5e6))
+</details>
+
+## v0.1.4 (2024-12-07)
+
+### New Features
+
+ - <csr-id-7c437e823e0e1845b60c2e99fb53685e790d9839/> use proxy as default feature
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 2 commits contributed to the release.
+ - 1 commit was understood as [conventional](https://www.conventionalcommits.org).
+ - 0 issues like '(#ID)' were seen in commit messages
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **Uncategorized**
+    - Release deeplx v0.1.4 ([`edaa15f`](https://github.com/hominsu/deeplx-rs/commit/edaa15f36576d5200d13c8d73608a269ba3ad6ad))
     - Use proxy as default feature ([`7c437e8`](https://github.com/hominsu/deeplx-rs/commit/7c437e823e0e1845b60c2e99fb53685e790d9839))
 </details>
 
