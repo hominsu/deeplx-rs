@@ -100,12 +100,17 @@ impl DeepLX {
     /// ```
     pub fn new(config: Config) -> Self {
         let builder = Client::builder();
+
+        #[cfg(feature = "proxy")]
         let client = match config.proxy {
             Some(p) => builder.proxy(Proxy::all(p).unwrap()),
             None => builder,
         }
         .build()
         .unwrap();
+
+        #[cfg(not(feature = "proxy"))]
+        let client = builder.build().unwrap();
 
         Self {
             base_url: config.base_url,
