@@ -5,11 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## v0.1.3 (2024-12-06)
+## v0.1.4 (2024-12-07)
 
-### Refactor
+### New Features
 
- - <csr-id-68e63558cfaaa04ab33970aa26afa90f9a7712d4/> String is enough for this case
+ - <csr-id-7c437e823e0e1845b60c2e99fb53685e790d9839/> use proxy as default feature
 
 ### Commit Statistics
 
@@ -26,6 +26,33 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Use proxy as default feature ([`7c437e8`](https://github.com/hominsu/deeplx-rs/commit/7c437e823e0e1845b60c2e99fb53685e790d9839))
+</details>
+
+## v0.1.3 (2024-12-06)
+
+<csr-id-68e63558cfaaa04ab33970aa26afa90f9a7712d4/>
+
+### Refactor
+
+ - <csr-id-68e63558cfaaa04ab33970aa26afa90f9a7712d4/> String is enough for this case
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 2 commits contributed to the release.
+ - 1 commit was understood as [conventional](https://www.conventionalcommits.org).
+ - 0 issues like '(#ID)' were seen in commit messages
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **Uncategorized**
+    - Release deeplx v0.1.3 ([`acc051e`](https://github.com/hominsu/deeplx-rs/commit/acc051e8c6083b1c6e6d366758dc9d7b998524a5))
     - String is enough for this case ([`68e6355`](https://github.com/hominsu/deeplx-rs/commit/68e63558cfaaa04ab33970aa26afa90f9a7712d4))
 </details>
 
