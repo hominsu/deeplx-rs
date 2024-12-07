@@ -15,6 +15,55 @@ use std::sync::Arc;
 #[cfg(feature = "proxy")]
 use reqwest::Proxy;
 
+/// Configuration settings for the `DeepLX` translation client.
+///
+/// # Examples
+///
+/// ## Using Default Configuration
+///
+/// ```no_run
+/// use deeplx::{Config, DeepLX};
+///
+/// let translator = DeepLX::new(Config::default());
+/// ```
+///
+/// ## Custom Base URL
+///
+/// ```no_run
+/// use deeplx::{Config, DeepLX};
+///
+/// let translator = DeepLX::new(Config {
+///     base_url: "https://custom.deepl.api/jsonrpc".to_string(),
+///     ..Default::default()
+/// });
+/// ```
+///
+/// ## Configuring a Proxy (Requires `proxy` Feature)
+///
+/// ```no_run
+/// use deeplx::{Config, DeepLX};
+///
+/// let translator = DeepLX::new(Config {
+///     proxy: Some("http://pro.xy".to_string()),
+///     ..Default::default()
+/// });
+/// ```
+pub struct Config {
+    pub base_url: String,
+    #[cfg(feature = "proxy")]
+    pub proxy: Option<String>,
+}
+
+impl Default for Config {
+    fn default() -> Self {
+        Self {
+            base_url: "https://www2.deepl.com/jsonrpc".to_string(),
+            #[cfg(feature = "proxy")]
+            proxy: None,
+        }
+    }
+}
+
 /// The main entry point for interacting with the DeepL translation service.
 ///
 /// `DeepLX` provides methods to create a translation client and perform translation
@@ -22,8 +71,8 @@ use reqwest::Proxy;
 /// choose source and target languages, and handle text with or without HTML/XML tags.
 #[derive(Clone)]
 pub struct DeepLX {
+    base_url: String,
     client: Arc<Client>,
-    base_url: &'static str,
     headers: HeaderMap,
 }
 
@@ -32,7 +81,7 @@ impl DeepLX {
     ///
     /// # Parameters
     ///
-    /// * `proxy` - An optional proxy URL, e.g. `"http://pro.xy"`. If `None`, no proxy is used.
+    /// * `Config` - Configuration settings for the translation client.
     ///
     /// # Panics
     ///
@@ -41,15 +90,17 @@ impl DeepLX {
     /// # Examples
     ///
     /// ```no_run
-    /// use deeplx::DeepLX;
+    /// use deeplx::{Config, DeepLX};
     ///
-    /// let translator = DeepLX::new(None);
-    /// let translator_with_proxy = DeepLX::new(Some("http://pro.xy"));
+    /// let translator = DeepLX::new(Config::default());
+    /// let translator_with_proxy = DeepLX::new(Config {
+    ///     proxy: Some("http://pro.xy".to_string()),
+    ///     ..Default::default()
+    /// });
     /// ```
-    #[cfg(feature = "proxy")]
-    pub fn new(proxy: Option<&str>) -> Self {
+    pub fn new(config: Config) -> Self {
         let builder = Client::builder();
-        let client = match proxy {
+        let client = match config.proxy {
             Some(p) => builder.proxy(Proxy::all(p).unwrap()),
             None => builder,
         }
@@ -57,28 +108,8 @@ impl DeepLX {
         .unwrap();
 
         Self {
+            base_url: config.base_url,
             client: Arc::new(client),
-            base_url: "https://www2.deepl.com/jsonrpc",
-            headers: headers(),
-        }
-    }
-
-    /// Constructs a new `DeepLX` instance.
-    ///
-    /// # Examples
-    ///
-    /// ```no_run
-    /// use deeplx::DeepLX;
-    ///
-    /// let translator = DeepLX::new();
-    /// ```
-    #[cfg(not(feature = "proxy"))]
-    pub fn new() -> Self {
-        let client = Client::builder().build().unwrap();
-
-        Self {
-            client: Arc::new(client),
-            base_url: "https://www2.deepl.com/jsonrpc",
             headers: headers(),
         }
     }
@@ -224,11 +255,11 @@ impl DeepLX {
     /// # Examples
     ///
     /// ```no_run
-    /// use deeplx::DeepLX;
+    /// use deeplx::{Config, DeepLX};
     ///
     /// #[tokio::main]
     /// async fn main() {
-    ///     let translator = DeepLX::new(None);
+    ///     let translator = DeepLX::new(Config::default());
     ///     match translator
     ///         .translate("auto", "zh", "Hello, world!", None, None)
     ///         .await {

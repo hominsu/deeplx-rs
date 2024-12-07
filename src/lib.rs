@@ -14,17 +14,12 @@
 //!
 //! When the `proxy` feature is enabled (default), you can specify a proxy when creating a new [`DeepLX`] instance:
 //! ```no_run
-//! use deeplx::DeepLX;
+//! use deeplx::{Config, DeepLX};
 //!
-//! let translator = DeepLX::new(Some("http://pro.xy"));
-//! let translator_no_proxy = DeepLX::new(None);
-//! ```
-//!
-//! When the `proxy` feature is disabled, simply call `new()` without arguments:
-//! ```no_run
-//! use deeplx::DeepLX;
-//!
-//! let translator = DeepLX::new();
+//! let translator = DeepLX::new(Config {
+//!     proxy: Some("http://pro.xy".to_string()),
+//!     ..Default::default()
+//! });
 //! ```
 //!
 //! The core structure of this library is [`DeepLX`], through which you can:
@@ -39,13 +34,15 @@
 //! # Example
 //!
 //! ```no_run
-//! use deeplx::DeepLX;
+//! use deeplx::{Config, DeepLX};
 //!
 //! #[tokio::main]
 //! async fn main() {
-//!     let translator = DeepLX::new(Some("http://pro.xy"));    // If proxy enabled, with proxy
-//!     // let translator = DeepLX::new(None);  // If proxy enabled, without proxy
-//!     // let translator = DeepLX::new();      // If proxy disabled
+//!     let translator = DeepLX::new(Config {   // If proxy enabled, with proxy
+//!         proxy: Some("http://pro.xy".to_string()),
+//!         ..Default::default()
+//!     });
+//!     // let translator = DeepLX::new(Config::default());    // Otherwise
 //!     match translator
 //!         .translate("auto", "zh", "Hello, world!", None, None)
 //!         .await
@@ -62,4 +59,4 @@ mod translate;
 mod utils;
 
 pub use data::DeepLXTranslationResult;
-pub use translate::DeepLX;
+pub use translate::{Config, DeepLX};

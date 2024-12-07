@@ -1,16 +1,10 @@
 #[cfg(test)]
 mod tests {
-    use deeplx::DeepLX;
+    use deeplx::{Config, DeepLX};
     use lazy_static::lazy_static;
 
-    #[cfg(feature = "proxy")]
     lazy_static! {
-        static ref TRANSLATOR: DeepLX = DeepLX::new(None);
-    }
-
-    #[cfg(not(feature = "proxy"))]
-    lazy_static! {
-        static ref TRANSLATOR: DeepLX = DeepLX::new();
+        static ref TRANSLATOR: DeepLX = DeepLX::new(Config::default());
     }
 
     #[tokio::test]
@@ -19,7 +13,10 @@ mod tests {
             .translate("auto", "zh", "Hello, world!", None, None)
             .await
         {
-            Ok(res) => assert_eq!(res.code, 200),
+            Ok(res) => {
+                assert_eq!(res.code, 200);
+                println!("{}", res.data)
+            }
             Err(e) => eprintln!("{}", e),
         }
     }
