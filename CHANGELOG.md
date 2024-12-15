@@ -5,6 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v0.1.7 (2024-12-15)
+
+### Documentation
+
+ - <csr-id-da8263e7a83aaefa060523f0fed06dcda32b3820/> update REMEAD.md
+
+### New Features
+
+ - <csr-id-e2b6263d64d697875cc4333b5cea321120140ca9/> add rquest for impersonation support
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 2 commits contributed to the release.
+ - 7 days passed between releases.
+ - 2 commits were understood as [conventional](https://www.conventionalcommits.org).
+ - 0 issues like '(#ID)' were seen in commit messages
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **Uncategorized**
+    - Update REMEAD.md ([`da8263e`](https://github.com/hominsu/deeplx-rs/commit/da8263e7a83aaefa060523f0fed06dcda32b3820))
+    - Add rquest for impersonation support ([`e2b6263`](https://github.com/hominsu/deeplx-rs/commit/e2b6263d64d697875cc4333b5cea321120140ca9))
+</details>
+
 ## v0.1.6 (2024-12-07)
 
 ### Bug Fixes
@@ -15,7 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <csr-read-only-do-not-edit/>
 
- - 1 commit contributed to the release.
+ - 2 commits contributed to the release.
  - 1 commit was understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
 
@@ -26,6 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Release deeplx v0.1.6 ([`9b65b37`](https://github.com/hominsu/deeplx-rs/commit/9b65b37a1ae48dea3fe54a5e999ca0b684deb73e))
     - Error in `DeepLX::new` ([`4cb9afa`](https://github.com/hominsu/deeplx-rs/commit/4cb9afa234f7e1bdacda61309804afd6e2fc7a7f))
 </details>
 
