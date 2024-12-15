@@ -3,15 +3,32 @@ use crate::data::{
     SplitTextResponse, TranslationResponse,
 };
 use crate::utils::{get_i_count, get_random_number, get_timestamp, is_rich_text};
-use reqwest::header::{
-    HeaderMap, HeaderValue, ACCEPT, ACCEPT_LANGUAGE, AUTHORIZATION, CACHE_CONTROL, CONTENT_TYPE,
-    COOKIE, DNT, ORIGIN, PRAGMA, REFERER, USER_AGENT,
-};
-use reqwest::Client;
-use std::error::Error;
-use std::io::Read;
-use std::sync::Arc;
+use std::{error::Error, io::Read, sync::Arc};
 
+#[cfg(feature = "impersonate")]
+use rquest::{
+    header::{
+        HeaderMap, HeaderValue, ACCEPT, ACCEPT_LANGUAGE, AUTHORIZATION, CACHE_CONTROL,
+        CONTENT_TYPE, COOKIE, DNT, ORIGIN, PRAGMA, REFERER, USER_AGENT,
+    },
+    tls::Impersonate,
+    Client,
+};
+
+#[cfg(feature = "impersonate")]
+#[cfg(feature = "proxy")]
+use rquest::Proxy;
+
+#[cfg(not(feature = "impersonate"))]
+use reqwest::{
+    header::{
+        HeaderMap, HeaderValue, ACCEPT, ACCEPT_LANGUAGE, AUTHORIZATION, CACHE_CONTROL,
+        CONTENT_TYPE, COOKIE, DNT, ORIGIN, PRAGMA, REFERER, USER_AGENT,
+    },
+    Client,
+};
+
+#[cfg(not(feature = "impersonate"))]
 #[cfg(feature = "proxy")]
 use reqwest::Proxy;
 
@@ -99,6 +116,10 @@ impl DeepLX {
     /// });
     /// ```
     pub fn new(config: Config) -> Self {
+        #[cfg(feature = "impersonate")]
+        let builder = Client::builder().impersonate(Impersonate::Chrome131);
+
+        #[cfg(not(feature = "impersonate"))]
         let builder = Client::builder();
 
         #[cfg(feature = "proxy")]

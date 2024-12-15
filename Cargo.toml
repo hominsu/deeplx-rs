@@ -16,6 +16,7 @@ exclude = [".*"]
 [features]
 default = ["proxy"]
 proxy = []
+impersonate = ["rquest/default"]
 
 [package.metadata.docs.rs]
 all-features = true
@@ -32,6 +33,7 @@ isolang = { version = "2.4.0" }
 whatlang = { version = "0.16" }
 
 reqwest = { version = "0.12", features = ["json", "brotli"] }
+rquest = { version = "0.32.1", optional = true }
 
 [dev-dependencies]
 lazy_static = { version = "1" }
