@@ -1,9 +1,12 @@
-use crate::data::{
-    CommonJobParams, DeepLXTranslationResult, Job, Lang, Params, PostData, Sentence,
-    SplitTextResponse, TranslationResponse,
+use crate::{
+    data::{
+        CommonJobParams, DeepLXTranslationResult, Job, Lang, Params, PostData, Sentence,
+        SplitTextResponse, TranslationResponse,
+    },
+    utils::{get_i_count, get_random_number, get_timestamp, is_rich_text},
 };
-use crate::utils::{get_i_count, get_random_number, get_timestamp, is_rich_text};
-use std::{error::Error, io::Read, sync::Arc};
+
+use std::{error::Error, sync::Arc};
 
 #[cfg(feature = "impersonate")]
 use rquest::{
@@ -145,7 +148,7 @@ impl DeepLX {
         post_data: &PostData<'_>,
         method: &str,
         deepl_session: Option<&str>,
-    ) -> Result<Vec<u8>, Box<dyn Error>> {
+    ) -> Result<bytes::Bytes, Box<dyn Error>> {
         let full_url = format!(
             "{}?client=chrome-extension,1.28.0&method={}",
             self.base_url, method
@@ -156,14 +159,16 @@ impl DeepLX {
             headers.insert(COOKIE, session.parse().unwrap());
         }
 
-        let mut data = serde_json::to_string(&post_data)?;
+        let data = serde_json::to_string(&post_data)?;
 
-        let replacement = if (post_data.id + 5) % 29 == 0 || (post_data.id + 3) % 13 == 0 {
+        let use_colon_spacing = ((post_data.id + 5) % 29 == 0) || ((post_data.id + 3) % 13 == 0);
+        let replacement = if use_colon_spacing {
             r#""method" : ""#
         } else {
             r#""method": ""#
         };
-        data = data.replacen(r#""method":""#, replacement, 1);
+
+        let data = data.replacen(r#""method":""#, replacement, 1);
 
         let resp = self
             .client
@@ -177,22 +182,7 @@ impl DeepLX {
             return Err(format!("Request failed with status: {}", resp.status()).into());
         }
 
-        let bytes = if resp
-            .headers()
-            .get("Content-Encoding")
-            .map_or(false, |val| val.eq(&HeaderValue::from_static("br")))
-        {
-            let full = resp.bytes().await?;
-            let mut reader = brotli::Decompressor::new(full.as_ref(), 4096);
-            let mut vec = Vec::new();
-            reader.read_to_end(&mut vec)?;
-            vec
-        } else {
-            let full = resp.bytes().await?;
-            full.to_vec()
-        };
-
-        Ok(bytes)
+        Ok(resp.bytes().await?)
     }
 
     async fn split_text(
@@ -200,7 +190,7 @@ impl DeepLX {
         text: &str,
         tag_handling: bool,
         deepl_session: Option<&str>,
-    ) -> Result<Vec<u8>, Box<dyn Error>> {
+    ) -> Result<bytes::Bytes, Box<dyn Error>> {
         let post_data = PostData {
             json_rpc: "2.0",
             method: "LMT_split_text",
