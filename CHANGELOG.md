@@ -5,6 +5,32 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v0.1.8 (2024-12-15)
+
+### Bug Fixes
+
+ - <csr-id-063377c4b6537a885b3bdc2492fce7ab3f2cdcf6/> add gzip support
+   - Use `bytes::Bytes` instead of `Vec<u8>` for http responses.
+   - Remove the manual decompression of the http response body.
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 1 commit contributed to the release.
+ - 1 commit was understood as [conventional](https://www.conventionalcommits.org).
+ - 0 issues like '(#ID)' were seen in commit messages
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **Uncategorized**
+    - Add gzip support ([`063377c`](https://github.com/hominsu/deeplx-rs/commit/063377c4b6537a885b3bdc2492fce7ab3f2cdcf6))
+</details>
+
 ## v0.1.7 (2024-12-15)
 
 ### Documentation
@@ -19,7 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <csr-read-only-do-not-edit/>
 
- - 2 commits contributed to the release.
+ - 3 commits contributed to the release.
  - 7 days passed between releases.
  - 2 commits were understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
@@ -31,6 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Release deeplx v0.1.7 ([`13acb8f`](https://github.com/hominsu/deeplx-rs/commit/13acb8f598c4c4569771a117558026010220e389))
     - Update REMEAD.md ([`da8263e`](https://github.com/hominsu/deeplx-rs/commit/da8263e7a83aaefa060523f0fed06dcda32b3820))
     - Add rquest for impersonation support ([`e2b6263`](https://github.com/hominsu/deeplx-rs/commit/e2b6263d64d697875cc4333b5cea321120140ca9))
 </details>
