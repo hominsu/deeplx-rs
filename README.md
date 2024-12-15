@@ -15,12 +15,94 @@
 <br/>
 <div align="center">
 <h3 align="center">deeplx-rs</h3>
-
   <p align="center">
     A Rust package for unlimited DeepL translation
     <br/>
-    <a href="#usage"><strong>Usage »</strong></a>
+    <br/>
+    <a href="#features">Features</a>
+    ·
+    <a href="#installation">Installation</a>
+    ·
+    <a href="#configuration">Configuration</a>
+    ·
+    <a href="#usage">Usage</a>
+    ·
+    <a href="#license">License</a>
   </p>
 </div>
 
+## Features
+
+- **Proxy support** by default (can be disabled via features).
+- **Optional impersonation** using the `impersonate` feature to mimic browser settings.
+
+## Installation
+
+Add `deeplx` to your `Cargo.toml`:
+
+```toml
+[dependencies]
+deeplx = "0.1"
+```
+
+By default, deeplx includes proxy support. If you do not need proxy support, disable the default features:
+
+```toml
+[dependencies]
+deeplx = { version = "0.1", default-features = false }
+```
+
+If you want to enable the impersonate feature to mimic browser headers, TLS settings, etc.:
+
+```toml
+[dependencies]
+deeplx = { version = "0.1", features = ["impersonate"] }
+```
+
+## Configuration
+
+deeplx is configured via the Config struct. You can specify options such as proxy, timeout, and more. For example:
+
+```rust
+use deeplx::{Config, DeepLX};
+
+let translator = DeepLX::new(Config {
+proxy: Some("http://pro.xy".to_string()),
+..Default::default ()
+});
+```
+
+If you have disabled the proxy feature, you can simply omit the proxy field:
+
+```rust
+use deeplx::{Config, DeepLX};
+
+let translator = DeepLX::new(Config::default ());
+```
+
 ## Usage
+
+Below is an example using tokio for async execution:
+
+```rust
+use deeplx::{Config, DeepLX};
+
+#[tokio::main]
+async fn main() {
+    let translator = DeepLX::new(Config {
+        proxy: Some("http://pro.xy".to_string()),
+        ..Default::default()
+    });
+    // Or without proxy:
+    // let translator = DeepLX::new(Config::default());
+
+    match translator.translate("auto", "zh", "Hello, world!", None, None).await {
+        Ok(res) => println!("Translated: {}", res.data),
+        Err(e) => eprintln!("Error: {}", e),
+    }
+}
+```
+
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.
