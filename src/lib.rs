@@ -63,9 +63,9 @@
 //! ```
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
-mod data;
-mod translate;
-mod utils;
+mod skeleton;
 
-pub use data::DeepLXTranslationResult;
-pub use translate::{Config, DeepLX};
+pub use skeleton::{
+    data::DeepLXTranslationResult,
+    translate::{Config, DeepLX},
+};

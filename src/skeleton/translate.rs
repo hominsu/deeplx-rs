@@ -1,4 +1,4 @@
-use crate::{
+use super::{
     data::{
         CommonJobParams, DeepLXTranslationResult, Job, Lang, Params, PostData, Sentence,
         SplitTextResponse, TranslationResponse,
