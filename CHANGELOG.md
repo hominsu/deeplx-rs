@@ -5,19 +5,71 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v0.1.9 (2024-12-16)
+
+### Documentation
+
+ - <csr-id-7e6b4e5cc272386b2b5496d9b95390cff48f1aba/> update README.md
+
+### New Features
+
+ - <csr-id-5530c6406e6da5ca37c0eab55a3584c36bdd7bab/> add server
+
+### Bug Fixes
+
+ - <csr-id-1ddef14571c282bdd96905b2b53187e90d5bf1a9/> enbale `server` feature for cargo install
+
+### Other
+
+ - <csr-id-e24b2e2072bc86fe55bb04090321142c5d60c1a5/> automate docker image releases
+ - <csr-id-5e45fd5e2f6c935a67e6ffefc193dc9a485c4f3c/> add docker support
+   - add `Dockerfile` for building the application
+   - add `docker-bake.hcl` for defining multi-platform builds
+   - add `docker-compose.yml`
+
+### Refactor
+
+ - <csr-id-6766cf0f59375773b36d91a350c601d7c084dbce/> restructure codebase into skeleton module
+   - Move the modules `data`, `translate` and `utils` into the new `skeleton` module
+   - Update `rquest` dependency version from `0.32.1` to `0.33`
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 6 commits contributed to the release.
+ - 1 day passed between releases.
+ - 6 commits were understood as [conventional](https://www.conventionalcommits.org).
+ - 0 issues like '(#ID)' were seen in commit messages
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **Uncategorized**
+    - Update README.md ([`7e6b4e5`](https://github.com/hominsu/deeplx-rs/commit/7e6b4e5cc272386b2b5496d9b95390cff48f1aba))
+    - Enbale `server` feature for cargo install ([`1ddef14`](https://github.com/hominsu/deeplx-rs/commit/1ddef14571c282bdd96905b2b53187e90d5bf1a9))
+    - Automate docker image releases ([`e24b2e2`](https://github.com/hominsu/deeplx-rs/commit/e24b2e2072bc86fe55bb04090321142c5d60c1a5))
+    - Add docker support ([`5e45fd5`](https://github.com/hominsu/deeplx-rs/commit/5e45fd5e2f6c935a67e6ffefc193dc9a485c4f3c))
+    - Add server ([`5530c64`](https://github.com/hominsu/deeplx-rs/commit/5530c6406e6da5ca37c0eab55a3584c36bdd7bab))
+    - Restructure codebase into skeleton module ([`6766cf0`](https://github.com/hominsu/deeplx-rs/commit/6766cf0f59375773b36d91a350c601d7c084dbce))
+</details>
+
 ## v0.1.8 (2024-12-15)
 
 ### Bug Fixes
 
  - <csr-id-063377c4b6537a885b3bdc2492fce7ab3f2cdcf6/> add gzip support
    - Use `bytes::Bytes` instead of `Vec<u8>` for http responses.
-   - Remove the manual decompression of the http response body.
+- Remove the manual decompression of the http response body.
 
 ### Commit Statistics
 
 <csr-read-only-do-not-edit/>
 
- - 1 commit contributed to the release.
+ - 2 commits contributed to the release.
  - 1 commit was understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
 
@@ -28,6 +80,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Release deeplx v0.1.8 ([`2b63521`](https://github.com/hominsu/deeplx-rs/commit/2b63521cb0fabb73e26572ee69eb3641e5dc512f))
     - Add gzip support ([`063377c`](https://github.com/hominsu/deeplx-rs/commit/063377c4b6537a885b3bdc2492fce7ab3f2cdcf6))
 </details>
 
