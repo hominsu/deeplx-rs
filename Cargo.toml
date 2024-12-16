@@ -11,7 +11,7 @@ readme = "README.md"
 repository = "https://github.com/hominsu/deeplx-rs"
 keywords = ["deeplx", "translation"]
 categories = ["text-processing", "internationalization"]
-exclude = [".*"]
+exclude = ["configs", "deploy", ".*" ]
 
 [lib]
 name = "deeplx"
