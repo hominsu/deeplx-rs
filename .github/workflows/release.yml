@@ -23,8 +23,8 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ghcr.io/hominsu/postgresql
-            hominsu/postgresql
+            ghcr.io/hominsu/deeplx
+            hominsu/deeplx
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
