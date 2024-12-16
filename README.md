@@ -21,11 +21,9 @@
     <br/>
     <a href="#features">Features</a>
     ·
-    <a href="#installation">Installation</a>
-    ·
-    <a href="#configuration">Configuration</a>
-    ·
     <a href="#usage">Usage</a>
+    ·
+    <a href="#Integration">Integration</a>
     ·
     <a href="#license">License</a>
   </p>
@@ -33,10 +31,28 @@
 
 ## Features
 
+- **Docker support** for easy deployment.
 - **Proxy support** by default (can be disabled via features).
 - **Optional impersonation** using the `impersonate` feature to mimic browser settings.
 
-## Installation
+## Usage
+
+Clone the repository:
+
+```shell
+git clone https://github.com/hominsu/deeplx-rs.git
+```
+
+Start the container:
+
+```shell
+cd deploy
+docker-compose up -d
+```
+
+## Integration
+
+### Installation
 
 Add `deeplx` to your `Cargo.toml`:
 
@@ -59,7 +75,7 @@ If you want to enable the impersonate feature to mimic browser headers, TLS sett
 deeplx = { version = "0.1", features = ["impersonate"] }
 ```
 
-## Configuration
+### Configuration
 
 deeplx is configured via the Config struct. You can specify options such as proxy, timeout, and more. For example:
 
@@ -80,7 +96,7 @@ use deeplx::{Config, DeepLX};
 let translator = DeepLX::new(Config::default ());
 ```
 
-## Usage
+### Usage
 
 Below is an example using tokio for async execution:
 
