@@ -5,6 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v1.0.0 (2024-12-17)
+
+### Chore
+
+ - <csr-id-e6b2eae0a771af67266e7e72df01b7a97b07c8bd/> publish only source code files
+
+### Bug Fixes
+
+ - <csr-id-9d6346a1f99a127b6d45f0adc2b38bacdbd6e32c/> ci
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 2 commits contributed to the release.
+ - 2 commits were understood as [conventional](https://www.conventionalcommits.org).
+ - 0 issues like '(#ID)' were seen in commit messages
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **Uncategorized**
+    - Publish only source code files ([`e6b2eae`](https://github.com/hominsu/deeplx-rs/commit/e6b2eae0a771af67266e7e72df01b7a97b07c8bd))
+    - Ci ([`9d6346a`](https://github.com/hominsu/deeplx-rs/commit/9d6346a1f99a127b6d45f0adc2b38bacdbd6e32c))
+</details>
+
 ## v0.1.10 (2024-12-16)
 
 ### Bug Fixes
@@ -15,7 +44,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <csr-read-only-do-not-edit/>
 
- - 1 commit contributed to the release.
+ - 2 commits contributed to the release.
  - 1 commit was understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
 
@@ -26,6 +55,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Release deeplx v0.1.10 ([`76d6b49`](https://github.com/hominsu/deeplx-rs/commit/76d6b49c56131779c32253a1d78f9d2138d5e314))
     - Sscache env ([`a60000d`](https://github.com/hominsu/deeplx-rs/commit/a60000d820efe6c5bbbdb7bb25a1fbbd63fede4b))
 </details>
 
@@ -111,9 +141,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Release deeplx v0.1.8 ([`2b63521`](https://github.com/hominsu/deeplx-rs/commit/2b63521cb0fabb73e26572ee69eb3641e5dc512f))
     - Add gzip support ([`063377c`](https://github.com/hominsu/deeplx-rs/commit/063377c4b6537a885b3bdc2492fce7ab3f2cdcf6))
 </details>
-
-<csr-unknown>
-Remove the manual decompression of the http response body.<csr-unknown/>
 
 ## v0.1.7 (2024-12-15)
 
