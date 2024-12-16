@@ -1,0 +1,19 @@
+services:
+  deeplx:
+    image: hominsu/deeplx:latest
+    container_name: deeplx
+    restart: always
+    environment:
+      - TZ=Asia/Shanghai
+    volumes:
+      - "../configs:/data/conf"
+    ports:
+      - "3000:3000"
+    networks:
+      net:
+        aliases:
+          - deeplx
+
+networks:
+  net:
+    driver: bridge
