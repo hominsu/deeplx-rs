@@ -1,7 +1,5 @@
 FROM rust:1.83 AS base
 
-ENV RUSTC_WRAPPER=sccache SCCACHE_DIR=/sccach
-
 RUN cargo install sccache --version ^0.9 && \
     cargo install cargo-chef --version ^0.1
 
@@ -10,6 +8,8 @@ FROM base AS planner
 WORKDIR /app
 COPY . .
 
+ENV RUSTC_WRAPPER=sccache SCCACHE_DIR=/sccach
+
 RUN --mount=type=cache,target=/usr/local/cargo/registry \
     --mount=type=cache,target=${SCCACHE_DIR},sharing=locked \
     cargo chef prepare --recipe-path recipe.json
@@ -17,6 +17,8 @@ RUN --mount=type=cache,target=/usr/local/cargo/registry \
 FROM base AS builder
 
 WORKDIR /app
+
+ENV RUSTC_WRAPPER=sccache SCCACHE_DIR=/sccach
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends libclang-dev cmake &&  \
@@ -36,7 +38,7 @@ RUN --mount=type=cache,target=/usr/local/cargo/registry \
     --mount=type=cache,target=${SCCACHE_DIR},sharing=locked \
     RUSTFLAGS='-C target-feature=+crt-static' \
     CARGO_BUILD_TARGET=$(rustc -vV | grep host | awk '{print $2}')  \
-    cargo install --path . --features=server
+    cargo install --path . --features=impersonate,server
 
 FROM scratch
 
