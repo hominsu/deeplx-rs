@@ -1,0 +1,2 @@
+addr = "0.0.0.0:3000"
+auth = "your_access_token"

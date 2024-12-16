@@ -13,10 +13,32 @@ keywords = ["deeplx", "translation"]
 categories = ["text-processing", "internationalization"]
 exclude = [".*"]
 
+[lib]
+name = "deeplx"
+path = "src/lib.rs"
+
+[[bin]]
+name = "deeplx"
+path = "src/main.rs"
+required-features = ["server"]
+
 [features]
 default = ["proxy"]
 proxy = []
 impersonate = ["dep:rquest"]
+server = [
+    "dep:async-trait",
+    "dep:clap",
+    "dep:glob",
+    "dep:notify",
+    "dep:config",
+    "dep:tracing",
+    "dep:tracing-subscriber",
+    "dep:tokio",
+    "dep:tower-http",
+    "dep:axum",
+    "dep:axum-extra",
+]
 
 [package.metadata.docs.rs]
 all-features = true
@@ -35,6 +57,20 @@ whatlang = { version = "0.16" }
 
 reqwest = { version = "0.12", features = ["gzip", "brotli", "json"] }
 rquest = { version = "0.33", optional = true, features = ["gzip", "brotli", "json"] }
+
+async-trait = { version = "0.1", optional = true }
+clap = { version = "4.5.23", optional = true, features = ["derive"] }
+glob = { version = "0.3.1", optional = true }
+notify = { version = "7.0.0", optional = true }
+config = { version = "0.14.1", optional = true, features = ["ini", "json", "yaml", "toml", "ron", "json5"] }
+
+tracing = { version = "0.1", optional = true }
+tracing-subscriber = { version = "0.3.19", optional = true, features = ["env-filter"] }
+
+tokio = { version = "1", optional = true, features = ["full"] }
+tower-http = { version = "0.6.2", optional = true, features = ["trace"] }
+axum = { version = "0.7.9", optional = true, features = ["tracing", "macros"] }
+axum-extra = { version = "0.9.6", optional = true, features = ["typed-header"] }
 
 [dev-dependencies]
 lazy_static = { version = "1" }
