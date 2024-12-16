@@ -5,7 +5,35 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v0.1.10 (2024-12-16)
+
+### Bug Fixes
+
+ - <csr-id-a60000d820efe6c5bbbdb7bb25a1fbbd63fede4b/> sscache env
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 1 commit contributed to the release.
+ - 1 commit was understood as [conventional](https://www.conventionalcommits.org).
+ - 0 issues like '(#ID)' were seen in commit messages
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **Uncategorized**
+    - Sscache env ([`a60000d`](https://github.com/hominsu/deeplx-rs/commit/a60000d820efe6c5bbbdb7bb25a1fbbd63fede4b))
+</details>
+
 ## v0.1.9 (2024-12-16)
+
+<csr-id-e24b2e2072bc86fe55bb04090321142c5d60c1a5/>
+<csr-id-5e45fd5e2f6c935a67e6ffefc193dc9a485c4f3c/>
+<csr-id-6766cf0f59375773b36d91a350c601d7c084dbce/>
 
 ### Documentation
 
@@ -37,7 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <csr-read-only-do-not-edit/>
 
- - 6 commits contributed to the release.
+ - 7 commits contributed to the release.
  - 1 day passed between releases.
  - 6 commits were understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
@@ -49,6 +77,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Release deeplx v0.1.9 ([`e956f93`](https://github.com/hominsu/deeplx-rs/commit/e956f9344f8f23ba5c3d484193b4c39caf7116da))
     - Update README.md ([`7e6b4e5`](https://github.com/hominsu/deeplx-rs/commit/7e6b4e5cc272386b2b5496d9b95390cff48f1aba))
     - Enbale `server` feature for cargo install ([`1ddef14`](https://github.com/hominsu/deeplx-rs/commit/1ddef14571c282bdd96905b2b53187e90d5bf1a9))
     - Automate docker image releases ([`e24b2e2`](https://github.com/hominsu/deeplx-rs/commit/e24b2e2072bc86fe55bb04090321142c5d60c1a5))
@@ -63,7 +92,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
  - <csr-id-063377c4b6537a885b3bdc2492fce7ab3f2cdcf6/> add gzip support
    - Use `bytes::Bytes` instead of `Vec<u8>` for http responses.
-- Remove the manual decompression of the http response body.
 
 ### Commit Statistics
 
@@ -83,6 +111,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Release deeplx v0.1.8 ([`2b63521`](https://github.com/hominsu/deeplx-rs/commit/2b63521cb0fabb73e26572ee69eb3641e5dc512f))
     - Add gzip support ([`063377c`](https://github.com/hominsu/deeplx-rs/commit/063377c4b6537a885b3bdc2492fce7ab3f2cdcf6))
 </details>
+
+<csr-unknown>
+Remove the manual decompression of the http response body.<csr-unknown/>
 
 ## v0.1.7 (2024-12-15)
 
