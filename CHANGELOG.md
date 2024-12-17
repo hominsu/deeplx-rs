@@ -5,7 +5,33 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v1.1.0 (2024-12-17)
+
+### Performance
+
+ - <csr-id-cd332c0ad5fe97e60982d3b5af5684c4cf7421b6/> enable memory allocation with `mimalloc`
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 1 commit contributed to the release.
+ - 1 commit was understood as [conventional](https://www.conventionalcommits.org).
+ - 0 issues like '(#ID)' were seen in commit messages
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **Uncategorized**
+    - Enable memory allocation with `mimalloc` ([`cd332c0`](https://github.com/hominsu/deeplx-rs/commit/cd332c0ad5fe97e60982d3b5af5684c4cf7421b6))
+</details>
+
 ## v1.0.0 (2024-12-17)
+
+<csr-id-e6b2eae0a771af67266e7e72df01b7a97b07c8bd/>
 
 ### Chore
 
@@ -19,7 +45,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <csr-read-only-do-not-edit/>
 
- - 2 commits contributed to the release.
+ - 3 commits contributed to the release.
  - 2 commits were understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
 
@@ -30,6 +56,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Release deeplx v1.0.0 ([`2758be2`](https://github.com/hominsu/deeplx-rs/commit/2758be2fd62c3a719cbbb7953d1653d06e9f0d34))
     - Publish only source code files ([`e6b2eae`](https://github.com/hominsu/deeplx-rs/commit/e6b2eae0a771af67266e7e72df01b7a97b07c8bd))
     - Ci ([`9d6346a`](https://github.com/hominsu/deeplx-rs/commit/9d6346a1f99a127b6d45f0adc2b38bacdbd6e32c))
 </details>
