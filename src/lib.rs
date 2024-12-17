@@ -9,7 +9,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! deeplx = { version = "0.1", default-features = false }
+//! deeplx = { version = "1", default-features = false }
 //! ```
 //!
 //! When the `proxy` feature is enabled (default), you can specify a proxy when creating a new [`DeepLX`] instance:
@@ -27,7 +27,7 @@
 //!
 //! ```toml
 //! [dependencies]
-//! deeplx = { version = "0.1", features = ["impersonate"] }
+//! deeplx = { version = "1", features = ["impersonate"] }
 //! ```
 //!
 //! The core structure of this library is [`DeepLX`], through which you can:

@@ -37,17 +37,22 @@
 
 ## Usage
 
-Clone the repository:
+### Docker Deployment
+
+1. Clone the repository:
+    ```shell
+    git clone https://github.com/hominsu/deeplx-rs.git
+    ```
+2. Start the container:
+    ```shell
+    cd deploy
+    docker-compose up -d
+    ```
+
+### Install with Cargo
 
 ```shell
-git clone https://github.com/hominsu/deeplx-rs.git
-```
-
-Start the container:
-
-```shell
-cd deploy
-docker-compose up -d
+cargo install --features=impersonate,server
 ```
 
 ## Integration
@@ -58,21 +63,21 @@ Add `deeplx` to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-deeplx = "0.1"
+deeplx = "1"
 ```
 
 By default, deeplx includes proxy support. If you do not need proxy support, disable the default features:
 
 ```toml
 [dependencies]
-deeplx = { version = "0.1", default-features = false }
+deeplx = { version = "1", default-features = false }
 ```
 
 If you want to enable the impersonate feature to mimic browser headers, TLS settings, etc.:
 
 ```toml
 [dependencies]
-deeplx = { version = "0.1", features = ["impersonate"] }
+deeplx = { version = "1", features = ["impersonate"] }
 ```
 
 ### Configuration
