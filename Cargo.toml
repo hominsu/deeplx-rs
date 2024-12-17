@@ -11,7 +11,7 @@ readme = "README.md"
 repository = "https://github.com/hominsu/deeplx-rs"
 keywords = ["deeplx", "translation"]
 categories = ["text-processing", "internationalization"]
-exclude = ["configs", "deploy", ".*" ]
+exclude = ["configs", "deploy", ".*"]
 
 [lib]
 name = "deeplx"
@@ -27,6 +27,7 @@ default = ["proxy"]
 proxy = []
 impersonate = ["dep:rquest"]
 server = [
+    "dep:mimalloc",
     "dep:async-trait",
     "dep:clap",
     "dep:glob",
@@ -58,6 +59,7 @@ whatlang = { version = "0.16" }
 reqwest = { version = "0.12", features = ["gzip", "brotli", "json"] }
 rquest = { version = "0.33", optional = true, features = ["gzip", "brotli", "json"] }
 
+mimalloc = { version = "0.1", optional = true }
 async-trait = { version = "0.1", optional = true }
 clap = { version = "4.5.23", optional = true, features = ["derive"] }
 glob = { version = "0.3.1", optional = true }

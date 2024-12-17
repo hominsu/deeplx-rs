@@ -1,12 +1,15 @@
 mod server;
 
-use server::{biz, conf, data::translate::TranslateRepo, pkgs::exit::shutdown_signal, routes};
-
 use clap::Parser;
 use deeplx::{Config, DeepLX};
+use mimalloc::MiMalloc;
+use server::{biz, conf, data::translate::TranslateRepo, pkgs::exit::shutdown_signal, routes};
 use std::{future::IntoFuture, sync::Arc};
 use tower_http::trace::TraceLayer;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
+
+#[global_allocator]
+static GLOBAL: MiMalloc = MiMalloc;
 
 #[derive(Parser)]
 #[clap(name = "deeplx", version, about)]
