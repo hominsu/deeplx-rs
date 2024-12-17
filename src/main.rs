@@ -35,7 +35,10 @@ async fn main() {
     let config = manager.config();
     let manager_fut = manager.into_future();
 
-    let translator = Arc::new(DeepLX::new(Config::default()));
+    let translator = Arc::new(DeepLX::new(Config {
+        proxy: config.read().unwrap().proxy.clone(),
+        ..Config::default()
+    }));
     let translate_repo = Arc::new(TranslateRepo::new(translator.clone()));
     let translate_usecase = Arc::new(biz::translate::TranslateUsecase::new(
         translate_repo.clone(),

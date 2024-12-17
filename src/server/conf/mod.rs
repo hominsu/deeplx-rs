@@ -14,6 +14,7 @@ use std::{
 #[allow(unused)]
 pub struct Config {
     pub addr: String,
+    pub proxy: Option<String>,
     pub auth: String,
 }
 
