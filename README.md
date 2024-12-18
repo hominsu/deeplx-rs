@@ -8,6 +8,7 @@
 <a href="https://github.com/hominsu/deeplx-rs/issues"><img src="https://img.shields.io/github/issues/hominsu/deeplx-rs.svg?style=for-the-badge" alt="Issues"></a>
 <a href="https://github.com/hominsu/deeplx-rs/blob/master/LICENSE"><img src="https://img.shields.io/github/license/hominsu/deeplx-rs.svg?style=for-the-badge" alt="License"></a>
 <a href="https://github.com/hominsu/deeplx-rs/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/hominsu/deeplx-rs/ci.yml?branch=main&style=for-the-badge" alt="Build"></a>
+<a href="https://app.fossa.com/projects/git%2Bgithub.com%2Fhominsu%2Fdeeplx-rs?ref=badge_shield" alt="FOSSA Status"><img src="https://app.fossa.com/api/projects/git%2Bgithub.com%2Fhominsu%2Fdeeplx-rs.svg?type=shield"/></a>
 </p>
 
 
@@ -28,6 +29,9 @@
     <a href="#license">License</a>
   </p>
 </div>
+
+
+[![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fhominsu%2Fdeeplx-rs.svg?type=large)](https://app.fossa.com/projects/git%2Bgithub.com%2Fhominsu%2Fdeeplx-rs?ref=badge_large)
 
 ## Features
 
