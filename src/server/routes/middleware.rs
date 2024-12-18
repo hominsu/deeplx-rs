@@ -2,7 +2,7 @@ use super::AppState;
 use crate::server::pkgs::Error;
 
 use axum::{
-    extract::{FromRef, FromRequestParts},
+    extract::{FromRef, FromRequestParts, Query},
     http::request::Parts,
     RequestPartsExt,
 };
@@ -10,6 +10,11 @@ use axum_extra::{
     headers::{authorization::Bearer, Authorization},
     TypedHeader,
 };
+
+#[derive(serde::Deserialize)]
+struct QueryParams {
+    key: Option<String>,
+}
 
 pub struct RequireAuth {}
 
@@ -27,21 +32,28 @@ where
             .await
             .map_err(|_e| Error::InternalServerError)?;
 
-        let auth = state
-            .config
-            .read()
-            .map_err(|_e| Error::InternalServerError)?
-            .auth
-            .clone();
+        let auth = {
+            let guard = state
+                .config
+                .read()
+                .map_err(|_e| Error::InternalServerError)?;
+            guard.auth.clone()
+        };
 
-        let TypedHeader(Authorization(bearer)) = parts
-            .extract::<TypedHeader<Authorization<Bearer>>>()
-            .await
-            .map_err(|_| Error::InvalidAccessToken)?;
+        let query: Query<QueryParams> =
+            Query::try_from_uri(&parts.uri).map_err(|_| Error::InternalServerError)?;
 
-        match auth.eq(bearer.token()) {
-            true => Ok(Self {}),
-            false => Err(Error::InvalidAccessToken),
+        let bearer = match parts.extract::<TypedHeader<Authorization<Bearer>>>().await {
+            Ok(TypedHeader(Authorization(b))) => Some(b.token().to_owned()),
+            Err(_) => None,
+        };
+
+        let token = query.key.as_deref().or_else(|| bearer.as_deref());
+
+        if token != Some(auth.as_str()) {
+            return Err(Error::InvalidAccessToken);
         }
+
+        Ok(Self {})
     }
 }
