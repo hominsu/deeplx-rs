@@ -5,7 +5,39 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v1.2.1 (2024-12-22)
+
+### Documentation
+
+ - <csr-id-c6af5ff4676e9c6cf922db73b0a5edc291689853/> update README.md
+
+### Refactor
+
+ - <csr-id-294dbe6087abdbe77970bda1a16d37789e0fde26/> remove generic types from router function
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 2 commits contributed to the release.
+ - 3 days passed between releases.
+ - 2 commits were understood as [conventional](https://www.conventionalcommits.org).
+ - 0 issues like '(#ID)' were seen in commit messages
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **Uncategorized**
+    - Update README.md ([`c6af5ff`](https://github.com/hominsu/deeplx-rs/commit/c6af5ff4676e9c6cf922db73b0a5edc291689853))
+    - Remove generic types from router function ([`294dbe6`](https://github.com/hominsu/deeplx-rs/commit/294dbe6087abdbe77970bda1a16d37789e0fde26))
+</details>
+
 ## v1.2.0 (2024-12-18)
+
+<csr-id-fe43461a5359031e43235f20d1bca666e3455456/>
 
 ### Chore
 
@@ -17,19 +49,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### New Features
 
+<csr-id-e30086552556bdbb0dba50869a7ea6f8e7cf120f/>
+
  - <csr-id-934875cd2a645e715e82ae649b4afcde5b4de702/> configure proxy
    - Change the `DeepLX` struct to accept a proxy configuration.
-   - Add a `proxy` field to the config struct.
- - <csr-id-e30086552556bdbb0dba50869a7ea6f8e7cf120f/> improve token handling in authentication
-   - Modify authentication to accept either a query parameter or a header for the token.
-   - Extract the token from the query parameter or the authorization header.
-   - Return an error if neither the query parameter nor the header contains a valid token.
+- Add a `proxy` field to the config struct.
+- Modify authentication to accept either a query parameter or a header for the token.
+- Extract the token from the query parameter or the authorization header.
+- Return an error if neither the query parameter nor the header contains a valid token.
 
 ### Commit Statistics
 
 <csr-read-only-do-not-edit/>
 
- - 4 commits contributed to the release.
+ - 5 commits contributed to the release.
  - 4 commits were understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
 
@@ -40,11 +73,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Release deeplx v1.2.0 ([`4e0f1cf`](https://github.com/hominsu/deeplx-rs/commit/4e0f1cfbd98a09b126f788a28454246e6af88c96))
     - Configure proxy ([`934875c`](https://github.com/hominsu/deeplx-rs/commit/934875cd2a645e715e82ae649b4afcde5b4de702))
     - Improve token handling in authentication ([`e300865`](https://github.com/hominsu/deeplx-rs/commit/e30086552556bdbb0dba50869a7ea6f8e7cf120f))
     - Update dependencies ([`fe43461`](https://github.com/hominsu/deeplx-rs/commit/fe43461a5359031e43235f20d1bca666e3455456))
     - Update dependencies ([`c26c68b`](https://github.com/hominsu/deeplx-rs/commit/c26c68b2809acf6802975889cf3e0611a5459e32))
 </details>
+
+<csr-unknown>
+ improve token handling in authentication<csr-unknown/>
 
 ## v1.1.0 (2024-12-17)
 
