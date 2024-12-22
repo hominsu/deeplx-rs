@@ -25,6 +25,8 @@
     ·
     <a href="#Integration">Integration</a>
     ·
+    <a href="#Reference">Reference</a>
+    ·
     <a href="#license">License</a>
   </p>
 </div>
@@ -123,6 +125,10 @@ async fn main() {
     }
 }
 ```
+
+## Reference
+
+- [OwO-Network/DeepLX](https://github.com/OwO-Network/DeepLX)
 
 ## License
 
