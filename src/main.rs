@@ -47,7 +47,7 @@ async fn main() {
         translate_uc: translate_usecase,
         config: config.clone(),
     };
-    let app = routes::router::<TranslateRepo>(state).layer(TraceLayer::new_for_http());
+    let app = routes::router(state).layer(TraceLayer::new_for_http());
 
     let addr = config.read().unwrap().addr.clone();
     let listener = tokio::net::TcpListener::bind(addr).await.unwrap();
