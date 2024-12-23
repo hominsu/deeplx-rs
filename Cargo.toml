@@ -13,6 +13,13 @@ keywords = ["deeplx", "translation"]
 categories = ["text-processing", "internationalization"]
 exclude = ["configs", "deploy", ".*"]
 
+[profile.release]
+opt-level = 3
+strip = true
+lto = true
+codegen-units = 1
+panic = "abort"
+
 [lib]
 name = "deeplx"
 path = "src/lib.rs"
