@@ -5,7 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v1.2.2 (2024-12-23)
+
+### Other
+
+ - <csr-id-d8bf36c9ca8a40f627c39d9d6c6d6efad90bffe3/> significantly reduced the size of the build artifacts
+   - Add configuration for release mode optimization, including setting `opt-level` to 3, enabling `strip` and `lto`, setting `codegen-units` to 1, and setting `panic` to abort.
+   - Remove the `impersonate` feature flag in Dockerfile, since it's not a stable and usable crate.
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 1 commit contributed to the release.
+ - 1 day passed between releases.
+ - 1 commit was understood as [conventional](https://www.conventionalcommits.org).
+ - 0 issues like '(#ID)' were seen in commit messages
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **Uncategorized**
+    - Significantly reduced the size of the build artifacts ([`d8bf36c`](https://github.com/hominsu/deeplx-rs/commit/d8bf36c9ca8a40f627c39d9d6c6d6efad90bffe3))
+</details>
+
 ## v1.2.1 (2024-12-22)
+
+<csr-id-294dbe6087abdbe77970bda1a16d37789e0fde26/>
 
 ### Documentation
 
@@ -19,7 +48,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <csr-read-only-do-not-edit/>
 
- - 2 commits contributed to the release.
+ - 3 commits contributed to the release.
  - 3 days passed between releases.
  - 2 commits were understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
@@ -31,6 +60,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Release deeplx v1.2.1 ([`2fbc750`](https://github.com/hominsu/deeplx-rs/commit/2fbc7501e95f25e3b678b1b3af09ca8e835f53b6))
     - Update README.md ([`c6af5ff`](https://github.com/hominsu/deeplx-rs/commit/c6af5ff4676e9c6cf922db73b0a5edc291689853))
     - Remove generic types from router function ([`294dbe6`](https://github.com/hominsu/deeplx-rs/commit/294dbe6087abdbe77970bda1a16d37789e0fde26))
 </details>
@@ -53,10 +83,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
  - <csr-id-934875cd2a645e715e82ae649b4afcde5b4de702/> configure proxy
    - Change the `DeepLX` struct to accept a proxy configuration.
-- Add a `proxy` field to the config struct.
-- Modify authentication to accept either a query parameter or a header for the token.
-- Extract the token from the query parameter or the authorization header.
-- Return an error if neither the query parameter nor the header contains a valid token.
 
 ### Commit Statistics
 
@@ -81,7 +107,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 </details>
 
 <csr-unknown>
- improve token handling in authentication<csr-unknown/>
+Add a proxy field to the config struct.Modify authentication to accept either a query parameter or a header for the token.Extract the token from the query parameter or the authorization header.Return an error if neither the query parameter nor the header contains a valid token.<csr-unknown/>
 
 ## v1.1.0 (2024-12-17)
 
