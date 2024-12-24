@@ -54,8 +54,16 @@
 ### Install with Cargo
 
 ```shell
-cargo install --features=impersonate,server
+cargo install --features="server"
 ```
+
+If you want to mimic browser settings, use the `impersonate` feature:
+
+```shell
+cargo install --features="impersonate,server"
+```
+
+> **Note:** The `impersonate` feature relies on the [`rquest`](https://github.com/penumbra-x/rquest) crate, which may not be stable. Additionally, build artifacts may increase by ~50%.
 
 ## Integration
 
@@ -90,8 +98,8 @@ deeplx is configured via the Config struct. You can specify options such as prox
 use deeplx::{Config, DeepLX};
 
 let translator = DeepLX::new(Config {
-proxy: Some("http://pro.xy".to_string()),
-..Default::default ()
+    proxy: Some("http://pro.xy".to_string()),
+    ..Default::default()
 });
 ```
 
