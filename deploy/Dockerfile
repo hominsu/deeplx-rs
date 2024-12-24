@@ -48,4 +48,4 @@ COPY --from=builder /usr/local/cargo/bin/deeplx /app/deeplx
 EXPOSE 3000/tcp
 VOLUME /data/conf
 
-CMD ["./deeplx", "-c", "/data/conf"]
+CMD ["./deeplx", "--conf", "/data/conf"]

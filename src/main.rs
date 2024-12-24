@@ -1,6 +1,6 @@
 mod server;
 
-use clap::Parser;
+use argh::FromArgs;
 use deeplx::{Config, DeepLX};
 use mimalloc::MiMalloc;
 use server::{biz, conf, data::translate::TranslateRepo, pkgs::exit::shutdown_signal, routes};
@@ -11,16 +11,20 @@ use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 #[global_allocator]
 static GLOBAL: MiMalloc = MiMalloc;
 
-#[derive(Parser)]
-#[clap(name = "deeplx", version, about)]
+#[derive(FromArgs)]
+#[argh(description = "deeplx")]
 struct Args {
-    #[clap(short, long, default_value = "./configs")]
+    #[argh(
+        option,
+        default = "String::from(\"configs\")",
+        description = "config path, eg: --conf ./configs"
+    )]
     conf: String,
 }
 
 #[tokio::main]
 async fn main() {
-    let args = Args::parse();
+    let args: Args = argh::from_env();
 
     tracing_subscriber::registry()
         .with(
