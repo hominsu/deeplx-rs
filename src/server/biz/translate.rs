@@ -6,18 +6,17 @@ use axum::{
 };
 use deeplx::DeepLXTranslationResult;
 use serde::Serialize;
-use std::sync::Arc;
+use std::{future::Future, pin::Pin, sync::Arc};
 
-#[async_trait::async_trait]
 pub trait TranslateRepo: Send + Sync {
-    async fn translate(
-        &self,
-        text: &str,
-        source_lang: &str,
-        target_lang: &str,
-        tag_handling: Option<&str>,
-        dl_session: Option<&str>,
-    ) -> Result<DeepLXTranslationResult, Error>;
+    fn translate<'a>(
+        &'a self,
+        text: &'a str,
+        source_lang: &'a str,
+        target_lang: &'a str,
+        tag_handling: Option<&'a str>,
+        dl_session: Option<&'a str>,
+    ) -> Pin<Box<dyn Future<Output = Result<DeepLXTranslationResult, Error>> + Send + 'a>>;
 }
 
 pub struct TranslateUsecase {
