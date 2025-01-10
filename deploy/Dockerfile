@@ -1,7 +1,8 @@
 FROM rust:1.83 AS base
 
-RUN cargo install sccache --version ^0.9 && \
-    cargo install cargo-chef --version ^0.1
+RUN cargo install sccache && \
+    cargo install cargo-chef
+
 
 FROM base AS planner
 
@@ -13,6 +14,7 @@ ENV RUSTC_WRAPPER=sccache SCCACHE_DIR=/sccach
 RUN --mount=type=cache,target=/usr/local/cargo/registry \
     --mount=type=cache,target=${SCCACHE_DIR},sharing=locked \
     cargo chef prepare --recipe-path recipe.json
+
 
 FROM base AS builder
 
