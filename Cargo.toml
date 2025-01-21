@@ -30,11 +30,10 @@ path = "src/main.rs"
 required-features = ["server"]
 
 [features]
-default = ["proxy"]
+default = ["proxy", "server", "mimalloc"]
 proxy = []
 impersonate = ["dep:rquest"]
 server = [
-    "dep:mimalloc",
     "dep:argh",
     "dep:glob",
     "dep:notify",
@@ -46,41 +45,58 @@ server = [
     "dep:axum",
     "dep:axum-extra",
 ]
+mimalloc = ["dep:mimalloc"]
+rpmalloc = ["dep:rpmalloc"]
+snmalloc = ["dep:snmalloc-rs"]
+tikv-jemallocator = ["dep:tikv-jemallocator"]
 
 [package.metadata.docs.rs]
 all-features = true
 
 [dependencies]
+# data processing
 bytes = { version = "1.9.0" }
 rand = { version = "0.8" }
 chrono = { version = "0.4" }
-
 serde = { version = "1", features = ["derive"] }
 serde_json = { version = "1" }
 
+# internationalization & language detection
 isolang = { version = "2.4.0" }
 whatlang = { version = "0.16" }
 
+# http client
 reqwest = { version = "0.12", features = ["gzip", "brotli", "json"] }
 rquest = { version = "1", optional = true, features = ["gzip", "brotli", "json"] }
 
+# memory allocator
 mimalloc = { version = "0.1", optional = true }
+rpmalloc = { version = "0.2", optional = true }
+snmalloc-rs = { version = "0.3", optional = true }
+tikv-jemallocator = { version = "0.6", optional = true }
+
+# cli
 argh = { version = "0.1", optional = true }
+
+# hot reload config
 glob = { version = "0.3", optional = true }
-notify = { version = "7.0.0", optional = true }
+notify = { version = "8.0.0", optional = true }
 config = { version = "0.15", optional = true, features = ["ini", "json", "yaml", "toml", "ron", "json5"] }
 
+# logging & tracing
 tracing = { version = "0.1", optional = true }
 tracing-subscriber = { version = "0.3", optional = true, features = ["env-filter"] }
 
+# async runtime
 tokio = { version = "1", optional = true, features = ["full"] }
+
+# web stuff
 tower-http = { version = "0.6", optional = true, features = ["trace"] }
 axum = { version = "0.8", optional = true, features = ["tracing", "macros"] }
 axum-extra = { version = "0.10", optional = true, features = ["typed-header"] }
 
 [dev-dependencies]
 lazy_static = { version = "1" }
-tokio = { version = "1", features = ["macros"] }
 
 [[test]]
 name = "translate"
