@@ -1,6 +1,5 @@
 use super::AppState;
 use crate::server::pkgs::Error;
-use std::future::Future;
 
 use axum::{
     extract::{FromRef, FromRequestParts, Query},
@@ -26,39 +25,31 @@ where
 {
     type Rejection = Error;
 
-    fn from_request_parts(
-        parts: &mut Parts,
-        state: &S,
-    ) -> impl Future<Output = Result<Self, Self::Rejection>> {
-        async move {
-            let state = parts
-                .extract_with_state::<AppState, _>(state)
-                .await
-                .map_err(|_e| Error::InternalServerError)?;
+    async fn from_request_parts(parts: &mut Parts, state: &S) -> Result<Self, Self::Rejection> {
+        let state = parts
+            .extract_with_state::<AppState, _>(state)
+            .await
+            .map_err(|_e| Error::InternalServer)?;
 
-            let auth = {
-                let guard = state
-                    .config
-                    .read()
-                    .map_err(|_e| Error::InternalServerError)?;
-                guard.auth.clone()
-            };
+        let auth = {
+            let guard = state.config.read().map_err(|_e| Error::InternalServer)?;
+            guard.auth.clone()
+        };
 
-            let query: Query<QueryParams> =
-                Query::try_from_uri(&parts.uri).map_err(|_| Error::InternalServerError)?;
+        let query: Query<QueryParams> =
+            Query::try_from_uri(&parts.uri).map_err(|_| Error::InternalServer)?;
 
-            let bearer = match parts.extract::<TypedHeader<Authorization<Bearer>>>().await {
-                Ok(TypedHeader(Authorization(b))) => Some(b.token().to_owned()),
-                Err(_) => None,
-            };
+        let bearer = match parts.extract::<TypedHeader<Authorization<Bearer>>>().await {
+            Ok(TypedHeader(Authorization(b))) => Some(b.token().to_owned()),
+            Err(_) => None,
+        };
 
-            let token = query.key.as_deref().or_else(|| bearer.as_deref());
+        let token = query.key.as_deref().or(bearer.as_deref());
 
-            if token != Some(auth.as_str()) {
-                return Err(Error::InvalidAccessToken);
-            }
-
-            Ok(Self {})
+        if token != Some(auth.as_str()) {
+            return Err(Error::InvalidAccessToken);
         }
+
+        Ok(Self {})
     }
 }

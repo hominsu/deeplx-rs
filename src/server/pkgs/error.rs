@@ -10,7 +10,7 @@ use serde::Serialize;
 pub enum Error {
     JsonRejection(JsonRejection),
     InvalidTagHandling,
-    InternalServerError,
+    InternalServer,
     DeepLSessionMissing,
     DeepLUnauthorized,
     InvalidAccessToken,
@@ -30,7 +30,7 @@ impl IntoResponse for Error {
                 StatusCode::BAD_REQUEST,
                 "Invalid tag_handling value. Allowed values are 'html' and 'xml'.".to_string(),
             ),
-            Error::InternalServerError => (
+            Error::InternalServer => (
                 StatusCode::INTERNAL_SERVER_ERROR,
                 "Internal Server Error".to_string(),
             ),
