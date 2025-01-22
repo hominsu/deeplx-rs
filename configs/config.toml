@@ -1,2 +1,4 @@
-addr = "0.0.0.0:3000"
+debug = true
+bind = "0.0.0.0:3000"
+concurrent = 1024
 auth = "your_access_token"

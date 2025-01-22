@@ -34,7 +34,8 @@ default = ["proxy", "server", "mimalloc"]
 proxy = []
 impersonate = ["dep:rquest"]
 server = [
-    "dep:argh",
+    "dep:thiserror",
+    "dep:clap",
     "dep:glob",
     "dep:notify",
     "dep:config",
@@ -55,11 +56,11 @@ all-features = true
 
 [dependencies]
 # data processing
-bytes = { version = "1.9.0" }
-rand = { version = "0.8" }
-chrono = { version = "0.4" }
+bytes = "1.9"
+rand = "0.8"
+chrono = "0.4"
 serde = { version = "1", features = ["derive"] }
-serde_json = { version = "1" }
+serde_json = "1"
 
 # internationalization & language detection
 isolang = { version = "2.4.0" }
@@ -75,8 +76,11 @@ rpmalloc = { version = "0.2", optional = true }
 snmalloc-rs = { version = "0.3", optional = true }
 tikv-jemallocator = { version = "0.6", optional = true }
 
+# error handling
+thiserror = { version = "2", optional = true }
+
 # cli
-argh = { version = "0.1", optional = true }
+clap = { version = "4.5", optional = true, features = ["derive", "env"] }
 
 # hot reload config
 glob = { version = "0.3", optional = true }

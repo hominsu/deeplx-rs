@@ -10,12 +10,26 @@ use std::{
     time::Duration,
 };
 
-#[derive(Debug, Deserialize)]
-#[allow(unused)]
+#[derive(Clone, Debug, Deserialize)]
+#[serde(default)]
 pub struct Config {
-    pub addr: String,
+    pub debug: bool,
+    pub bind: String,
+    pub concurrent: usize,
     pub proxy: Option<String>,
-    pub auth: String,
+    pub auth: Option<String>,
+}
+
+impl Default for Config {
+    fn default() -> Self {
+        Self {
+            debug: false,
+            bind: "0.0.0.0:3000".to_string(),
+            concurrent: 1024,
+            proxy: None,
+            auth: None,
+        }
+    }
 }
 
 impl Config {

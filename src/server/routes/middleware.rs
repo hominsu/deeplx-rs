@@ -31,9 +31,13 @@ where
             .await
             .map_err(|_e| Error::InternalServer)?;
 
-        let auth = {
+        let auth_option = {
             let guard = state.config.read().map_err(|_e| Error::InternalServer)?;
             guard.auth.clone()
+        };
+
+        let Some(auth) = auth_option else {
+            return Ok(Self {});
         };
 
         let query: Query<QueryParams> =
