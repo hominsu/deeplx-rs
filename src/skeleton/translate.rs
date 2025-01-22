@@ -292,6 +292,7 @@ impl DeepLX {
         tag_handling: Option<&str>,
         deepl_session: Option<&str>,
     ) -> Result<DeepLXTranslationResult, Box<dyn Error>> {
+        // return if there's nothing to translate
         if text.is_empty() {
             return Ok(DeepLXTranslationResult {
                 code: 404,
@@ -300,28 +301,30 @@ impl DeepLX {
             });
         }
 
-        let bytes = self
-            .split_text(
-                text,
-                matches!(tag_handling, Some("html" | "xml")),
-                deepl_session,
-            )
-            .await?;
-        let split_result: SplitTextResponse = serde_json::from_slice(&bytes)?;
+        // split text
+        let is_tag = matches!(tag_handling, Some("html" | "xml"));
+        let split_bytes = self.split_text(text, is_tag, deepl_session).await?;
+        let split_result: SplitTextResponse = serde_json::from_slice(&split_bytes)?;
+
+        // build jobs for translation
         let jobs = self.extract_jobs(&split_result);
 
+        // determine source language
         let source_lang_detached = match source_lang {
             "auto" | "" => {
-                let code = whatlang::detect_lang(text).unwrap().code();
-                isolang::Language::from_639_3(code)
-                    .unwrap()
-                    .to_639_1()
-                    .unwrap()
-                    .to_uppercase()
+                let iso_639_3 = whatlang::detect_lang(text)
+                    .ok_or("Failed to detect language")?
+                    .code();
+
+                isolang::Language::from_639_3(iso_639_3)
+                    .and_then(|lang| lang.to_639_1())
+                    .map(|iso_639_1| iso_639_1.to_uppercase())
+                    .ok_or("Could not map detected language to ISO 639-1")?
             }
             _ => source_lang.to_uppercase(),
         };
 
+        // check target language
         let target_lang_parts = target_lang.split('-').collect::<Vec<&str>>();
         let (target_lang_code, has_regional_variant) = if target_lang_parts.len() > 1 {
             (target_lang_parts[0].to_uppercase(), true)
@@ -329,6 +332,7 @@ impl DeepLX {
             (target_lang.to_uppercase(), false)
         };
 
+        // prepare the JSON-RPC request
         let id = get_random_number();
         let post_data = PostData {
             json_rpc: "2.0",
@@ -351,34 +355,45 @@ impl DeepLX {
             },
         };
 
+        // send request and parse response
         let bytes = &self
             .make_request(&post_data, "LMT_handle_jobs", deepl_session)
             .await?;
         let resp: TranslationResponse = serde_json::from_slice(bytes)?;
 
-        let mut alternatives = Vec::new();
-        let mut translated_text = String::new();
         let translations = resp.result.translations;
-        if !translations.is_empty() {
-            let num_beams = translations[0].beams.len();
-            for idx in 0..num_beams {
-                let mut alt_text = String::new();
-                for translation in &translations {
-                    let beams = &translation.beams;
-                    if idx < beams.len() {
-                        alt_text.push_str(beams[idx].sentences[0].text.as_ref());
-                    }
-                }
-                if !alt_text.is_empty() {
-                    alternatives.push(alt_text);
-                }
-            }
-            for translation in &translations {
-                translated_text.push_str(translation.beams[0].sentences[0].text.as_ref());
-                translated_text.push(' ');
+        if translations.is_empty() {
+            return Ok(DeepLXTranslationResult {
+                code: 503,
+                message: Some("Translation failed".to_string()),
+                ..Default::default()
+            });
+        }
+
+        // collect alternatives
+        let num_beams = translations[0].beams.len();
+        let mut alternatives = Vec::new();
+        for i in 0..num_beams {
+            let alt_text = translations
+                .iter()
+                .filter_map(|tr| tr.beams.get(i))
+                .map(|beam| beam.sentences[0].text.clone())
+                .collect::<String>();
+
+            if !alt_text.is_empty() {
+                alternatives.push(alt_text);
             }
         }
-        translated_text = translated_text.trim().to_string();
+
+        // best translation
+        let translated_text = translations
+            .iter()
+            .filter_map(|tr| tr.beams.first())
+            .map(|beam| beam.sentences[0].text.clone())
+            .collect::<Vec<String>>()
+            .join(" ")
+            .trim()
+            .to_string();
 
         if translated_text.is_empty() {
             return Ok(DeepLXTranslationResult {
