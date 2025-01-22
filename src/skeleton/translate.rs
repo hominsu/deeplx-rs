@@ -190,7 +190,7 @@ impl DeepLX {
         text: &str,
         tag_handling: bool,
         deepl_session: Option<&str>,
-    ) -> Result<bytes::Bytes, Box<dyn Error>> {
+    ) -> Result<SplitTextResponse, Box<dyn Error>> {
         let post_data = PostData {
             json_rpc: "2.0",
             method: "LMT_split_text",
@@ -213,8 +213,12 @@ impl DeepLX {
                 ..Default::default()
             },
         };
-        self.make_request(&post_data, "LMT_split_text", deepl_session)
-            .await
+
+        let resp = self
+            .make_request(&post_data, "LMT_split_text", deepl_session)
+            .await?;
+
+        Ok(serde_json::from_slice(&resp)?)
     }
 
     fn extract_jobs<'a>(&self, split_result: &'a SplitTextResponse) -> Vec<Job<'a>> {
@@ -315,8 +319,7 @@ impl DeepLX {
 
             // split text
             let is_tag = matches!(tag_handling, Some("html" | "xml"));
-            let split_bytes = self.split_text(part, is_tag, deepl_session).await?;
-            let split_result: SplitTextResponse = serde_json::from_slice(&split_bytes)?;
+            let split_result = self.split_text(part, is_tag, deepl_session).await?;
 
             // build jobs for translation
             let jobs = self.extract_jobs(&split_result);
@@ -367,10 +370,10 @@ impl DeepLX {
             };
 
             // send request and parse response
-            let bytes = &self
+            let resp = &self
                 .make_request(&post_data, "LMT_handle_jobs", deepl_session)
                 .await?;
-            let resp: TranslationResponse = serde_json::from_slice(bytes)?;
+            let resp: TranslationResponse = serde_json::from_slice(resp)?;
 
             let translations = resp.result.translations;
             if translations.is_empty() {
