@@ -9,6 +9,7 @@ use crate::{Bootstrap, Result};
 use deeplx::{Config, DeepLX};
 use pkgs::exit::shutdown_signal;
 use std::{future::IntoFuture, sync::Arc};
+use tokio::sync::watch;
 use tower_http::trace::TraceLayer;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
@@ -29,12 +30,13 @@ static GLOBAL: snmalloc_rs::SnMalloc = snmalloc_rs::SnMalloc;
 static GLOBAL: tikv_jemallocator::Jemalloc = tikv_jemallocator::Jemalloc;
 
 pub fn run(args: Bootstrap) -> Result<()> {
-    let manager = conf::manager(args.conf.as_str()).with_watcher(shutdown_signal());
+    let manager = conf::manager(args.conf.as_str());
     let config = manager.config();
     let conf::Config {
         debug,
         bind,
         concurrent,
+        proxy,
         ..
     } = config.read().unwrap().clone();
 
@@ -58,10 +60,8 @@ pub fn run(args: Bootstrap) -> Result<()> {
         .build()?;
 
     runtime.block_on(async move {
-        let manager_fut = manager.into_future();
-
         let translator = Arc::new(DeepLX::new(Config {
-            proxy: config.read().unwrap().proxy.clone(),
+            proxy,
             ..Config::default()
         }));
         let translate_repo = Arc::new(data::translate::TranslateRepo::new(translator.clone()));
@@ -70,7 +70,7 @@ pub fn run(args: Bootstrap) -> Result<()> {
         ));
         let state = routes::AppState {
             translate_uc: translate_usecase,
-            config: config.clone(),
+            config: manager.config().clone(),
         };
 
         let app = routes::router(state).layer(TraceLayer::new_for_http());
@@ -78,11 +78,29 @@ pub fn run(args: Bootstrap) -> Result<()> {
 
         tracing::debug!("listening on {}", listener.local_addr().unwrap());
 
-        let serve_fut = axum::serve(listener, app)
-            .with_graceful_shutdown(shutdown_signal())
-            .into_future();
+        let (tx, rx) = watch::channel(());
+        let tx = Arc::new(tx);
 
-        let _ = tokio::join!(serve_fut, manager_fut);
+        tokio::pin! {
+            let serve_fut = axum::serve(listener, app)
+                .with_graceful_shutdown(shutdown_signal(Arc::clone(&tx)))
+                .into_future();
+
+            let manager_fut = manager
+                .with_watcher(shutdown_signal(Arc::clone(&tx)))
+                .into_future();
+        }
+
+        tokio::select! {
+            _ = &mut serve_fut => {
+                drop(rx);
+                let _ = &mut manager_fut.await;
+            },
+            _ = &mut manager_fut => {
+                drop(rx);
+                let _ = &mut serve_fut.await;
+            },
+        }
     });
 
     Ok(())
