@@ -14,8 +14,7 @@ use rquest::{
         HeaderMap, HeaderValue, ACCEPT, ACCEPT_LANGUAGE, AUTHORIZATION, CACHE_CONTROL,
         CONTENT_TYPE, COOKIE, DNT, ORIGIN, PRAGMA, REFERER, USER_AGENT,
     },
-    tls::Impersonate,
-    Client,
+    Client, Impersonate,
 };
 
 #[cfg(feature = "impersonate")]
