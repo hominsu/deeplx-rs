@@ -5,7 +5,91 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v1.3.1 (2025-01-24)
+
+### Documentation
+
+ - <csr-id-12c0470aaea7a326ae406fa17bac155e48479fa2/> update install instructions and Dockerfile
+   - Remove the `server` feature flag from the install command in README
+   - Update the Dockerfile to use the `latest` rust version
+ - <csr-id-a98ad40f33e7b18671eb4da040c03df4981e0017/> update README.md
+
+### New Features
+
+ - <csr-id-e9201998503fa80e880efd2c9f0b547b2b3787de/> enhance translation robustness and error handling
+   - Improve error handling for language detection.
+   - Refactor translation logic for better readability and maintainability.
+   - Improve the way alternative translations are collected.
+   - Improve the way source language is determined.
+
+### Bug Fixes
+
+ - <csr-id-ce7dde6b67a85921f99478c292b9fc457fef00fb/> new line
+
+### Refactor
+
+ - <csr-id-76648191c8dafc1ed32771c10d2aa42405ce07fa/> improve server shutdown and config handling
+ - <csr-id-543411c7892a9dcfc926f538faa17fac07865a0e/> Improve CLI and error handling
+   - Updated Cargo.toml: Added `thiserror` and `clap` dependencies, removed `argh`.
+   - Updated config.toml: Added `debug`, `bind` and `concurrent` fields, changed `addr` to `bind`.
+   - Updated Dockerfile: Changed the CMD to use the `run` subcommand.
+   - Updated main.rs: Refactored the main function to use clap for command-line argument parsing, added subcommands and changed the server setup.
+   - Updated server/conf/mod.rs: Added default values for config fields.
+   - Updated server/mod.rs: Modified the server setup to use clap and to handle the subcommand `run`.
+   - Updated server/routes/middleware.rs: Modified the middleware to handle optional authentication.
+ - <csr-id-a90df3140f0a6c20f285c04598c26bba17233215/> Improve `split_text` error handling and response
+   - Refactor `split_text` to directly return a `SplitTextResponse` instead of bytes.
+   - Adjust the code to handle the response from `make_request` consistently.
+ - <csr-id-bed536265ea643fcd1f7654144578667f0ec1f7e/> enhance memory management
+   - Added support for multiple memory allocators: mimalloc, rpmalloc, snmalloc, and tikv-jemallocator.
+   - Removed `mimalloc` as the default global allocator.
+ - <csr-id-f336482cc4d3432c7e08b52a61b6c404ac5bcea0/> improve error handling and middleware
+   - Rename `InternalServerError` error variant to `InternalServer`
+   - Remove unnecessary `Future` trait bound in `from_request_parts` functions
+   - Simplify error handling in middleware and state extraction
+   - Remove unnecessary `async` block in `from_request_parts` function in `middleware.rs`
+   - Use `or` instead of `or_else` for optional token handling.
+ - <csr-id-49c857123034ad725d5beada036a00662201f956/> improve CI/CD workflows and Docker build
+ - <csr-id-3eaa33b7fcccde9d3d8de26150c51c8dcb85f8f3/> upgrade `axum` to 0.8 and remove `async-trait`
+   - Change `RequireAuth` and `AppState` middleware to return a `Future`.
+   - Change `translate` function to return a `Future`.
+ - <csr-id-b33d7898fc127e31ff87e25e5b5911f0c26c8a82/> cli argument parsing
+   - Replace `clap` with `argh` for command line parsing, reduced about 300
+     KB of server.
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 12 commits contributed to the release over the course of 31 calendar days.
+ - 31 days passed between releases.
+ - 12 commits were understood as [conventional](https://www.conventionalcommits.org).
+ - 0 issues like '(#ID)' were seen in commit messages
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **Uncategorized**
+    - Update install instructions and Dockerfile ([`12c0470`](https://github.com/hominsu/deeplx-rs/commit/12c0470aaea7a326ae406fa17bac155e48479fa2))
+    - Improve server shutdown and config handling ([`7664819`](https://github.com/hominsu/deeplx-rs/commit/76648191c8dafc1ed32771c10d2aa42405ce07fa))
+    - Improve CLI and error handling ([`543411c`](https://github.com/hominsu/deeplx-rs/commit/543411c7892a9dcfc926f538faa17fac07865a0e))
+    - Improve `split_text` error handling and response ([`a90df31`](https://github.com/hominsu/deeplx-rs/commit/a90df3140f0a6c20f285c04598c26bba17233215))
+    - New line ([`ce7dde6`](https://github.com/hominsu/deeplx-rs/commit/ce7dde6b67a85921f99478c292b9fc457fef00fb))
+    - Enhance translation robustness and error handling ([`e920199`](https://github.com/hominsu/deeplx-rs/commit/e9201998503fa80e880efd2c9f0b547b2b3787de))
+    - Enhance memory management ([`bed5362`](https://github.com/hominsu/deeplx-rs/commit/bed536265ea643fcd1f7654144578667f0ec1f7e))
+    - Improve error handling and middleware ([`f336482`](https://github.com/hominsu/deeplx-rs/commit/f336482cc4d3432c7e08b52a61b6c404ac5bcea0))
+    - Improve CI/CD workflows and Docker build ([`49c8571`](https://github.com/hominsu/deeplx-rs/commit/49c857123034ad725d5beada036a00662201f956))
+    - Upgrade `axum` to 0.8 and remove `async-trait` ([`3eaa33b`](https://github.com/hominsu/deeplx-rs/commit/3eaa33b7fcccde9d3d8de26150c51c8dcb85f8f3))
+    - Update README.md ([`a98ad40`](https://github.com/hominsu/deeplx-rs/commit/a98ad40f33e7b18671eb4da040c03df4981e0017))
+    - Cli argument parsing ([`b33d789`](https://github.com/hominsu/deeplx-rs/commit/b33d7898fc127e31ff87e25e5b5911f0c26c8a82))
+</details>
+
 ## v1.2.2 (2024-12-23)
+
+<csr-id-d8bf36c9ca8a40f627c39d9d6c6d6efad90bffe3/>
 
 ### Other
 
@@ -17,7 +101,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <csr-read-only-do-not-edit/>
 
- - 1 commit contributed to the release.
+ - 2 commits contributed to the release.
  - 1 day passed between releases.
  - 1 commit was understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
@@ -29,6 +113,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Release deeplx v1.2.2 ([`f4d3038`](https://github.com/hominsu/deeplx-rs/commit/f4d30383c49311b49ea2db916330f26332aa607e))
     - Significantly reduced the size of the build artifacts ([`d8bf36c`](https://github.com/hominsu/deeplx-rs/commit/d8bf36c9ca8a40f627c39d9d6c6d6efad90bffe3))
 </details>
 
@@ -105,9 +190,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Update dependencies ([`fe43461`](https://github.com/hominsu/deeplx-rs/commit/fe43461a5359031e43235f20d1bca666e3455456))
     - Update dependencies ([`c26c68b`](https://github.com/hominsu/deeplx-rs/commit/c26c68b2809acf6802975889cf3e0611a5459e32))
 </details>
-
-<csr-unknown>
-Add a proxy field to the config struct.Modify authentication to accept either a query parameter or a header for the token.Extract the token from the query parameter or the authorization header.Return an error if neither the query parameter nor the header contains a valid token.<csr-unknown/>
 
 ## v1.1.0 (2024-12-17)
 
