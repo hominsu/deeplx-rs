@@ -5,22 +5,61 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v1.3.2 (2025-01-24)
+
+### Bug Fixes
+
+ - <csr-id-cfcdb4c4003975b5a76038eb622c9fda5fc724ea/> request library imports
+
+### Other
+
+ - <csr-id-444652ceefccb3d6ff17ed9f2156b57cac3e126e/> configure docker buildx cloud driver
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 2 commits contributed to the release.
+ - 2 commits were understood as [conventional](https://www.conventionalcommits.org).
+ - 0 issues like '(#ID)' were seen in commit messages
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **Uncategorized**
+    - Configure docker buildx cloud driver ([`444652c`](https://github.com/hominsu/deeplx-rs/commit/444652ceefccb3d6ff17ed9f2156b57cac3e126e))
+    - Request library imports ([`cfcdb4c`](https://github.com/hominsu/deeplx-rs/commit/cfcdb4c4003975b5a76038eb622c9fda5fc724ea))
+</details>
+
 ## v1.3.1 (2025-01-24)
+
+<csr-id-76648191c8dafc1ed32771c10d2aa42405ce07fa/>
+<csr-id-543411c7892a9dcfc926f538faa17fac07865a0e/>
+<csr-id-a90df3140f0a6c20f285c04598c26bba17233215/>
+<csr-id-bed536265ea643fcd1f7654144578667f0ec1f7e/>
+<csr-id-f336482cc4d3432c7e08b52a61b6c404ac5bcea0/>
+<csr-id-49c857123034ad725d5beada036a00662201f956/>
+<csr-id-3eaa33b7fcccde9d3d8de26150c51c8dcb85f8f3/>
+<csr-id-b33d7898fc127e31ff87e25e5b5911f0c26c8a82/>
 
 ### Documentation
 
+<csr-id-a98ad40f33e7b18671eb4da040c03df4981e0017/>
+
  - <csr-id-12c0470aaea7a326ae406fa17bac155e48479fa2/> update install instructions and Dockerfile
    - Remove the `server` feature flag from the install command in README
-   - Update the Dockerfile to use the `latest` rust version
- - <csr-id-a98ad40f33e7b18671eb4da040c03df4981e0017/> update README.md
+- Update the Dockerfile to use the `latest` rust version
 
 ### New Features
 
  - <csr-id-e9201998503fa80e880efd2c9f0b547b2b3787de/> enhance translation robustness and error handling
    - Improve error handling for language detection.
-   - Refactor translation logic for better readability and maintainability.
-   - Improve the way alternative translations are collected.
-   - Improve the way source language is determined.
+- Refactor translation logic for better readability and maintainability.
+- Improve the way alternative translations are collected.
+- Improve the way source language is determined.
 
 ### Bug Fixes
 
@@ -61,7 +100,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <csr-read-only-do-not-edit/>
 
- - 12 commits contributed to the release over the course of 31 calendar days.
+ - 13 commits contributed to the release over the course of 31 calendar days.
  - 31 days passed between releases.
  - 12 commits were understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
@@ -73,6 +112,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Release deeplx v1.3.1 ([`11d34a9`](https://github.com/hominsu/deeplx-rs/commit/11d34a93fc94dbf47aa4fc187d500d4cc6d643e3))
     - Update install instructions and Dockerfile ([`12c0470`](https://github.com/hominsu/deeplx-rs/commit/12c0470aaea7a326ae406fa17bac155e48479fa2))
     - Improve server shutdown and config handling ([`7664819`](https://github.com/hominsu/deeplx-rs/commit/76648191c8dafc1ed32771c10d2aa42405ce07fa))
     - Improve CLI and error handling ([`543411c`](https://github.com/hominsu/deeplx-rs/commit/543411c7892a9dcfc926f538faa17fac07865a0e))
@@ -86,6 +126,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Update README.md ([`a98ad40`](https://github.com/hominsu/deeplx-rs/commit/a98ad40f33e7b18671eb4da040c03df4981e0017))
     - Cli argument parsing ([`b33d789`](https://github.com/hominsu/deeplx-rs/commit/b33d7898fc127e31ff87e25e5b5911f0c26c8a82))
 </details>
+
+<csr-unknown>
+ update README.md<csr-unknown/>
 
 ## v1.2.2 (2024-12-23)
 
