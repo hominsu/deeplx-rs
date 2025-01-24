@@ -1,4 +1,4 @@
-FROM rust:1.83 AS base
+FROM rust:latest AS base
 
 RUN cargo install sccache && \
     cargo install cargo-chef

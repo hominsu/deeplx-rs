@@ -54,13 +54,13 @@
 ### Install with Cargo
 
 ```shell
-cargo install --features="server"
+cargo install
 ```
 
 If you want to mimic browser settings, use the `impersonate` feature:
 
 ```shell
-cargo install --features="impersonate,server"
+cargo install --features="impersonate"
 ```
 
 > **Note:** The `impersonate` feature relies on the [`rquest`](https://github.com/penumbra-x/rquest) crate, which may not be stable. Additionally, build artifacts may increase by ~50%.
