@@ -1,7 +1,10 @@
-use crate::server::{biz::translate::TranslateRepo as BizTranslateRepo, pkgs::Error};
+use std::future::Future;
+use std::pin::Pin;
+use std::sync::Arc;
 
 use deeplx::{DeepLX, DeepLXTranslationResult};
-use std::{future::Future, pin::Pin, sync::Arc};
+
+use crate::server::{biz::translate::TranslateRepo as BizTranslateRepo, pkgs::Error};
 
 pub struct TranslateRepo {
     translator: Arc<DeepLX>,

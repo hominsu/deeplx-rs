@@ -1,4 +1,5 @@
 use std::sync::Arc;
+
 use tokio::{signal, sync::watch::Sender};
 
 pub async fn shutdown_signal(tx: Arc<Sender<()>>) {

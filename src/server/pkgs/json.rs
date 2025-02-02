@@ -1,8 +1,6 @@
-use axum::{
-    extract::FromRequest,
-    http::StatusCode,
-    response::{IntoResponse, Response},
-};
+use axum::extract::FromRequest;
+use axum::http::StatusCode;
+use axum::response::{IntoResponse, Response};
 
 #[derive(FromRequest)]
 #[from_request(via(axum::Json), rejection(super::Error))]

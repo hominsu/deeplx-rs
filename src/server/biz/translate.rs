@@ -1,12 +1,11 @@
-use crate::server::pkgs::{Error, Json};
+use std::{future::Future, pin::Pin, sync::Arc};
 
-use axum::{
-    http::StatusCode,
-    response::{IntoResponse, Response},
-};
+use axum::http::StatusCode;
+use axum::response::{IntoResponse, Response};
 use deeplx::DeepLXTranslationResult;
 use serde::Serialize;
-use std::{future::Future, pin::Pin, sync::Arc};
+
+use crate::server::pkgs::{Error, Json};
 
 pub trait TranslateRepo: Send + Sync {
     fn translate<'a>(

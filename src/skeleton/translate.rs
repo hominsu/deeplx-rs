@@ -1,10 +1,8 @@
-use super::{
-    data::{
-        CommonJobParams, DeepLXTranslationResult, Job, Lang, Params, PostData, Sentence,
-        SplitTextResponse, TranslationResponse,
-    },
-    utils::{get_i_count, get_random_number, get_timestamp, is_rich_text},
+use super::data::{
+    CommonJobParams, DeepLXTranslationResult, Job, Lang, Params, PostData, Sentence,
+    SplitTextResponse, TranslationResponse,
 };
+use super::utils::{get_i_count, get_random_number, get_timestamp, is_rich_text};
 
 use std::{error::Error, sync::Arc};
 
