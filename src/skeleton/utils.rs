@@ -1,7 +1,7 @@
-use rand::{thread_rng, Rng};
+use rand::{rng, Rng};
 
 pub(crate) fn get_random_number() -> i64 {
-    let num = thread_rng().gen_range(1..99999) + 8300000;
+    let num = rng().random_range(1..99999) + 8300000;
     (num as i64) * 1000
 }
 
