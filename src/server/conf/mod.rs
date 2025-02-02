@@ -1,21 +1,21 @@
+use std::future::{Future, IntoFuture};
+use std::io;
+use std::net::SocketAddr;
+use std::path::Path;
+use std::sync::{mpsc, Arc, RwLock};
+use std::time::Duration;
+
 use config::{ConfigError, File};
 use glob::glob;
 use notify::{Event, RecommendedWatcher, RecursiveMode, Watcher};
 use serde::Deserialize;
-use std::{
-    future::{Future, IntoFuture},
-    io,
-    path::Path,
-    sync::{mpsc, Arc, RwLock},
-    time::Duration,
-};
 
 #[derive(Clone, Debug, Deserialize)]
 #[serde(default)]
 pub struct Config {
     pub debug: bool,
-    pub bind: String,
-    pub concurrent: usize,
+    pub bind: SocketAddr,
+    pub concurrent: u32,
     pub proxy: Option<String>,
     pub auth: Option<String>,
 }
@@ -24,7 +24,7 @@ impl Default for Config {
     fn default() -> Self {
         Self {
             debug: false,
-            bind: "0.0.0.0:3000".to_string(),
+            bind: "0.0.0.0:3000".parse().unwrap(),
             concurrent: 1024,
             proxy: None,
             auth: None,
