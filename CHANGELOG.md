@@ -5,7 +5,46 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v1.3.3 (2025-02-02)
+
+### Chore
+
+ - <csr-id-59f9eb1252117f0f32704caeaf9e60750a1bf5b8/> docker authentication
+
+### Bug Fixes
+
+ - <csr-id-3b56ba3474ba43dcd3f02b8a5d0e910a90163457/> lint
+
+### Refactor
+
+ - <csr-id-dd4fd71c6cf091749547a06c5b22584ebcc461be/> server to use SocketAddr config
+   - Move the server run logic to a separate module
+   - Change the config `bind` field to be a `SocketAddr` instead of a String
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 3 commits contributed to the release over the course of 9 calendar days.
+ - 9 days passed between releases.
+ - 3 commits were understood as [conventional](https://www.conventionalcommits.org).
+ - 0 issues like '(#ID)' were seen in commit messages
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **Uncategorized**
+    - Lint ([`3b56ba3`](https://github.com/hominsu/deeplx-rs/commit/3b56ba3474ba43dcd3f02b8a5d0e910a90163457))
+    - Server to use SocketAddr config ([`dd4fd71`](https://github.com/hominsu/deeplx-rs/commit/dd4fd71c6cf091749547a06c5b22584ebcc461be))
+    - Docker authentication ([`59f9eb1`](https://github.com/hominsu/deeplx-rs/commit/59f9eb1252117f0f32704caeaf9e60750a1bf5b8))
+</details>
+
 ## v1.3.2 (2025-01-24)
+
+<csr-id-444652ceefccb3d6ff17ed9f2156b57cac3e126e/>
 
 ### Bug Fixes
 
@@ -19,7 +58,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <csr-read-only-do-not-edit/>
 
- - 2 commits contributed to the release.
+ - 3 commits contributed to the release.
  - 2 commits were understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
 
@@ -30,6 +69,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Release deeplx v1.3.2 ([`3e9a907`](https://github.com/hominsu/deeplx-rs/commit/3e9a9078dc13255b0aca908c5f6648dc14bee7c4))
     - Configure docker buildx cloud driver ([`444652c`](https://github.com/hominsu/deeplx-rs/commit/444652ceefccb3d6ff17ed9f2156b57cac3e126e))
     - Request library imports ([`cfcdb4c`](https://github.com/hominsu/deeplx-rs/commit/cfcdb4c4003975b5a76038eb622c9fda5fc724ea))
 </details>
@@ -51,15 +91,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
  - <csr-id-12c0470aaea7a326ae406fa17bac155e48479fa2/> update install instructions and Dockerfile
    - Remove the `server` feature flag from the install command in README
-- Update the Dockerfile to use the `latest` rust version
 
 ### New Features
 
  - <csr-id-e9201998503fa80e880efd2c9f0b547b2b3787de/> enhance translation robustness and error handling
    - Improve error handling for language detection.
-- Refactor translation logic for better readability and maintainability.
-- Improve the way alternative translations are collected.
-- Improve the way source language is determined.
 
 ### Bug Fixes
 
@@ -128,7 +164,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 </details>
 
 <csr-unknown>
- update README.md<csr-unknown/>
+Update the Dockerfile to use the latest rust versionRefactor translation logic for better readability and maintainability.Improve the way alternative translations are collected.Improve the way source language is determined.<csr-unknown/>
 
 ## v1.2.2 (2024-12-23)
 
