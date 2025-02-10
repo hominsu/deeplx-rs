@@ -442,7 +442,7 @@ impl DeepLX {
             } else {
                 "Pro"
             }
-                .to_string(),
+            .to_string(),
             ..Default::default()
         })
     }
