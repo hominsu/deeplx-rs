@@ -40,7 +40,7 @@ RUN --mount=type=cache,target=/usr/local/cargo/registry \
     --mount=type=cache,target=${SCCACHE_DIR},sharing=locked \
     RUSTFLAGS='-C target-feature=+crt-static' \
     CARGO_BUILD_TARGET=$(rustc -vV | grep host | awk '{print $2}')  \
-    cargo install --path . --features=server
+    cargo install --path . --features=impersonate
 
 FROM scratch
 
