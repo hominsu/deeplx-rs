@@ -5,7 +5,47 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v1.4.0 (2025-02-10)
+
+### Chore
+
+ - <csr-id-a29a32db11450ef4c22d20c44abbd778d8ead8c0/> enable impersonation feature in docker
+
+### New Features
+
+ - <csr-id-ef26b4be967c454283df9dd773997163cb1b75bf/> bump rand crate
+
+### Refactor
+
+ - <csr-id-aa06ce866e21614f5361e4492c4c0e9b023fa83e/> proxy configuration for improved flexibility
+   - Store the proxy configuration in the `DeepLX` struct.
+   - Create a `reqwest` client inside the `translate` function, instead of inside the `new` function.
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 3 commits contributed to the release over the course of 8 calendar days.
+ - 8 days passed between releases.
+ - 3 commits were understood as [conventional](https://www.conventionalcommits.org).
+ - 0 issues like '(#ID)' were seen in commit messages
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **Uncategorized**
+    - Enable impersonation feature in docker ([`a29a32d`](https://github.com/hominsu/deeplx-rs/commit/a29a32db11450ef4c22d20c44abbd778d8ead8c0))
+    - Proxy configuration for improved flexibility ([`aa06ce8`](https://github.com/hominsu/deeplx-rs/commit/aa06ce866e21614f5361e4492c4c0e9b023fa83e))
+    - Bump rand crate ([`ef26b4b`](https://github.com/hominsu/deeplx-rs/commit/ef26b4be967c454283df9dd773997163cb1b75bf))
+</details>
+
 ## v1.3.3 (2025-02-02)
+
+<csr-id-59f9eb1252117f0f32704caeaf9e60750a1bf5b8/>
+<csr-id-dd4fd71c6cf091749547a06c5b22584ebcc461be/>
 
 ### Chore
 
@@ -25,7 +65,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <csr-read-only-do-not-edit/>
 
- - 3 commits contributed to the release over the course of 9 calendar days.
+ - 4 commits contributed to the release over the course of 9 calendar days.
  - 9 days passed between releases.
  - 3 commits were understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
@@ -37,6 +77,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Release deeplx v1.3.3 ([`7038f1b`](https://github.com/hominsu/deeplx-rs/commit/7038f1b252d451e3f05ed28c80c8180e07a571f7))
     - Lint ([`3b56ba3`](https://github.com/hominsu/deeplx-rs/commit/3b56ba3474ba43dcd3f02b8a5d0e910a90163457))
     - Server to use SocketAddr config ([`dd4fd71`](https://github.com/hominsu/deeplx-rs/commit/dd4fd71c6cf091749547a06c5b22584ebcc461be))
     - Docker authentication ([`59f9eb1`](https://github.com/hominsu/deeplx-rs/commit/59f9eb1252117f0f32704caeaf9e60750a1bf5b8))
@@ -162,9 +203,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Update README.md ([`a98ad40`](https://github.com/hominsu/deeplx-rs/commit/a98ad40f33e7b18671eb4da040c03df4981e0017))
     - Cli argument parsing ([`b33d789`](https://github.com/hominsu/deeplx-rs/commit/b33d7898fc127e31ff87e25e5b5911f0c26c8a82))
 </details>
-
-<csr-unknown>
-Update the Dockerfile to use the latest rust versionRefactor translation logic for better readability and maintainability.Improve the way alternative translations are collected.Improve the way source language is determined.<csr-unknown/>
 
 ## v1.2.2 (2024-12-23)
 
