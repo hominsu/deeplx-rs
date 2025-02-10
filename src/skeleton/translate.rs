@@ -4,7 +4,7 @@ use super::data::{
 };
 use super::utils::{get_i_count, get_random_number, get_timestamp, is_rich_text};
 
-use std::{error::Error, sync::Arc};
+use std::error::Error;
 
 #[cfg(feature = "impersonate")]
 use rquest::{
@@ -12,12 +12,8 @@ use rquest::{
         HeaderMap, HeaderValue, ACCEPT, ACCEPT_LANGUAGE, AUTHORIZATION, CACHE_CONTROL,
         CONTENT_TYPE, COOKIE, DNT, ORIGIN, PRAGMA, REFERER, USER_AGENT,
     },
-    Client, Impersonate,
+    Client, Impersonate, Proxy,
 };
-
-#[cfg(feature = "impersonate")]
-#[cfg(feature = "proxy")]
-use rquest::Proxy;
 
 #[cfg(not(feature = "impersonate"))]
 use reqwest::{
@@ -25,12 +21,8 @@ use reqwest::{
         HeaderMap, HeaderValue, ACCEPT, ACCEPT_LANGUAGE, AUTHORIZATION, CACHE_CONTROL,
         CONTENT_TYPE, COOKIE, DNT, ORIGIN, PRAGMA, REFERER, USER_AGENT,
     },
-    Client,
+    Client, Proxy,
 };
-
-#[cfg(not(feature = "impersonate"))]
-#[cfg(feature = "proxy")]
-use reqwest::Proxy;
 
 /// Configuration settings for the `DeepLX` translation client.
 ///
@@ -67,7 +59,6 @@ use reqwest::Proxy;
 /// ```
 pub struct Config {
     pub base_url: String,
-    #[cfg(feature = "proxy")]
     pub proxy: Option<String>,
 }
 
@@ -75,7 +66,6 @@ impl Default for Config {
     fn default() -> Self {
         Self {
             base_url: "https://www2.deepl.com/jsonrpc".to_string(),
-            #[cfg(feature = "proxy")]
             proxy: None,
         }
     }
@@ -89,7 +79,7 @@ impl Default for Config {
 #[derive(Clone)]
 pub struct DeepLX {
     base_url: String,
-    client: Arc<Client>,
+    proxy: Option<String>,
     headers: HeaderMap,
 }
 
@@ -116,26 +106,9 @@ impl DeepLX {
     /// });
     /// ```
     pub fn new(config: Config) -> Self {
-        #[cfg(feature = "impersonate")]
-        let builder = Client::builder().impersonate(Impersonate::Chrome131);
-
-        #[cfg(not(feature = "impersonate"))]
-        let builder = Client::builder();
-
-        #[cfg(feature = "proxy")]
-        let client = match config.proxy {
-            Some(p) => builder.proxy(Proxy::all(p).unwrap()),
-            None => builder,
-        }
-        .build()
-        .unwrap();
-
-        #[cfg(not(feature = "proxy"))]
-        let client = builder.build().unwrap();
-
         Self {
             base_url: config.base_url,
-            client: Arc::new(client),
+            proxy: config.proxy,
             headers: headers(),
         }
     }
@@ -167,8 +140,19 @@ impl DeepLX {
 
         let data = data.replacen(r#""method":""#, replacement, 1);
 
-        let resp = self
-            .client
+        #[cfg(feature = "impersonate")]
+        let builder = Client::builder().impersonate(Impersonate::Chrome131);
+
+        #[cfg(not(feature = "impersonate"))]
+        let builder = Client::builder();
+
+        let builder = match &self.proxy {
+            Some(p) => builder.proxy(Proxy::all(p.clone()).unwrap()),
+            None => builder,
+        };
+
+        let resp = builder
+            .build()?
             .post(&full_url)
             .headers(headers)
             .body(data)
@@ -458,7 +442,7 @@ impl DeepLX {
             } else {
                 "Pro"
             }
-            .to_string(),
+                .to_string(),
             ..Default::default()
         })
     }
