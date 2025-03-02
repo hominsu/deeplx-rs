@@ -2,9 +2,55 @@ name: Release
 
 on:
   push:
-    tags: [ '*.*.*' ]
+    tags: ['v*']
 
 jobs:
+  build:
+    if: startsWith(github.ref, 'refs/tags/')
+    runs-on: ubuntu-latest
+    container:
+      image: ghcr.io/rust-cross/cargo-zigbuild:latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install dependencies
+        run: |
+          apt update && apt install -y mingw-w64 sudo
+
+      - name: Build
+        uses: hominsu/cargo-zigbuild-action@v1
+        env:
+          RUSTFLAGS: -C target-feature=+crt-static
+        with:
+          name: deeplx
+          args: |
+            target=x86_64-unknown-linux-musl,release,no-default-features,"features=server,impersonate,mimalloc"
+            target=aarch64-unknown-linux-musl,release,no-default-features,"features=server,impersonate,mimalloc"
+            target=armv7-unknown-linux-musleabihf,release,no-default-features,"features=server,impersonate,tikv-jemallocator"
+            target=arm-unknown-linux-musleabihf,release,no-default-features,"features=server,impersonate,tikv-jemallocator"
+            target=i686-unknown-linux-musl,release,no-default-features,"features=server,impersonate,tikv-jemallocator"
+            target=x86_64-apple-darwin,release,no-default-features,"features=server,impersonate"
+            target=aarch64-apple-darwin,release,no-default-features,"features=server,impersonate"
+            target=x86_64-pc-windows-gnu,release,no-default-features,"features=server,impersonate"
+            target=i686-pc-windows-gnu,release,no-default-features,"features=server,impersonate"
+
+      - name: Upload binaries to GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            artifacts/*
+          prerelease: ${{ contains(github.ref, 'alpha') || contains(github.ref, 'beta') }}
+          token: ${{ secrets.CR_PAT }}
+          generate_release_notes: true
+
   dockerize:
     if: startsWith(github.ref, 'refs/tags/')
     runs-on: ubuntu-latest
@@ -69,3 +115,27 @@ jobs:
           username: ${{ secrets.DOCKER_ID }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: hominsu/deeplx
+
+  crates:
+    if: startsWith(github.ref, 'refs/tags/')
+    needs: [build, dockerize]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install stable toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          components: rustfmt, clippy
+
+      - name: Publish to crates.io
+        uses: katyo/publish-crates@v2
+        with:
+          registry-token: ${{ secrets.CARGO_REGISTRY_TOKEN }}

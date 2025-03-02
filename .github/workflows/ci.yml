@@ -1,12 +1,9 @@
-on: [ push, pull_request ]
-
 name: CI
 
-env:
-  RUSTTOOLCHAIN: "stable"
+on: [push, pull_request]
 
 jobs:
-  deeplx:
+  CI:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -17,7 +14,7 @@ jobs:
       - name: Install stable toolchain
         uses: dtolnay/rust-toolchain@stable
         with:
-          toolchain: ${{ env.RUSTTOOLCHAIN }}
+          toolchain: stable
           components: rustfmt, clippy
 
       - name: Run cargo check
