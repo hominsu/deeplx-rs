@@ -34,8 +34,16 @@ pub fn run(args: Bootstrap) -> Result<()> {
         .with(tracing_subscriber::fmt::layer())
         .init();
 
+    let cpus = std::thread::available_parallelism()?;
+
+    tracing::info!("OS: {}", std::env::consts::OS);
+    tracing::info!("Arch: {}", std::env::consts::ARCH);
+    tracing::info!("CPUs: {}", cpus);
+    tracing::info!("Concurrent: {}", concurrent);
+
     let runtime = tokio::runtime::Builder::new_multi_thread()
         .enable_all()
+        .worker_threads(cpus.into())
         .build()?;
 
     runtime.block_on(async move {
