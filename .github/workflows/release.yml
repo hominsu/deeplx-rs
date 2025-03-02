@@ -31,15 +31,15 @@ jobs:
         with:
           name: deeplx
           args: |
-            target=x86_64-unknown-linux-musl,release,no-default-features,"features=server,impersonate,mimalloc"
-            target=aarch64-unknown-linux-musl,release,no-default-features,"features=server,impersonate,mimalloc"
-            target=armv7-unknown-linux-musleabihf,release,no-default-features,"features=server,impersonate,tikv-jemallocator"
-            target=arm-unknown-linux-musleabihf,release,no-default-features,"features=server,impersonate,tikv-jemallocator"
-            target=i686-unknown-linux-musl,release,no-default-features,"features=server,impersonate,tikv-jemallocator"
-            target=x86_64-apple-darwin,release,no-default-features,"features=server,impersonate"
-            target=aarch64-apple-darwin,release,no-default-features,"features=server,impersonate"
-            target=x86_64-pc-windows-gnu,release,no-default-features,"features=server,impersonate"
-            target=i686-pc-windows-gnu,release,no-default-features,"features=server,impersonate"
+            target=x86_64-unknown-linux-musl,release,no-default-features,'features=server,impersonate,mimalloc'
+            target=aarch64-unknown-linux-musl,release,no-default-features,'features=server,impersonate,mimalloc'
+            target=armv7-unknown-linux-musleabihf,release,no-default-features,'features=server,impersonate,tikv-jemallocator'
+            target=arm-unknown-linux-musleabihf,release,no-default-features,'features=server,impersonate,tikv-jemallocator'
+            target=i686-unknown-linux-musl,release,no-default-features,'features=server,impersonate,tikv-jemallocator'
+            target=x86_64-apple-darwin,release,no-default-features,'features=server,impersonate'
+            target=aarch64-apple-darwin,release,no-default-features,'features=server,impersonate'
+            target=x86_64-pc-windows-gnu,release,no-default-features,'features=server,impersonate'
+            target=i686-pc-windows-gnu,release,no-default-features,'features=server,impersonate'
 
       - name: Upload binaries to GitHub Release
         uses: softprops/action-gh-release@v2
