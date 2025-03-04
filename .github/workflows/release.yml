@@ -22,7 +22,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          apt update && apt install -y mingw-w64 sudo
+          apt update && apt install -y mingw-w64 libssl-dev sudo
 
       - name: Build
         uses: hominsu/cargo-zigbuild-action@v1
