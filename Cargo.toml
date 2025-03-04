@@ -66,7 +66,15 @@ isolang = { version = "2.4.0" }
 whatlang = { version = "0.16" }
 
 # http client
-reqwest = { version = "0.12", features = ["gzip", "brotli", "json"] }
+reqwest = { version = "0.12", default-features = false, features = [
+    "rustls-tls",
+    "charset",
+    "http2",
+    "macos-system-configuration",
+    "gzip",
+    "brotli",
+    "json"
+] }
 rquest = { version = "2", optional = true, features = ["gzip", "brotli", "json"] }
 
 # memory allocator
@@ -91,7 +99,7 @@ tracing = { version = "0.1", optional = true }
 tracing-subscriber = { version = "0.3", optional = true, features = ["env-filter"] }
 
 # async runtime
-tokio = { version = "1", optional = true, features = ["full"] }
+tokio = { version = "1", optional = true, features = ["io-util", "macros", "net", "rt-multi-thread", "signal"] }
 
 # web stuff
 tower-http = { version = "0.6", optional = true, features = ["trace"] }
