@@ -15,8 +15,6 @@ target "cross" {
 
 target "deeplx" {
   inherits = ["metadata", "cross"]
-  cache-from = ["type=gha"]
-  cache-to = ["type=gha,mode=max"]
   context    = "."
   dockerfile = "deploy/Dockerfile"
 }
