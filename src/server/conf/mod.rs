@@ -167,7 +167,7 @@ where
                 res = &mut task => {
                     match res {
                         Ok(_) => Ok(()),
-                        Err(err) => Err(io::Error::new(io::ErrorKind::Other, format!("watcher task failed: {err}"))),
+                        Err(err) => Err(io::Error::other(format!("watcher task failed: {err}"))),
                     }
                 },
             }

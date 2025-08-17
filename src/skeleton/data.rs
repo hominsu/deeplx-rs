@@ -3,8 +3,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Default, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub(crate) struct Lang<'a> {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub source_lang_computed: Option<&'a str>,
+    pub source_lang_user_selected: &'a str,
     pub target_lang: &'a str,
     #[serde(skip_serializing_if = "Option::is_none")]
     pub lang_user_selected: Option<&'a str>,
@@ -12,48 +11,19 @@ pub(crate) struct Lang<'a> {
 
 #[derive(Debug, Default, Serialize)]
 #[serde(rename_all = "snake_case")]
-pub(crate) struct CommonJobParams<'a> {
-    pub mode: &'a str,
-    #[serde(rename = "regionalVariant", skip_serializing_if = "Option::is_none")]
-    pub regional_variant: Option<&'a str>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub(crate) struct Sentence {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub prefix: Option<String>,
-    pub text: String,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub id: Option<i32>,
-}
-
-#[derive(Debug, Serialize)]
-#[serde(rename_all = "snake_case")]
-pub(crate) struct Job<'a> {
-    pub kind: &'a str,
-    pub preferred_num_beams: i32,
-    pub raw_en_context_before: Vec<&'a str>,
-    pub raw_en_context_after: Vec<&'a str>,
-    pub sentences: Vec<Sentence>,
+pub(crate) struct TextItem<'a> {
+    pub text: &'a str,
+    #[serde(rename = "requestAlternatives")]
+    pub request_alternatives: i64,
 }
 
 #[derive(Debug, Default, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub(crate) struct Params<'a> {
-    #[serde(rename = "commonJobParams")]
-    pub common_job_params: CommonJobParams<'a>,
+    pub splitting: &'a str,
     pub lang: Lang<'a>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub texts: Option<Vec<&'a str>>,
-    #[serde(rename = "textType", skip_serializing_if = "Option::is_none")]
-    pub text_type: Option<&'a str>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub jobs: Option<Vec<Job<'a>>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub priority: Option<i32>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub timestamp: Option<i64>,
+    pub texts: Vec<TextItem<'a>>,
+    pub timestamp: i64,
 }
 
 #[derive(Debug, Serialize)]
@@ -64,70 +34,6 @@ pub(crate) struct PostData<'a> {
     pub method: &'a str,
     pub id: i64,
     pub params: Params<'a>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub(crate) struct SplitTextResponseResultLang {
-    pub detected: String,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub(crate) struct SplitTextResponseResultChunk {
-    pub sentences: Vec<Sentence>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub(crate) struct SplitTextResponseResultText {
-    pub chunks: Vec<SplitTextResponseResultChunk>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub(crate) struct SplitTextResponseResult {
-    pub lang: SplitTextResponseResultLang,
-    pub texts: Vec<SplitTextResponseResultText>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub(crate) struct SplitTextResponse {
-    #[serde(rename = "jsonrpc")]
-    pub json_rpc: String,
-    pub id: i64,
-    pub result: SplitTextResponseResult,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub(crate) struct TranslationResponseResultBeam {
-    pub sentences: Vec<Sentence>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub(crate) struct TranslationResponseResultTranslation {
-    pub beams: Vec<TranslationResponseResultBeam>,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub(crate) struct TranslationResponseResult<'a> {
-    pub translations: Vec<TranslationResponseResultTranslation>,
-    pub source_lang: &'a str,
-    pub target_lang: &'a str,
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub(crate) struct TranslationResponse<'a> {
-    #[serde(rename = "jsonrpc")]
-    pub json_rpc: &'a str,
-    pub id: i64,
-    #[serde(borrow)]
-    pub result: TranslationResponseResult<'a>,
 }
 
 /// A structure representing the final result of a translation.
@@ -169,4 +75,33 @@ impl Default for DeepLXTranslationResult {
             method: "".to_string(),
         }
     }
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub(crate) struct Text {
+    pub text: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub(crate) struct Texts {
+    pub alternatives: Vec<Text>,
+    pub text: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub(crate) struct TranslationResponseResult {
+    pub texts: Vec<Texts>,
+    pub lang: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub(crate) struct TranslationResponse {
+    #[serde(rename = "jsonrpc")]
+    pub json_rpc: String,
+    pub id: i64,
+    pub result: TranslationResponseResult,
 }

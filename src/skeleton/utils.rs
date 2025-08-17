@@ -18,7 +18,3 @@ pub(crate) fn get_timestamp(mut i_count: i64) -> i64 {
         ts
     }
 }
-
-pub(crate) fn is_rich_text(text: &str) -> bool {
-    text.contains("<") && text.contains(">")
-}
