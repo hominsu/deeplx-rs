@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## v1.4.2 (2025-08-17)
 
+<csr-id-8ebefeb492c48a11597d2719aba36fabeb81e495/>
+
 ### Refactor
 
  - <csr-id-8ebefeb492c48a11597d2719aba36fabeb81e495/> simplify logic
@@ -15,7 +17,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <csr-read-only-do-not-edit/>
 
- - 1 commit contributed to the release.
+ - 2 commits contributed to the release.
  - 166 days passed between releases.
  - 1 commit was understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
@@ -27,10 +29,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Release deeplx v1.4.2 ([`428d168`](https://github.com/hominsu/deeplx-rs/commit/428d168e00cef09475b2174504202335fa8c91bd))
     - Simplify logic ([`8ebefeb`](https://github.com/hominsu/deeplx-rs/commit/8ebefeb492c48a11597d2719aba36fabeb81e495))
 </details>
 
 ## v1.4.1 (2025-03-04)
+
+<csr-id-57c8fa6c4ed0d69793e93d13478a887c04aacecc/>
+<csr-id-6729abfa5087ec12773c28b623979187150ea525/>
+<csr-id-2ded061aac5994fc3151bd743cebd82a32ce69d0/>
+<csr-id-1feec80534d9ab29f3c19d5f7c0bf0371bf08a0b/>
+<csr-id-08c478d51f141ebaf86d3d2165c7a6fa499b6fb6/>
+<csr-id-4006f8255253b1eea42e31530e20d0fec4a828ce/>
 
 ### New Features
 
@@ -129,7 +139,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <csr-id-dd4fd71c6cf091749547a06c5b22584ebcc461be/>
 
 
-<csr-id-dd4fd71c6cf091749547a06c5b22584ebcc461be/>
 
 ### Chore
 
@@ -171,8 +180,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <csr-id-444652ceefccb3d6ff17ed9f2156b57cac3e126e/>
 
-
-
 ### Bug Fixes
 
  - <csr-id-cfcdb4c4003975b5a76038eb622c9fda5fc724ea/> request library imports
@@ -213,7 +220,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <csr-id-b33d7898fc127e31ff87e25e5b5911f0c26c8a82/>
 
 
-<csr-id-543411c7892a9dcfc926f538faa17fac07865a0e/>
 <csr-id-a90df3140f0a6c20f285c04598c26bba17233215/>
 <csr-id-bed536265ea643fcd1f7654144578667f0ec1f7e/>
 <csr-id-f336482cc4d3432c7e08b52a61b6c404ac5bcea0/>
@@ -299,15 +305,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Cli argument parsing ([`b33d789`](https://github.com/hominsu/deeplx-rs/commit/b33d7898fc127e31ff87e25e5b5911f0c26c8a82))
 </details>
 
-<csr-unknown>
-
-<csr-unknown/>
-
 ## v1.2.2 (2024-12-23)
 
 <csr-id-d8bf36c9ca8a40f627c39d9d6c6d6efad90bffe3/>
-
-
 
 ### Other
 
@@ -338,8 +338,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## v1.2.1 (2024-12-22)
 
 <csr-id-294dbe6087abdbe77970bda1a16d37789e0fde26/>
-
-
 
 ### Documentation
 
@@ -373,8 +371,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## v1.2.0 (2024-12-18)
 
 <csr-id-fe43461a5359031e43235f20d1bca666e3455456/>
-
-
 
 ### Chore
 
@@ -413,10 +409,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - Update dependencies ([`c26c68b`](https://github.com/hominsu/deeplx-rs/commit/c26c68b2809acf6802975889cf3e0611a5459e32))
 </details>
 
-<csr-unknown>
-
-<csr-unknown/>
-
 ## v1.1.0 (2024-12-17)
 
 ### Performance
@@ -445,8 +437,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## v1.0.0 (2024-12-17)
 
 <csr-id-e6b2eae0a771af67266e7e72df01b7a97b07c8bd/>
-
-
 
 ### Chore
 
@@ -508,7 +498,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <csr-id-6766cf0f59375773b36d91a350c601d7c084dbce/>
 
 
-<csr-id-5e45fd5e2f6c935a67e6ffefc193dc9a485c4f3c/>
 <csr-id-6766cf0f59375773b36d91a350c601d7c084dbce/>
 
 ### Documentation
@@ -698,8 +687,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <csr-id-68e63558cfaaa04ab33970aa26afa90f9a7712d4/>
 
-
-
 ### Refactor
 
  - <csr-id-68e63558cfaaa04ab33970aa26afa90f9a7712d4/> String is enough for this case
@@ -727,8 +714,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <csr-id-00ce8653b58562bfe39901889a542c3faae15e8f/>
 
-
-
 ### Refactor
 
  - <csr-id-00ce8653b58562bfe39901889a542c3faae15e8f/> serialize data into struct
@@ -755,8 +740,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## v0.1.1 (2024-12-06)
 
 <csr-id-7fa3532f7169fecc232d0957c41d2442750bc7d2/>
-
-
 
 ### Chore
 
@@ -796,7 +779,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <csr-id-781134495786432752fa191a79a219f42ea036db/>
 
 
-<csr-id-05f1555739794356cf66c3ed95db99df3e103917/>
 <csr-id-b080ada977b0192042e6a3a4cb07c79f2f5c0060/>
 <csr-id-904ed1645a6ec5cefd2cafa6531dec6f7620adbc/>
 <csr-id-9a3d3c6545403905d92c5e3ae52eb16edaba0813/>
