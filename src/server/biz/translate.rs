@@ -97,10 +97,7 @@ impl TranslateUsecase {
         text: &str,
         target_lang: &str,
     ) -> Result<Response, Error> {
-        let res = self
-            .repo
-            .translate(text, "auto", target_lang, None)
-            .await?;
+        let res = self.repo.translate(text, "auto", target_lang, None).await?;
 
         match res.code {
             200 => Ok(Json(TranslateResultOfficial {
