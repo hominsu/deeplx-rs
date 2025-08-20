@@ -56,12 +56,7 @@ pub async fn translate_pro(
             false => {
                 state
                     .translate_uc
-                    .translate(
-                        &text,
-                        &source_lang,
-                        &target_lang,
-                        Some(dl_session.as_str()),
-                    )
+                    .translate(&text, &source_lang, &target_lang, Some(dl_session.as_str()))
                     .await
             }
         },
