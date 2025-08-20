@@ -3,7 +3,7 @@ use crate::server::pkgs::{Error, Json};
 
 use axum::{
     extract::{Form, State},
-    http::{header, HeaderMap},
+    http::{HeaderMap, header},
     response::Response,
 };
 use serde::Deserialize;
@@ -14,7 +14,6 @@ pub(crate) struct PayloadFree {
     pub text: String,
     pub source_lang: String,
     pub target_lang: String,
-    pub tag_handling: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -31,15 +30,10 @@ pub async fn translate_free(
     let text = payload.text;
     let source_lang = payload.source_lang;
     let target_lang = payload.target_lang;
-    let tag_handling = payload.tag_handling.as_deref();
-
-    if tag_handling.is_some_and(|tag_handling| !matches!(tag_handling, "html" | "xml")) {
-        return Err(Error::InvalidTagHandling);
-    }
 
     state
         .translate_uc
-        .translate(&text, &source_lang, &target_lang, tag_handling, None)
+        .translate(&text, &source_lang, &target_lang, None)
         .await
 }
 
@@ -51,14 +45,9 @@ pub async fn translate_pro(
     let text = payload.text;
     let source_lang = payload.source_lang;
     let target_lang = payload.target_lang;
-    let tag_handling = payload.tag_handling.as_deref();
     let dl_session = headers
         .get(header::COOKIE)
         .map(|c| c.to_str().unwrap().replace("dl_session=", ""));
-
-    if tag_handling.is_some_and(|tag_handling| !matches!(tag_handling, "html" | "xml")) {
-        return Err(Error::InvalidTagHandling);
-    }
 
     match dl_session {
         None => Err(Error::DeepLSessionMissing),
@@ -71,7 +60,6 @@ pub async fn translate_pro(
                         &text,
                         &source_lang,
                         &target_lang,
-                        tag_handling,
                         Some(dl_session.as_str()),
                     )
                     .await

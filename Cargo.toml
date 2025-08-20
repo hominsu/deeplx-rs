@@ -1,7 +1,7 @@
 [package]
 name = "deeplx"
 version = "1.4.2"
-edition = "2021"
+edition = "2024"
 authors = [
     "Homing So <i@homing.so>"
 ]

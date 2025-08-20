@@ -2,13 +2,13 @@ use super::AppState;
 use crate::server::pkgs::Error;
 
 use axum::{
+    RequestPartsExt,
     extract::{FromRef, FromRequestParts, Query},
     http::request::Parts,
-    RequestPartsExt,
 };
 use axum_extra::{
-    headers::{authorization::Bearer, Authorization},
     TypedHeader,
+    headers::{Authorization, authorization::Bearer},
 };
 
 #[derive(serde::Deserialize)]

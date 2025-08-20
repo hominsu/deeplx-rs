@@ -1,4 +1,4 @@
-use rand::{rng, Rng};
+use rand::{Rng, rng};
 
 pub(crate) fn get_random_number() -> i64 {
     let num = rng().random_range(1..99999) + 8300000;

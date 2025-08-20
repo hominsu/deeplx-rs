@@ -5,20 +5,20 @@ use std::error::Error;
 
 #[cfg(feature = "impersonate")]
 use rquest::{
-    header::{
-        HeaderMap, HeaderValue, ACCEPT, ACCEPT_LANGUAGE, AUTHORIZATION, CACHE_CONTROL,
-        CONTENT_TYPE, COOKIE, DNT, ORIGIN, PRAGMA, REFERER, USER_AGENT,
-    },
     Client, Impersonate, Proxy,
+    header::{
+        ACCEPT, ACCEPT_LANGUAGE, AUTHORIZATION, CACHE_CONTROL, CONTENT_TYPE, COOKIE, DNT,
+        HeaderMap, HeaderValue, ORIGIN, PRAGMA, REFERER, USER_AGENT,
+    },
 };
 
 #[cfg(not(feature = "impersonate"))]
 use reqwest::{
-    header::{
-        HeaderMap, HeaderValue, ACCEPT, ACCEPT_LANGUAGE, AUTHORIZATION, CACHE_CONTROL,
-        CONTENT_TYPE, COOKIE, DNT, ORIGIN, PRAGMA, REFERER, USER_AGENT,
-    },
     Client, Proxy,
+    header::{
+        ACCEPT, ACCEPT_LANGUAGE, AUTHORIZATION, CACHE_CONTROL, CONTENT_TYPE, COOKIE, DNT,
+        HeaderMap, HeaderValue, ORIGIN, PRAGMA, REFERER, USER_AGENT,
+    },
 };
 
 /// Configuration settings for the `DeepLX` translation client.
@@ -184,7 +184,7 @@ impl DeepLX {
     /// async fn main() {
     ///     let translator = DeepLX::new(Config::default());
     ///     match translator
-    ///         .translate("auto", "zh", "Hello, world!", None, None)
+    ///         .translate("auto", "zh", "Hello, world!", None)
     ///         .await {
     ///         Ok(res) => println!("Translated: {}", res.data),
     ///         Err(e) => eprintln!("Error: {}", e),
@@ -196,7 +196,6 @@ impl DeepLX {
         source_lang: &str,
         target_lang: &str,
         text: &str,
-        _: Option<&str>,
         deepl_session: Option<&str>,
     ) -> Result<DeepLXTranslationResult, Box<dyn Error>> {
         // return if there's nothing to translate

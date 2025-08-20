@@ -13,7 +13,6 @@ pub trait TranslateRepo: Send + Sync {
         text: &'a str,
         source_lang: &'a str,
         target_lang: &'a str,
-        tag_handling: Option<&'a str>,
         dl_session: Option<&'a str>,
     ) -> Pin<Box<dyn Future<Output = Result<DeepLXTranslationResult, Error>> + Send + 'a>>;
 }
@@ -65,12 +64,11 @@ impl TranslateUsecase {
         text: &str,
         source_lang: &str,
         target_lang: &str,
-        tag_handling: Option<&str>,
         dl_session: Option<&str>,
     ) -> Result<Response, Error> {
         let res = self
             .repo
-            .translate(text, source_lang, target_lang, tag_handling, dl_session)
+            .translate(text, source_lang, target_lang, dl_session)
             .await?;
 
         match res.code {
@@ -101,7 +99,7 @@ impl TranslateUsecase {
     ) -> Result<Response, Error> {
         let res = self
             .repo
-            .translate(text, "auto", target_lang, None, None)
+            .translate(text, "auto", target_lang, None)
             .await?;
 
         match res.code {

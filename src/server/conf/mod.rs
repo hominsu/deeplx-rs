@@ -2,7 +2,7 @@ use std::future::{Future, IntoFuture};
 use std::io;
 use std::net::SocketAddr;
 use std::path::Path;
-use std::sync::{mpsc, Arc, RwLock};
+use std::sync::{Arc, RwLock, mpsc};
 use std::time::Duration;
 
 use config::{ConfigError, File};
@@ -142,16 +142,19 @@ where
 
             let config_clone = config.clone();
             let path_clone = path.clone();
-            let task = tokio::task::spawn_blocking(move || loop {
-                match rx.recv() {
-                    Ok(Ok(Event {
-                        kind: notify::EventKind::Modify(_),
-                        ..
-                    })) => {
-                        *config_clone.write().unwrap() = Config::new(path_clone.as_str()).unwrap();
+            let task = tokio::task::spawn_blocking(move || {
+                loop {
+                    match rx.recv() {
+                        Ok(Ok(Event {
+                            kind: notify::EventKind::Modify(_),
+                            ..
+                        })) => {
+                            *config_clone.write().unwrap() =
+                                Config::new(path_clone.as_str()).unwrap();
+                        }
+                        Err(_) => break,
+                        _ => {}
                     }
-                    Err(_) => break,
-                    _ => {}
                 }
             });
 
