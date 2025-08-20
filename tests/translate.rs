@@ -10,7 +10,7 @@ mod tests {
     #[tokio::test]
     async fn test_translate() {
         match TRANSLATOR
-            .translate("auto", "zh", "Hello, world!", None, None)
+            .translate("auto", "zh", "Hello, world!", None)
             .await
         {
             Ok(res) => {
@@ -24,7 +24,7 @@ mod tests {
     #[tokio::test]
     async fn test_translate_confident() {
         match TRANSLATOR
-            .translate("en", "zh", "Hello, world!", None, None)
+            .translate("en", "zh", "Hello, world!", None)
             .await
         {
             Ok(res) => {
@@ -38,7 +38,7 @@ mod tests {
     #[tokio::test]
     async fn test_translate_new_line() {
         match TRANSLATOR
-            .translate("auto", "zh", "Hello\nworld!", None, None)
+            .translate("auto", "zh", "Hello\nworld!", None)
             .await
         {
             Ok(res) => {
