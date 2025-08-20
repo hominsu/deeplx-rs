@@ -7,7 +7,7 @@ use tower_http::trace::TraceLayer;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 use crate::server::{biz, conf, data, pkgs::exit::shutdown_signal, routes};
-use crate::{error::Error, Bootstrap, Result};
+use crate::{Bootstrap, Result, error::Error};
 
 pub fn run(args: Bootstrap) -> Result<()> {
     let manager = conf::manager(args.conf.as_str());

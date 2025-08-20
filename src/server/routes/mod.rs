@@ -2,7 +2,7 @@ mod middleware;
 mod state;
 mod translate;
 
-use axum::{middleware::from_extractor_with_state, routing::post, Router};
+use axum::{Router, middleware::from_extractor_with_state, routing::post};
 use middleware::RequireAuth;
 pub use state::AppState;
 
