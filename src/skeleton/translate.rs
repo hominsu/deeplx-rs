@@ -3,6 +3,8 @@ use super::utils::{get_i_count, get_random_number, get_timestamp};
 
 use std::error::Error;
 
+#[cfg(all(feature = "impersonate", not(target_arch = "wasm32")))]
+use rquest::Proxy;
 #[cfg(feature = "impersonate")]
 use rquest::{
     Client, Impersonate,
@@ -11,9 +13,9 @@ use rquest::{
         HeaderMap, HeaderValue, ORIGIN, PRAGMA, REFERER, USER_AGENT,
     },
 };
-#[cfg(all(feature = "impersonate", not(target_arch = "wasm32")))]
-use rquest::Proxy;
 
+#[cfg(all(not(feature = "impersonate"), not(target_arch = "wasm32")))]
+use reqwest::Proxy;
 #[cfg(not(feature = "impersonate"))]
 use reqwest::{
     Client,
@@ -22,8 +24,6 @@ use reqwest::{
         HeaderMap, HeaderValue, ORIGIN, PRAGMA, REFERER, USER_AGENT,
     },
 };
-#[cfg(all(not(feature = "impersonate"), not(target_arch = "wasm32")))]
-use reqwest::Proxy;
 
 /// Configuration settings for the `DeepLX` translation client.
 ///
