@@ -5,7 +5,37 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v2.1.0 (2025-08-21)
+
+### Refactor
+
+ - <csr-id-fffe24ca505233e8a797831212520f200fcfc5b9/> improve error handling and data structures
+   - A dedicated `Error` type has been added to the `skeleton` module to provide more specific and detailed error information.
+   - The `DeepLXTranslationResult` and other related data structures have been updated to use `Option` for their fields. This allows for more graceful handling of partial or error responses from the DeepL API.
+   - The `translate` function in the `skeleton` module now handles non-successful HTTP responses and can deserialize error messages from the API.
+   - The new `Error` type is propagated to the server level, which allows for more informative error responses to the end-user.
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 1 commit contributed to the release.
+ - 1 commit was understood as [conventional](https://www.conventionalcommits.org).
+ - 0 issues like '(#ID)' were seen in commit messages
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **Uncategorized**
+    - Improve error handling and data structures ([`fffe24c`](https://github.com/hominsu/deeplx-rs/commit/fffe24ca505233e8a797831212520f200fcfc5b9))
+</details>
+
 ## v2.0.1 (2025-08-21)
+
+<csr-id-7a9869ee8cf847d9fac89e82fbb096b62c0b4201/>
 
 ### Bug Fixes
 
@@ -20,7 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <csr-read-only-do-not-edit/>
 
- - 3 commits contributed to the release.
+ - 4 commits contributed to the release.
  - 3 commits were understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
 
@@ -31,6 +61,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Release deeplx v2.0.1 ([`5fb9b15`](https://github.com/hominsu/deeplx-rs/commit/5fb9b15a7ac9b55f2181fdc996d3ca0d41595755))
     - Lint ([`d24e116`](https://github.com/hominsu/deeplx-rs/commit/d24e11680881f0b43b644c79eb9951341ca70964))
     - Disable proxy functionality for wasm32 target ([`d30dd1f`](https://github.com/hominsu/deeplx-rs/commit/d30dd1fe538e47d1c6712eab4f32eefeb0ff2725))
     - Add getrandom crate with `wasm_js` feature ([`7a9869e`](https://github.com/hominsu/deeplx-rs/commit/7a9869ee8cf847d9fac89e82fbb096b62c0b4201))
@@ -109,7 +140,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <csr-id-4006f8255253b1eea42e31530e20d0fec4a828ce/>
 
 
-<csr-id-2ded061aac5994fc3151bd743cebd82a32ce69d0/>
 <csr-id-1feec80534d9ab29f3c19d5f7c0bf0371bf08a0b/>
 <csr-id-08c478d51f141ebaf86d3d2165c7a6fa499b6fb6/>
 <csr-id-4006f8255253b1eea42e31530e20d0fec4a828ce/>
@@ -169,8 +199,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <csr-id-a29a32db11450ef4c22d20c44abbd778d8ead8c0/>
 <csr-id-aa06ce866e21614f5361e4492c4c0e9b023fa83e/>
 
-
-
 ### Chore
 
  - <csr-id-a29a32db11450ef4c22d20c44abbd778d8ead8c0/> enable impersonation feature in docker
@@ -211,8 +239,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <csr-id-59f9eb1252117f0f32704caeaf9e60750a1bf5b8/>
 <csr-id-dd4fd71c6cf091749547a06c5b22584ebcc461be/>
-
-
 
 ### Chore
 
@@ -294,7 +320,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <csr-id-b33d7898fc127e31ff87e25e5b5911f0c26c8a82/>
 
 
-<csr-id-a90df3140f0a6c20f285c04598c26bba17233215/>
 <csr-id-bed536265ea643fcd1f7654144578667f0ec1f7e/>
 <csr-id-f336482cc4d3432c7e08b52a61b6c404ac5bcea0/>
 <csr-id-49c857123034ad725d5beada036a00662201f956/>
@@ -580,7 +605,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <csr-id-6766cf0f59375773b36d91a350c601d7c084dbce/>
 
 
-<csr-id-6766cf0f59375773b36d91a350c601d7c084dbce/>
 
 
 <csr-id-6766cf0f59375773b36d91a350c601d7c084dbce/>
@@ -864,7 +888,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <csr-id-781134495786432752fa191a79a219f42ea036db/>
 
 
-<csr-id-b080ada977b0192042e6a3a4cb07c79f2f5c0060/>
 <csr-id-904ed1645a6ec5cefd2cafa6531dec6f7620adbc/>
 <csr-id-9a3d3c6545403905d92c5e3ae52eb16edaba0813/>
 <csr-id-781134495786432752fa191a79a219f42ea036db/>
