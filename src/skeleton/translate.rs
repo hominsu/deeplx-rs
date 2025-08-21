@@ -5,21 +5,25 @@ use std::error::Error;
 
 #[cfg(feature = "impersonate")]
 use rquest::{
-    Client, Impersonate, Proxy,
+    Client, Impersonate,
     header::{
         ACCEPT, ACCEPT_LANGUAGE, AUTHORIZATION, CACHE_CONTROL, CONTENT_TYPE, COOKIE, DNT,
         HeaderMap, HeaderValue, ORIGIN, PRAGMA, REFERER, USER_AGENT,
     },
 };
+#[cfg(all(feature = "impersonate", not(target_arch = "wasm32")))]
+use rquest::Proxy;
 
 #[cfg(not(feature = "impersonate"))]
 use reqwest::{
-    Client, Proxy,
+    Client,
     header::{
         ACCEPT, ACCEPT_LANGUAGE, AUTHORIZATION, CACHE_CONTROL, CONTENT_TYPE, COOKIE, DNT,
         HeaderMap, HeaderValue, ORIGIN, PRAGMA, REFERER, USER_AGENT,
     },
 };
+#[cfg(all(not(feature = "impersonate"), not(target_arch = "wasm32")))]
+use reqwest::Proxy;
 
 /// Configuration settings for the `DeepLX` translation client.
 ///
@@ -44,7 +48,7 @@ use reqwest::{
 /// });
 /// ```
 ///
-/// ## Configuring a Proxy (Requires `proxy` Feature)
+/// ## Configuring a Proxy (Not available on wasm32)
 ///
 /// ```no_run
 /// use deeplx::{Config, DeepLX};
@@ -56,6 +60,7 @@ use reqwest::{
 /// ```
 pub struct Config {
     pub base_url: String,
+    #[cfg(not(target_arch = "wasm32"))]
     pub proxy: Option<String>,
 }
 
@@ -63,6 +68,7 @@ impl Default for Config {
     fn default() -> Self {
         Self {
             base_url: "https://www2.deepl.com/jsonrpc".to_string(),
+            #[cfg(not(target_arch = "wasm32"))]
             proxy: None,
         }
     }
@@ -76,6 +82,7 @@ impl Default for Config {
 #[derive(Clone)]
 pub struct DeepLX {
     base_url: String,
+    #[cfg(not(target_arch = "wasm32"))]
     proxy: Option<String>,
     headers: HeaderMap,
 }
@@ -105,6 +112,7 @@ impl DeepLX {
     pub fn new(config: Config) -> Self {
         Self {
             base_url: config.base_url,
+            #[cfg(not(target_arch = "wasm32"))]
             proxy: config.proxy,
             headers: headers(),
         }
@@ -137,6 +145,7 @@ impl DeepLX {
         #[cfg(not(feature = "impersonate"))]
         let builder = Client::builder();
 
+        #[cfg(not(target_arch = "wasm32"))]
         let builder = match &self.proxy {
             Some(p) => builder.proxy(Proxy::all(p.clone()).unwrap()),
             None => builder,
