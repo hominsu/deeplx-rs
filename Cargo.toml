@@ -33,7 +33,6 @@ required-features = ["server"]
 default = ["server", "mimalloc"]
 impersonate = ["dep:rquest"]
 server = [
-    "dep:thiserror",
     "dep:clap",
     "dep:glob",
     "dep:notify",
@@ -62,6 +61,9 @@ chrono = "0.4"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 
+# error handling
+thiserror = { version = "2" }
+
 # internationalization & language detection
 isolang = { version = "2.4.0" }
 whatlang = { version = "0.16" }
@@ -83,9 +85,6 @@ mimalloc = { version = "0.1", optional = true }
 rpmalloc = { version = "0.2", optional = true }
 snmalloc-rs = { version = "0.3", optional = true }
 tikv-jemallocator = { version = "0.6", optional = true }
-
-# error handling
-thiserror = { version = "2", optional = true }
 
 # cli
 clap = { version = "4.5", optional = true, features = ["derive", "env"] }

@@ -33,7 +33,7 @@ impl BizTranslateRepo for TranslateRepo {
                 Ok(res) => Ok(res),
                 Err(e) => {
                     tracing::error!(%e);
-                    Err(Error::InternalServer)
+                    Err(Error::DeepLX(e))
                 }
             }
         })

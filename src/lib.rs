@@ -67,5 +67,6 @@ mod skeleton;
 
 pub use skeleton::{
     data::DeepLXTranslationResult,
+    error::Error,
     translate::{Config, DeepLX},
 };

@@ -1,13 +1,14 @@
 use super::data::{DeepLXTranslationResult, Lang, Params, PostData, TextItem, TranslationResponse};
 use super::utils::{get_i_count, get_random_number, get_timestamp};
+use std::io;
 
-use std::error::Error;
+use super::error::{Error, LangDetectError};
 
 #[cfg(all(feature = "impersonate", not(target_arch = "wasm32")))]
 use rquest::Proxy;
 #[cfg(feature = "impersonate")]
 use rquest::{
-    Client, Impersonate,
+    Client, Impersonate, StatusCode,
     header::{
         ACCEPT, ACCEPT_LANGUAGE, AUTHORIZATION, CACHE_CONTROL, CONTENT_TYPE, COOKIE, DNT,
         HeaderMap, HeaderValue, ORIGIN, PRAGMA, REFERER, USER_AGENT,
@@ -18,7 +19,7 @@ use rquest::{
 use reqwest::Proxy;
 #[cfg(not(feature = "impersonate"))]
 use reqwest::{
-    Client,
+    Client, StatusCode,
     header::{
         ACCEPT, ACCEPT_LANGUAGE, AUTHORIZATION, CACHE_CONTROL, CONTENT_TYPE, COOKIE, DNT,
         HeaderMap, HeaderValue, ORIGIN, PRAGMA, REFERER, USER_AGENT,
@@ -122,7 +123,7 @@ impl DeepLX {
         &self,
         post_data: &PostData<'_>,
         deepl_session: Option<&str>,
-    ) -> Result<bytes::Bytes, Box<dyn Error>> {
+    ) -> Result<(StatusCode, bytes::Bytes), Error> {
         let mut headers = self.headers.clone();
         if let Some(session) = deepl_session {
             headers.insert(COOKIE, session.parse().unwrap());
@@ -159,11 +160,10 @@ impl DeepLX {
             .send()
             .await?;
 
-        if !resp.status().is_success() {
-            return Err(format!("Request failed with status: {}", resp.status()).into());
-        }
+        let status = resp.status();
+        let bytes = resp.bytes().await?;
 
-        Ok(resp.bytes().await?)
+        Ok((status, bytes))
     }
 
     /// Translates the given text from a source language to a target language.
@@ -206,7 +206,7 @@ impl DeepLX {
         target_lang: &str,
         text: &str,
         deepl_session: Option<&str>,
-    ) -> Result<DeepLXTranslationResult, Box<dyn Error>> {
+    ) -> Result<DeepLXTranslationResult, Error> {
         // return if there's nothing to translate
         if text.is_empty() {
             return Ok(DeepLXTranslationResult {
@@ -220,13 +220,19 @@ impl DeepLX {
         let source_lang_detached = match source_lang {
             "auto" | "" => {
                 let iso_639_3 = whatlang::detect_lang(text)
-                    .ok_or("Failed to detect language")?
+                    .ok_or(LangDetectError::from(io::Error::new(
+                        io::ErrorKind::InvalidInput,
+                        "Failed to detect language",
+                    )))?
                     .code();
 
                 isolang::Language::from_639_3(iso_639_3)
                     .and_then(|lang| lang.to_639_1())
                     .map(|iso_639_1| iso_639_1.to_uppercase())
-                    .ok_or("Could not map detected language to ISO 639-1")?
+                    .ok_or(LangDetectError::from(io::Error::new(
+                        io::ErrorKind::InvalidInput,
+                        "Could not map detected language to ISO 639-1",
+                    )))?
             }
             _ => source_lang.to_uppercase(),
         };
@@ -264,7 +270,11 @@ impl DeepLX {
         };
 
         // send request and parse response
-        let bytes = &self.make_request(&post_data, deepl_session).await?;
+        let (status, bytes) = &self.make_request(&post_data, deepl_session).await?;
+        if !status.is_success() {
+            return Ok(serde_json::from_slice(bytes)?);
+        }
+
         let resp: TranslationResponse = serde_json::from_slice(bytes)?;
 
         let texts = resp.result.texts;
@@ -290,21 +300,23 @@ impl DeepLX {
 
         Ok(DeepLXTranslationResult {
             code: 200,
-            id,
-            data: main_translation,
-            alternatives,
-            source_lang: if resp.result.lang.is_empty() {
+            id: Some(id),
+            data: Some(main_translation),
+            alternatives: Some(alternatives),
+            source_lang: Some(if resp.result.lang.is_empty() {
                 source_lang_detached
             } else {
                 resp.result.lang
-            },
-            target_lang: target_lang.to_string(),
-            method: if deepl_session.is_none() {
-                "Free"
-            } else {
-                "Pro"
-            }
-            .to_string(),
+            }),
+            target_lang: Some(target_lang.to_string()),
+            method: Some(
+                if deepl_session.is_none() {
+                    "Free"
+                } else {
+                    "Pro"
+                }
+                .to_string(),
+            ),
             ..Default::default()
         })
     }

@@ -8,6 +8,7 @@ use axum::{
 use serde::Serialize;
 
 pub enum Error {
+    DeepLX(deeplx::Error),
     JsonRejection(JsonRejection),
     InternalServer,
     DeepLSessionMissing,
@@ -24,6 +25,7 @@ impl IntoResponse for Error {
         }
 
         let (code, message) = match self {
+            Error::DeepLX(err) => (StatusCode::INTERNAL_SERVER_ERROR, format!("{}", err)),
             Error::JsonRejection(rejection) => (rejection.status(), rejection.body_text()),
             Error::InternalServer => (
                 StatusCode::INTERNAL_SERVER_ERROR,
