@@ -5,6 +5,30 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v2.2.2 (2025-08-23)
+
+### Bug Fixes
+
+ - <csr-id-d5d4aabbd31775f4acbabc82d86c092d9261bda9/> disbale retry for wasm32
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 1 commit contributed to the release.
+ - 1 commit was understood as [conventional](https://www.conventionalcommits.org).
+ - 0 issues like '(#ID)' were seen in commit messages
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **Uncategorized**
+    - Disbale retry for wasm32 ([`d5d4aab`](https://github.com/hominsu/deeplx-rs/commit/d5d4aabbd31775f4acbabc82d86c092d9261bda9))
+</details>
+
 ## v2.2.1 (2025-08-23)
 
 ### Documentation
@@ -19,7 +43,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <csr-read-only-do-not-edit/>
 
- - 2 commits contributed to the release.
+ - 3 commits contributed to the release.
  - 2 commits were understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
 
@@ -30,6 +54,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Release deeplx v2.2.1 ([`c941aa7`](https://github.com/hominsu/deeplx-rs/commit/c941aa7727bfad43d3bca09a91adccebbd9cc5ce))
     - Update ([`cbc8d48`](https://github.com/hominsu/deeplx-rs/commit/cbc8d48dde4e69991b31667c125fe166431a562c))
     - Use reqwest retry and remove rquest ([`c9e559c`](https://github.com/hominsu/deeplx-rs/commit/c9e559c93dc1a69fceefb6e7480da1abfda8c52c))
 </details>
@@ -202,7 +227,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <csr-id-4006f8255253b1eea42e31530e20d0fec4a828ce/>
 
 
-<csr-id-4006f8255253b1eea42e31530e20d0fec4a828ce/>
 
 ### New Features
 
@@ -380,7 +404,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <csr-id-b33d7898fc127e31ff87e25e5b5911f0c26c8a82/>
 
 
-<csr-id-49c857123034ad725d5beada036a00662201f956/>
 <csr-id-3eaa33b7fcccde9d3d8de26150c51c8dcb85f8f3/>
 <csr-id-b33d7898fc127e31ff87e25e5b5911f0c26c8a82/>
 
@@ -941,7 +964,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <csr-id-781134495786432752fa191a79a219f42ea036db/>
 
 
-<csr-id-781134495786432752fa191a79a219f42ea036db/>
 
 
 <csr-id-b080ada977b0192042e6a3a4cb07c79f2f5c0060/>
