@@ -7,16 +7,11 @@ pub enum Error {
     #[error(transparent)]
     IOError(#[from] std::io::Error),
 
-    #[cfg(not(feature = "impersonate"))]
     #[error(transparent)]
     Request(#[from] reqwest::Error),
 
     #[error(transparent)]
     JSON(#[from] serde_json::Error),
-
-    #[cfg(feature = "impersonate")]
-    #[error(transparent)]
-    Request(#[from] rquest::Error),
 
     #[error(transparent)]
     LangDetect(#[from] LangDetectError),

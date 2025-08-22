@@ -8,26 +8,15 @@ use super::data::{
 use super::error::{Error, LangDetectError};
 use super::utils::{get_i_count, get_random_number, get_timestamp};
 
-#[cfg(all(feature = "impersonate", not(target_arch = "wasm32")))]
-use rquest::Proxy;
-#[cfg(feature = "impersonate")]
-use rquest::{
-    Client, Impersonate, Response, StatusCode,
-    header::{
-        ACCEPT, ACCEPT_ENCODING, ACCEPT_LANGUAGE, CONNECTION, CONTENT_TYPE, COOKIE, DNT, HeaderMap,
-        HeaderValue, UPGRADE_INSECURE_REQUESTS, USER_AGENT,
-    },
-};
-
-#[cfg(all(not(feature = "impersonate"), not(target_arch = "wasm32")))]
+#[cfg(not(target_arch = "wasm32"))]
 use reqwest::Proxy;
-#[cfg(not(feature = "impersonate"))]
 use reqwest::{
     Client, Response, StatusCode,
     header::{
         ACCEPT, ACCEPT_ENCODING, ACCEPT_LANGUAGE, CONNECTION, CONTENT_TYPE, COOKIE, DNT, HeaderMap,
         HeaderValue, UPGRADE_INSECURE_REQUESTS, USER_AGENT,
     },
+    retry,
 };
 
 /// Configuration settings for the `DeepLX` translation client.
@@ -144,19 +133,27 @@ impl DeepLX {
 
         let data = data.replacen(r#""method":""#, replacement, 1);
 
-        #[cfg(feature = "impersonate")]
-        let builder = Client::builder().impersonate(Impersonate::Chrome131);
-
-        #[cfg(not(feature = "impersonate"))]
         let builder = Client::builder();
 
         #[cfg(not(target_arch = "wasm32"))]
         let builder = match &self.proxy {
-            Some(p) => builder.proxy(Proxy::all(p.clone()).unwrap()),
+            Some(p) => builder.proxy(Proxy::all(p.clone())?),
             None => builder,
         };
 
+        let retry_builder = retry::for_host(self.base_url.clone())
+            .max_retries_per_request(3)
+            .classify_fn(|req| {
+                if let Some(status) = req.status()
+                    && status == StatusCode::TOO_MANY_REQUESTS
+                {
+                    return req.retryable();
+                }
+                req.success()
+            });
+
         let resp = builder
+            .retry(retry_builder)
             .build()?
             .post(&self.base_url)
             .headers(headers)
