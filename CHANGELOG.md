@@ -5,15 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## v2.2.0 (2025-08-22)
+## v2.2.1 (2025-08-23)
+
+### Documentation
+
+ - <csr-id-cbc8d48dde4e69991b31667c125fe166431a562c/> update
 
 ### New Features
 
- - <csr-id-325ef82c6279fe1d3a270c813214ea79538f3b0f/> add randomized headers to avoid API blocking
-
-### Performance
-
- - <csr-id-06b32e9a1ec358a0d89a530918927e0ca3054ad5/> enable deflate and zstd compression
+ - <csr-id-c9e559c93dc1a69fceefb6e7480da1abfda8c52c/> use reqwest retry and remove rquest
 
 ### Commit Statistics
 
@@ -30,6 +30,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Update ([`cbc8d48`](https://github.com/hominsu/deeplx-rs/commit/cbc8d48dde4e69991b31667c125fe166431a562c))
+    - Use reqwest retry and remove rquest ([`c9e559c`](https://github.com/hominsu/deeplx-rs/commit/c9e559c93dc1a69fceefb6e7480da1abfda8c52c))
+</details>
+
+## v2.2.0 (2025-08-22)
+
+### New Features
+
+ - <csr-id-325ef82c6279fe1d3a270c813214ea79538f3b0f/> add randomized headers to avoid API blocking
+
+### Performance
+
+ - <csr-id-06b32e9a1ec358a0d89a530918927e0ca3054ad5/> enable deflate and zstd compression
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 3 commits contributed to the release.
+ - 2 commits were understood as [conventional](https://www.conventionalcommits.org).
+ - 0 issues like '(#ID)' were seen in commit messages
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **Uncategorized**
+    - Release deeplx v2.2.0 ([`5c26e28`](https://github.com/hominsu/deeplx-rs/commit/5c26e28829ee967c0fea6c02a33fdefac0d89487))
     - Add randomized headers to avoid API blocking ([`325ef82`](https://github.com/hominsu/deeplx-rs/commit/325ef82c6279fe1d3a270c813214ea79538f3b0f))
     - Enable deflate and zstd compression ([`06b32e9`](https://github.com/hominsu/deeplx-rs/commit/06b32e9a1ec358a0d89a530918927e0ca3054ad5))
 </details>
@@ -172,7 +202,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <csr-id-4006f8255253b1eea42e31530e20d0fec4a828ce/>
 
 
-<csr-id-08c478d51f141ebaf86d3d2165c7a6fa499b6fb6/>
 <csr-id-4006f8255253b1eea42e31530e20d0fec4a828ce/>
 
 ### New Features
@@ -351,7 +380,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <csr-id-b33d7898fc127e31ff87e25e5b5911f0c26c8a82/>
 
 
-<csr-id-f336482cc4d3432c7e08b52a61b6c404ac5bcea0/>
 <csr-id-49c857123034ad725d5beada036a00662201f956/>
 <csr-id-3eaa33b7fcccde9d3d8de26150c51c8dcb85f8f3/>
 <csr-id-b33d7898fc127e31ff87e25e5b5911f0c26c8a82/>
@@ -634,8 +662,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <csr-id-5e45fd5e2f6c935a67e6ffefc193dc9a485c4f3c/>
 <csr-id-6766cf0f59375773b36d91a350c601d7c084dbce/>
 
-
-
 ### Documentation
 
  - <csr-id-7e6b4e5cc272386b2b5496d9b95390cff48f1aba/> update README.md
@@ -915,7 +941,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <csr-id-781134495786432752fa191a79a219f42ea036db/>
 
 
-<csr-id-9a3d3c6545403905d92c5e3ae52eb16edaba0813/>
 <csr-id-781134495786432752fa191a79a219f42ea036db/>
 
 
