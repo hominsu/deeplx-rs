@@ -25,18 +25,12 @@ pub struct TranslateUsecase {
 #[serde(rename_all = "snake_case")]
 pub struct TranslateResult {
     pub code: u16,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub id: Option<i64>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub data: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub alternatives: Option<Vec<String>>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub source_lang: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub target_lang: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub method: Option<String>,
+    pub id: i64,
+    pub data: String,
+    pub alternatives: Vec<String>,
+    pub source_lang: String,
+    pub target_lang: String,
+    pub method: String,
 }
 
 #[derive(Debug, Clone, Serialize)]
@@ -50,10 +44,8 @@ pub struct TranslateResultUnknown {
 #[derive(Debug, Clone, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub struct Translation {
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub detected_source_language: Option<String>,
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub text: Option<String>,
+    pub detected_source_language: String,
+    pub text: String,
 }
 
 #[derive(Debug, Clone, Serialize)]

@@ -40,32 +40,48 @@ pub(crate) struct PostData<'a> {
 ///
 /// This struct aggregates all necessary information after a translation request,
 /// including the translated text, alternatives, source language, target language, and more.
-#[derive(Debug, Default, Serialize, Deserialize)]
+#[derive(Debug, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub struct DeepLXTranslationResult {
     /// The HTTP-like status code. `200` indicates success, other values indicate various errors or failure states.
     pub code: i32,
     /// The unique identifier of the request or response.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub id: Option<i64>,
+    pub id: i64,
     /// A descriptive message providing more context or details about the result, if any.
     #[serde(skip_serializing_if = "Option::is_none")]
     pub message: Option<String>,
     /// The primary translated text result.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub data: Option<String>,
+    pub data: String,
     /// A collection of alternative translations.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub alternatives: Option<Vec<String>>,
+    pub alternatives: Vec<String>,
     /// The detected or used source language code.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub source_lang: Option<String>,
+    pub source_lang: String,
     /// The target language code used for the translation.
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub target_lang: Option<String>,
+    pub target_lang: String,
     /// Indicates the method used, for example "Pro" or "Free".
-    #[serde(skip_serializing_if = "Option::is_none")]
-    pub method: Option<String>,
+    pub method: String,
+}
+
+#[derive(Debug, Deserialize)]
+#[serde(rename_all = "snake_case")]
+pub struct CommonResult {
+    pub code: i32,
+    pub message: Option<String>,
+}
+
+impl Default for DeepLXTranslationResult {
+    fn default() -> Self {
+        DeepLXTranslationResult {
+            code: 0,
+            id: 0,
+            message: None,
+            data: "".to_string(),
+            alternatives: vec![],
+            source_lang: "".to_string(),
+            target_lang: "".to_string(),
+            method: "".to_string(),
+        }
+    }
 }
 
 #[derive(Debug, Serialize, Deserialize)]

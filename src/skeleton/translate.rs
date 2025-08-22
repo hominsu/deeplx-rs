@@ -1,17 +1,21 @@
-use super::data::{DeepLXTranslationResult, Lang, Params, PostData, TextItem, TranslationResponse};
-use super::utils::{get_i_count, get_random_number, get_timestamp};
 use std::io;
 
+use rand::prelude::*;
+
+use super::data::{
+    CommonResult, DeepLXTranslationResult, Lang, Params, PostData, TextItem, TranslationResponse,
+};
 use super::error::{Error, LangDetectError};
+use super::utils::{get_i_count, get_random_number, get_timestamp};
 
 #[cfg(all(feature = "impersonate", not(target_arch = "wasm32")))]
 use rquest::Proxy;
 #[cfg(feature = "impersonate")]
 use rquest::{
-    Client, Impersonate, StatusCode,
+    Client, Impersonate, Response, StatusCode,
     header::{
-        ACCEPT, ACCEPT_LANGUAGE, AUTHORIZATION, CACHE_CONTROL, CONTENT_TYPE, COOKIE, DNT,
-        HeaderMap, HeaderValue, ORIGIN, PRAGMA, REFERER, USER_AGENT,
+        ACCEPT, ACCEPT_ENCODING, ACCEPT_LANGUAGE, CONNECTION, CONTENT_TYPE, COOKIE, DNT, HeaderMap,
+        HeaderValue, UPGRADE_INSECURE_REQUESTS, USER_AGENT,
     },
 };
 
@@ -19,10 +23,10 @@ use rquest::{
 use reqwest::Proxy;
 #[cfg(not(feature = "impersonate"))]
 use reqwest::{
-    Client, StatusCode,
+    Client, Response, StatusCode,
     header::{
-        ACCEPT, ACCEPT_LANGUAGE, AUTHORIZATION, CACHE_CONTROL, CONTENT_TYPE, COOKIE, DNT,
-        HeaderMap, HeaderValue, ORIGIN, PRAGMA, REFERER, USER_AGENT,
+        ACCEPT, ACCEPT_ENCODING, ACCEPT_LANGUAGE, CONNECTION, CONTENT_TYPE, COOKIE, DNT, HeaderMap,
+        HeaderValue, UPGRADE_INSECURE_REQUESTS, USER_AGENT,
     },
 };
 
@@ -123,7 +127,7 @@ impl DeepLX {
         &self,
         post_data: &PostData<'_>,
         deepl_session: Option<&str>,
-    ) -> Result<(StatusCode, bytes::Bytes), Error> {
+    ) -> Result<(StatusCode, Response), Error> {
         let mut headers = self.headers.clone();
         if let Some(session) = deepl_session {
             headers.insert(COOKIE, session.parse().unwrap());
@@ -160,10 +164,7 @@ impl DeepLX {
             .send()
             .await?;
 
-        let status = resp.status();
-        let bytes = resp.bytes().await?;
-
-        Ok((status, bytes))
+        Ok((resp.status(), resp))
     }
 
     /// Translates the given text from a source language to a target language.
@@ -270,12 +271,17 @@ impl DeepLX {
         };
 
         // send request and parse response
-        let (status, bytes) = &self.make_request(&post_data, deepl_session).await?;
+        let (status, resp) = self.make_request(&post_data, deepl_session).await?;
         if !status.is_success() {
-            return Ok(serde_json::from_slice(bytes)?);
+            let resp: CommonResult = resp.json().await?;
+            return Ok(DeepLXTranslationResult {
+                code: resp.code,
+                message: resp.message,
+                ..Default::default()
+            });
         }
 
-        let resp: TranslationResponse = serde_json::from_slice(bytes)?;
+        let resp: TranslationResponse = resp.json().await?;
 
         let texts = resp.result.texts;
         if texts.is_empty() {
@@ -300,53 +306,69 @@ impl DeepLX {
 
         Ok(DeepLXTranslationResult {
             code: 200,
-            id: Some(id),
-            data: Some(main_translation),
-            alternatives: Some(alternatives),
-            source_lang: Some(if resp.result.lang.is_empty() {
+            id,
+            data: main_translation,
+            alternatives,
+            source_lang: if resp.result.lang.is_empty() {
                 source_lang_detached
             } else {
                 resp.result.lang
-            }),
-            target_lang: Some(target_lang.to_string()),
-            method: Some(
-                if deepl_session.is_none() {
-                    "Free"
-                } else {
-                    "Pro"
-                }
-                .to_string(),
-            ),
+            },
+            target_lang: target_lang.to_string(),
+            method: if deepl_session.is_none() {
+                "Free"
+            } else {
+                "Pro"
+            }
+            .to_string(),
             ..Default::default()
         })
     }
 }
 
+const USER_AGENTS: &[&str] = &[
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+    "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:121.0) Gecko/20100101 Firefox/121.0",
+    "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:121.0) Gecko/20100101 Firefox/121.0",
+];
+
+const ACCEPT_LANGUAGES: &[&str] = &[
+    "en-US,en;q=0.9",
+    "en-GB,en;q=0.9",
+    "en-US,en;q=0.8,es;q=0.6",
+    "en-US,en;q=0.9,fr;q=0.8",
+    "en-US,en;q=0.9,de;q=0.8",
+];
+
 fn headers() -> HeaderMap {
+    let mut rng = rand::rng();
+
     let mut headers = HeaderMap::new();
-    headers.insert(ACCEPT, HeaderValue::from_static("*/*"));
     headers.insert(
-        ACCEPT_LANGUAGE,
-        HeaderValue::from_static("en-US,en;q=0.9,zh-CN;q=0.8,zh-TW;q=0.7,zh-HK;q=0.6,zh;q=0.5"),
+        CONTENT_TYPE,
+        HeaderValue::from_static("application/json; charset=utf-8"),
     );
-    headers.insert(AUTHORIZATION, HeaderValue::from_static("None"));
-    headers.insert(CACHE_CONTROL, HeaderValue::from_static("no-cache"));
-    headers.insert(CONTENT_TYPE, HeaderValue::from_static("application/json"));
-    headers.insert(DNT, HeaderValue::from_static("1"));
-    headers.insert(
-        ORIGIN,
-        HeaderValue::from_static("chrome-extension://cofdbpoegempjloogbagkncekinflcnj"),
-    );
-    headers.insert(PRAGMA, HeaderValue::from_static("no-cache"));
-    headers.insert("Priority", HeaderValue::from_static("u=1, i"));
-    headers.insert(REFERER, HeaderValue::from_static("https://www.deepl.com/"));
-    headers.insert("Sec-Fetch-Dest", HeaderValue::from_static("empty"));
-    headers.insert("Sec-Fetch-Mode", HeaderValue::from_static("cors"));
-    headers.insert("Sec-Fetch-Site", HeaderValue::from_static("none"));
-    headers.insert("Sec-GPC", HeaderValue::from_static("1"));
     headers.insert(
         USER_AGENT,
-        HeaderValue::from_static("DeepLBrowserExtension/1.28.0 Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/127.0.0.0 Safari/537.36"),
+        HeaderValue::from_str(USER_AGENTS.choose(&mut rng).unwrap()).unwrap(),
     );
+    headers.insert(
+        ACCEPT_LANGUAGE,
+        HeaderValue::from_str(ACCEPT_LANGUAGES.choose(&mut rng).unwrap()).unwrap(),
+    );
+    headers.insert(
+        ACCEPT,
+        HeaderValue::from_static("application/json, text/plain, */*"),
+    );
+    headers.insert(
+        ACCEPT_ENCODING,
+        HeaderValue::from_static("gzip, deflate, br"),
+    );
+    headers.insert(DNT, HeaderValue::from_static("1"));
+    headers.insert(CONNECTION, HeaderValue::from_static("keep-alive"));
+    headers.insert(UPGRADE_INSECURE_REQUESTS, HeaderValue::from_static("1"));
+
     headers
 }
