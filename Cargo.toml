@@ -74,11 +74,13 @@ reqwest = { version = "0.12", default-features = false, features = [
     "charset",
     "http2",
     "macos-system-configuration",
-    "gzip",
     "brotli",
-    "json"
+    "deflate",
+    "gzip",
+    "json",
+    "zstd"
 ] }
-rquest = { version = "2", optional = true, features = ["gzip", "brotli", "json"] }
+rquest = { version = "2", optional = true, features = ["brotli", "deflate", "gzip", "json", "zstd"] }
 
 # memory allocator
 mimalloc = { version = "0.1", optional = true }
