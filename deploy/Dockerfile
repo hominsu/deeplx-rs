@@ -14,7 +14,7 @@ COPY . .
 
 RUN RUSTFLAGS='-C target-feature=+crt-static' \
     CARGO_BUILD_TARGET=$(rustc -vV | grep host | awk '{print $2}')  \
-    cargo install --path . --features=impersonate,mimalloc
+    cargo install --path . --features=mimalloc
 
 FROM scratch
 

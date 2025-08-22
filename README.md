@@ -35,7 +35,6 @@
 
 - **Docker support** for easy deployment.
 - **Proxy support** by default (can be disabled via features).
-- **Optional impersonation** using the `impersonate` feature to mimic browser settings.
 
 ## Usage
 
@@ -57,14 +56,6 @@
 cargo install
 ```
 
-If you want to mimic browser settings, use the `impersonate` feature:
-
-```shell
-cargo install --features="impersonate"
-```
-
-> **Note:** The `impersonate` feature relies on the [`rquest`](https://github.com/penumbra-x/rquest) crate, which may not be stable. Additionally, build artifacts may increase by ~50%.
-
 ## Integration
 
 ### Installation
@@ -73,21 +64,7 @@ Add `deeplx` to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-deeplx = "1"
-```
-
-By default, deeplx includes proxy support. If you do not need proxy support, disable the default features:
-
-```toml
-[dependencies]
-deeplx = { version = "1", default-features = false }
-```
-
-If you want to enable the impersonate feature to mimic browser headers, TLS settings, etc.:
-
-```toml
-[dependencies]
-deeplx = { version = "1", features = ["impersonate"] }
+deeplx = { version = "2", default-features = false }
 ```
 
 ### Configuration
@@ -103,7 +80,7 @@ let translator = DeepLX::new(Config {
 });
 ```
 
-If you have disabled the proxy feature, you can simply omit the proxy field:
+Or you can simply omit the proxy field:
 
 ```rust
 use deeplx::{Config, DeepLX};
@@ -127,7 +104,7 @@ async fn main() {
     // Or without proxy:
     // let translator = DeepLX::new(Config::default());
 
-    match translator.translate("auto", "zh", "Hello, world!", None, None).await {
+    match translator.translate("auto", "zh", "Hello, world!", None).await {
         Ok(res) => println!("Translated: {}", res.data),
         Err(e) => eprintln!("Error: {}", e),
     }

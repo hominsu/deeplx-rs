@@ -9,10 +9,10 @@
 //!
 //! ```toml
 //! [dependencies]
-//! deeplx = { version = "1", default-features = false }
+//! deeplx = { version = "2", default-features = false }
 //! ```
 //!
-//! When the `proxy` feature is enabled (default), you can specify a proxy when creating a new [`DeepLX`] instance:
+//! When the `proxy` feature is enabled (disabled on wasm32), you can specify a proxy when creating a new [`DeepLX`] instance:
 //! ```no_run
 //! use deeplx::{Config, DeepLX};
 //!
@@ -20,14 +20,6 @@
 //!     proxy: Some("http://pro.xy".to_string()),
 //!     ..Default::default()
 //! });
-//! ```
-//!
-//! When the `impersonate` feature is enabled, it will use `rquest` instead of `reqwest` as the HTTP client.
-//! This allows for mimicking the browser's version, headers, and TLS settings.
-//!
-//! ```toml
-//! [dependencies]
-//! deeplx = { version = "1", features = ["impersonate"] }
 //! ```
 //!
 //! The core structure of this library is [`DeepLX`], through which you can:
@@ -53,7 +45,7 @@
 //!     });
 //!     // let translator = DeepLX::new(Config::default());    // Otherwise
 //!     match translator
-//!         .translate("auto", "zh", "Hello, world!", None, None)
+//!         .translate("auto", "zh", "Hello, world!", None)
 //!         .await
 //!     {
 //!         Ok(res) => println!("Translated: {}", res.data),
