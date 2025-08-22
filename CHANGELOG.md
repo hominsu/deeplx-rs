@@ -5,7 +5,38 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v2.2.0 (2025-08-22)
+
+### New Features
+
+ - <csr-id-325ef82c6279fe1d3a270c813214ea79538f3b0f/> add randomized headers to avoid API blocking
+
+### Performance
+
+ - <csr-id-06b32e9a1ec358a0d89a530918927e0ca3054ad5/> enable deflate and zstd compression
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 2 commits contributed to the release.
+ - 2 commits were understood as [conventional](https://www.conventionalcommits.org).
+ - 0 issues like '(#ID)' were seen in commit messages
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **Uncategorized**
+    - Add randomized headers to avoid API blocking ([`325ef82`](https://github.com/hominsu/deeplx-rs/commit/325ef82c6279fe1d3a270c813214ea79538f3b0f))
+    - Enable deflate and zstd compression ([`06b32e9`](https://github.com/hominsu/deeplx-rs/commit/06b32e9a1ec358a0d89a530918927e0ca3054ad5))
+</details>
+
 ## v2.1.0 (2025-08-21)
+
+<csr-id-fffe24ca505233e8a797831212520f200fcfc5b9/>
 
 ### Refactor
 
@@ -19,7 +50,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <csr-read-only-do-not-edit/>
 
- - 1 commit contributed to the release.
+ - 2 commits contributed to the release.
  - 1 commit was understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
 
@@ -30,6 +61,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Release deeplx v2.1.0 ([`e768801`](https://github.com/hominsu/deeplx-rs/commit/e7688010918cbb2713dffa36404f9cfb65f4a151))
     - Improve error handling and data structures ([`fffe24c`](https://github.com/hominsu/deeplx-rs/commit/fffe24ca505233e8a797831212520f200fcfc5b9))
 </details>
 
@@ -140,7 +172,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <csr-id-4006f8255253b1eea42e31530e20d0fec4a828ce/>
 
 
-<csr-id-1feec80534d9ab29f3c19d5f7c0bf0371bf08a0b/>
 <csr-id-08c478d51f141ebaf86d3d2165c7a6fa499b6fb6/>
 <csr-id-4006f8255253b1eea42e31530e20d0fec4a828ce/>
 
@@ -320,7 +351,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <csr-id-b33d7898fc127e31ff87e25e5b5911f0c26c8a82/>
 
 
-<csr-id-bed536265ea643fcd1f7654144578667f0ec1f7e/>
 <csr-id-f336482cc4d3432c7e08b52a61b6c404ac5bcea0/>
 <csr-id-49c857123034ad725d5beada036a00662201f956/>
 <csr-id-3eaa33b7fcccde9d3d8de26150c51c8dcb85f8f3/>
@@ -606,9 +636,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 
 
-
-<csr-id-6766cf0f59375773b36d91a350c601d7c084dbce/>
-
 ### Documentation
 
  - <csr-id-7e6b4e5cc272386b2b5496d9b95390cff48f1aba/> update README.md
@@ -888,7 +915,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <csr-id-781134495786432752fa191a79a219f42ea036db/>
 
 
-<csr-id-904ed1645a6ec5cefd2cafa6531dec6f7620adbc/>
 <csr-id-9a3d3c6545403905d92c5e3ae52eb16edaba0813/>
 <csr-id-781134495786432752fa191a79a219f42ea036db/>
 
