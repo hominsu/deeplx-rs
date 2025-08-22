@@ -8,16 +8,15 @@ use super::data::{
 use super::error::{Error, LangDetectError};
 use super::utils::{get_i_count, get_random_number, get_timestamp};
 
-#[cfg(not(target_arch = "wasm32"))]
-use reqwest::Proxy;
 use reqwest::{
     Client, Response, StatusCode,
     header::{
         ACCEPT, ACCEPT_ENCODING, ACCEPT_LANGUAGE, CONNECTION, CONTENT_TYPE, COOKIE, DNT, HeaderMap,
         HeaderValue, UPGRADE_INSECURE_REQUESTS, USER_AGENT,
     },
-    retry,
 };
+#[cfg(not(target_arch = "wasm32"))]
+use reqwest::{Proxy, retry};
 
 /// Configuration settings for the `DeepLX` translation client.
 ///
@@ -141,19 +140,21 @@ impl DeepLX {
             None => builder,
         };
 
-        let retry_builder = retry::for_host(self.base_url.clone())
-            .max_retries_per_request(3)
-            .classify_fn(|req| {
-                if let Some(status) = req.status()
-                    && status == StatusCode::TOO_MANY_REQUESTS
-                {
-                    return req.retryable();
-                }
-                req.success()
-            });
+        #[cfg(not(target_arch = "wasm32"))]
+        let builder = builder.retry(
+            retry::for_host(self.base_url.clone())
+                .max_retries_per_request(3)
+                .classify_fn(|req| {
+                    if let Some(status) = req.status()
+                        && status == StatusCode::TOO_MANY_REQUESTS
+                    {
+                        return req.retryable();
+                    }
+                    req.success()
+                }),
+        );
 
         let resp = builder
-            .retry(retry_builder)
             .build()?
             .post(&self.base_url)
             .headers(headers)
