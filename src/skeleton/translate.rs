@@ -47,6 +47,7 @@ use reqwest::{Proxy, retry};
 /// use deeplx::{Config, DeepLX};
 ///
 /// let translator = DeepLX::new(Config {
+///     #[cfg(not(target_arch = "wasm32"))]
 ///     proxy: Some("http://pro.xy".to_string()),
 ///     ..Default::default()
 /// });
@@ -98,6 +99,7 @@ impl DeepLX {
     ///
     /// let translator = DeepLX::new(Config::default());
     /// let translator_with_proxy = DeepLX::new(Config {
+    ///     #[cfg(not(target_arch = "wasm32"))]
     ///     proxy: Some("http://pro.xy".to_string()),
     ///     ..Default::default()
     /// });
@@ -188,8 +190,7 @@ impl DeepLX {
     /// ```no_run
     /// use deeplx::{Config, DeepLX};
     ///
-    /// #[tokio::main]
-    /// async fn main() {
+    /// async fn run() {
     ///     let translator = DeepLX::new(Config::default());
     ///     match translator
     ///         .translate("auto", "zh", "Hello, world!", None)
@@ -197,6 +198,18 @@ impl DeepLX {
     ///         Ok(res) => println!("Translated: {}", res.data),
     ///         Err(e) => eprintln!("Error: {}", e),
     ///     }
+    /// }
+    ///
+    /// #[cfg(not(target_arch = "wasm32"))]
+    /// #[tokio::main]
+    /// async fn main() {
+    ///    run().await;
+    /// }
+    ///
+    /// #[cfg(target_arch = "wasm32")]
+    /// #[tokio::main(flavor = "current_thread")]
+    /// async fn main() {
+    ///    run().await;
     /// }
     /// ```
     pub async fn translate(

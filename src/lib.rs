@@ -16,6 +16,7 @@
 //! ```no_run
 //! use deeplx::{Config, DeepLX};
 //!
+//! #[cfg(not(target_arch = "wasm32"))]
 //! let translator = DeepLX::new(Config {
 //!     proxy: Some("http://pro.xy".to_string()),
 //!     ..Default::default()
@@ -37,9 +38,9 @@
 //! ```no_run
 //! use deeplx::{Config, DeepLX};
 //!
-//! #[tokio::main]
-//! async fn main() {
+//! async fn run() {
 //!     let translator = DeepLX::new(Config {   // If proxy enabled, with proxy
+//!         #[cfg(not(target_arch = "wasm32"))]
 //!         proxy: Some("http://pro.xy".to_string()),
 //!         ..Default::default()
 //!     });
@@ -51,6 +52,18 @@
 //!         Ok(res) => println!("Translated: {}", res.data),
 //!         Err(e) => eprintln!("{}", e),
 //!     }
+//! }
+//!
+//! #[cfg(not(target_arch = "wasm32"))]
+//! #[tokio::main]
+//! async fn main() {
+//!    run().await;
+//! }
+//!
+//! #[cfg(target_arch = "wasm32")]
+//! #[tokio::main(flavor = "current_thread")]
+//! async fn main() {
+//!    run().await;
 //! }
 //! ```
 #![cfg_attr(docsrs, feature(doc_cfg))]

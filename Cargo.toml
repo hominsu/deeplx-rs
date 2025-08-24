@@ -53,7 +53,6 @@ all-features = true
 
 [dependencies]
 # data processing
-bytes = "1.10"
 rand = "0.9"
 getrandom = { version = "0.3", features = ["wasm_js"] }
 chrono = "0.4"
@@ -108,6 +107,8 @@ axum-extra = { version = "0.10", optional = true, features = ["typed-header"] }
 
 [dev-dependencies]
 lazy_static = { version = "1" }
+wasm-bindgen-test = "0.3"
+tokio = { version = "1", features = ["macros", "rt"] }
 
 [[test]]
 name = "translate"
