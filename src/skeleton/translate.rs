@@ -144,13 +144,9 @@ impl DeepLX {
         let builder = builder.retry(
             retry::for_host(self.base_url.clone())
                 .max_retries_per_request(3)
-                .classify_fn(|req| {
-                    if let Some(status) = req.status()
-                        && status == StatusCode::TOO_MANY_REQUESTS
-                    {
-                        return req.retryable();
-                    }
-                    req.success()
+                .classify_fn(|req| match req.status() {
+                    Some(status) if status == StatusCode::TOO_MANY_REQUESTS => req.retryable(),
+                    _ => req.success(),
                 }),
         );
 
