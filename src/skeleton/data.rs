@@ -62,13 +62,6 @@ pub struct DeepLXTranslationResult {
     pub method: String,
 }
 
-#[derive(Debug, Deserialize)]
-#[serde(rename_all = "snake_case")]
-pub struct CommonResult {
-    pub code: i32,
-    pub message: Option<String>,
-}
-
 impl Default for DeepLXTranslationResult {
     fn default() -> Self {
         DeepLXTranslationResult {

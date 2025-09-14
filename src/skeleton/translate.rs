@@ -2,9 +2,7 @@ use std::io;
 
 use rand::prelude::*;
 
-use super::data::{
-    CommonResult, DeepLXTranslationResult, Lang, Params, PostData, TextItem, TranslationResponse,
-};
+use super::data::{DeepLXTranslationResult, Lang, Params, PostData, TextItem, TranslationResponse};
 use super::error::{Error, LangDetectError};
 use super::utils::{get_i_count, get_random_number, get_timestamp};
 
@@ -284,10 +282,8 @@ impl DeepLX {
         // send request and parse response
         let (status, resp) = self.make_request(&post_data, deepl_session).await?;
         if !status.is_success() {
-            let resp: CommonResult = resp.json().await?;
             return Ok(DeepLXTranslationResult {
-                code: resp.code,
-                message: resp.message,
+                code: status.as_u16() as i32,
                 ..Default::default()
             });
         }
