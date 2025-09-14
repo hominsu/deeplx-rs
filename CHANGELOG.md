@@ -5,7 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## v2.2.4 (2025-09-14)
+
+### Refactor
+
+ - <csr-id-9a40c85447bbd56d06ebeefde1881ab657bf15f6/> use match expression for retry classification
+
+### Commit Statistics
+
+<csr-read-only-do-not-edit/>
+
+ - 1 commit contributed to the release.
+ - 1 commit was understood as [conventional](https://www.conventionalcommits.org).
+ - 0 issues like '(#ID)' were seen in commit messages
+
+### Commit Details
+
+<csr-read-only-do-not-edit/>
+
+<details><summary>view details</summary>
+
+ * **Uncategorized**
+    - Use match expression for retry classification ([`9a40c85`](https://github.com/hominsu/deeplx-rs/commit/9a40c85447bbd56d06ebeefde1881ab657bf15f6))
+</details>
+
 ## v2.2.3 (2025-09-14)
+
+<csr-id-3169d0db3c032fe76c908eee15eba79e0e1328c7/>
+<csr-id-6c55c1b3ee4da385332e7fae96a2764bfb7dd50d/>
 
 ### Other
 
@@ -19,7 +46,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 <csr-read-only-do-not-edit/>
 
- - 2 commits contributed to the release over the course of 20 calendar days.
+ - 3 commits contributed to the release over the course of 20 calendar days.
  - 22 days passed between releases.
  - 2 commits were understood as [conventional](https://www.conventionalcommits.org).
  - 0 issues like '(#ID)' were seen in commit messages
@@ -31,6 +58,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <details><summary>view details</summary>
 
  * **Uncategorized**
+    - Release deeplx v2.2.3 ([`b99ae91`](https://github.com/hominsu/deeplx-rs/commit/b99ae91465ae00563f20e051267a194b771aaa0b))
     - Simplify error handling for failed requests ([`6c55c1b`](https://github.com/hominsu/deeplx-rs/commit/6c55c1b3ee4da385332e7fae96a2764bfb7dd50d))
     - Add wasm pack to check wasm runtime ([`3169d0d`](https://github.com/hominsu/deeplx-rs/commit/3169d0db3c032fe76c908eee15eba79e0e1328c7))
 </details>
@@ -433,7 +461,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <csr-id-b33d7898fc127e31ff87e25e5b5911f0c26c8a82/>
 
 
-<csr-id-b33d7898fc127e31ff87e25e5b5911f0c26c8a82/>
 
 
 <csr-id-a90df3140f0a6c20f285c04598c26bba17233215/>
@@ -992,7 +1019,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 <csr-id-781134495786432752fa191a79a219f42ea036db/>
 
 
-<csr-id-904ed1645a6ec5cefd2cafa6531dec6f7620adbc/>
 <csr-id-9a3d3c6545403905d92c5e3ae52eb16edaba0813/>
 <csr-id-781134495786432752fa191a79a219f42ea036db/>
 
