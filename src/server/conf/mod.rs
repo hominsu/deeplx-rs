@@ -35,19 +35,28 @@ impl Default for Config {
 impl Config {
     pub fn new(path: &str) -> Result<Self, ConfigError> {
         let pattern = Path::new(path).join("*");
+        let pattern_str = pattern
+            .to_str()
+            .ok_or_else(|| ConfigError::Message("Config path contains invalid UTF-8".into()))?;
+
+        let glob_entries = glob(pattern_str)
+            .map_err(|e| ConfigError::Message(format!("Invalid glob pattern: {}", e)))?;
+
         config::Config::builder()
             .add_source(
-                glob(pattern.to_str().unwrap())
-                    .unwrap()
+                glob_entries
                     .filter_map(|entry| match entry {
                         Ok(path) => match path.extension() {
-                            Some(ext)
+                            Some(ext) => {
+                                let ext_str = ext.to_str()?;
                                 if matches!(
-                                    ext.to_str().unwrap(),
+                                    ext_str,
                                     "ini" | "json" | "yaml" | "toml" | "ron" | "json5"
-                                ) =>
-                            {
-                                Some(File::from(path))
+                                ) {
+                                    Some(File::from(path))
+                                } else {
+                                    None
+                                }
                             }
                             _ => None,
                         },
@@ -60,20 +69,21 @@ impl Config {
     }
 }
 
-pub fn manager(path: &str) -> Manager {
-    let config = Config::new(path).unwrap();
-    Manager {
-        config: Arc::new(RwLock::new(config)),
-        path: path.to_string(),
-    }
-}
-
 pub struct Manager {
     config: Arc<RwLock<Config>>,
     path: String,
 }
 
 impl Manager {
+    pub fn new(path: &str) -> Self {
+        let config = Config::new(path)
+            .unwrap_or_else(|e| panic!("Failed to load config from '{}': {}", path, e));
+        Manager {
+            config: Arc::new(RwLock::new(config)),
+            path: path.to_string(),
+        }
+    }
+
     pub fn with_watcher<F>(&self, signal: F) -> WithWatcher<F>
     where
         F: Future<Output = ()> + Send + 'static,
@@ -134,11 +144,11 @@ where
                 tx,
                 notify::Config::default().with_poll_interval(Duration::from_secs(2)),
             )
-            .unwrap();
+            .expect("Failed to create file watcher");
 
             watcher
                 .watch(Path::new(path.as_str()), RecursiveMode::NonRecursive)
-                .unwrap();
+                .unwrap_or_else(|e| panic!("Failed to watch config directory '{}': {}", path, e));
 
             let config_clone = config.clone();
             let path_clone = path.clone();
@@ -148,10 +158,20 @@ where
                         Ok(Ok(Event {
                             kind: notify::EventKind::Modify(_),
                             ..
-                        })) => {
-                            *config_clone.write().unwrap() =
-                                Config::new(path_clone.as_str()).unwrap();
-                        }
+                        })) => match Config::new(path_clone.as_str()) {
+                            Ok(new_config) => match config_clone.write() {
+                                Ok(mut guard) => {
+                                    *guard = new_config;
+                                    tracing::info!("Config reloaded successfully");
+                                }
+                                Err(e) => {
+                                    tracing::error!("Config lock poisoned, cannot reload: {}", e);
+                                }
+                            },
+                            Err(e) => {
+                                tracing::error!("Failed to reload config: {}", e);
+                            }
+                        },
                         Err(_) => break,
                         _ => {}
                     }

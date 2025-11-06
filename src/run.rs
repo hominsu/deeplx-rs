@@ -10,7 +10,7 @@ use crate::server::{biz, conf, data, pkgs::exit::shutdown_signal, routes};
 use crate::{Bootstrap, Result, error::Error};
 
 pub fn run(args: Bootstrap) -> Result<()> {
-    let manager = conf::manager(args.conf.as_str());
+    let manager = conf::Manager::new(args.conf.as_str());
     let config = manager.config();
     let conf::Config {
         debug,
@@ -18,7 +18,10 @@ pub fn run(args: Bootstrap) -> Result<()> {
         concurrent,
         proxy,
         ..
-    } = config.read().unwrap().clone();
+    } = config
+        .read()
+        .expect("Config lock poisoned - this is a critical error")
+        .clone();
 
     tracing_subscriber::registry()
         .with(
@@ -51,13 +54,11 @@ pub fn run(args: Bootstrap) -> Result<()> {
             proxy,
             ..Config::default()
         }));
-        let translate_repo = Arc::new(data::translate::TranslateRepo::new(translator.clone()));
-        let translate_usecase = Arc::new(biz::translate::TranslateUsecase::new(
-            translate_repo.clone(),
-        ));
+        let translate_repo = Arc::new(data::translate::TranslateRepo::new(translator));
+        let translate_uc = Arc::new(biz::translate::TranslateUsecase::new(translate_repo));
         let state = routes::AppState {
-            translate_uc: translate_usecase,
-            config: manager.config().clone(),
+            translate_uc,
+            config,
         };
         let app = routes::router(state).layer(TraceLayer::new_for_http());
 

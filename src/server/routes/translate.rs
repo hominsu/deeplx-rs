@@ -47,7 +47,8 @@ pub async fn translate_pro(
     let target_lang = payload.target_lang;
     let dl_session = headers
         .get(header::COOKIE)
-        .map(|c| c.to_str().unwrap().replace("dl_session=", ""));
+        .and_then(|c| c.to_str().ok())
+        .map(|s| s.replace("dl_session=", ""));
 
     match dl_session {
         None => Err(Error::DeepLSessionMissing),

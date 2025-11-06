@@ -87,7 +87,9 @@ impl TranslateUsecase {
                 code: res.code as u16,
                 message: res.message,
             })
-            .with_status_code(StatusCode::from_u16(res.code as u16).unwrap())
+            .with_status_code(
+                StatusCode::from_u16(res.code as u16).unwrap_or(StatusCode::INTERNAL_SERVER_ERROR),
+            )
             .into_response()),
         }
     }
@@ -112,7 +114,9 @@ impl TranslateUsecase {
                 code: res.code as u16,
                 message: res.message,
             })
-            .with_status_code(StatusCode::from_u16(res.code as u16).unwrap())
+            .with_status_code(
+                StatusCode::from_u16(res.code as u16).unwrap_or(StatusCode::INTERNAL_SERVER_ERROR),
+            )
             .into_response()),
         }
     }
