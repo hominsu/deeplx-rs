@@ -52,15 +52,13 @@ pub async fn translate_pro(
 
     match dl_session {
         None => Err(Error::DeepLSessionMissing),
-        Some(dl_session) => match dl_session.contains(".") {
-            true => Err(Error::DeepLUnauthorized),
-            false => {
-                state
-                    .translate_uc
-                    .translate(&text, &source_lang, &target_lang, Some(dl_session.as_str()))
-                    .await
-            }
-        },
+        Some(ref session) if session.contains('.') => Err(Error::DeepLUnauthorized),
+        Some(ref session) => {
+            state
+                .translate_uc
+                .translate(&text, &source_lang, &target_lang, Some(session.as_str()))
+                .await
+        }
     }
 }
 

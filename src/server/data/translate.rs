@@ -25,17 +25,13 @@ impl BizTranslateRepo for TranslateRepo {
         dl_session: Option<&'a str>,
     ) -> Pin<Box<dyn Future<Output = Result<DeepLXTranslationResult, Error>> + Send + 'a>> {
         Box::pin(async move {
-            match self
-                .translator
+            self.translator
                 .translate(source_lang, target_lang, text, dl_session)
                 .await
-            {
-                Ok(res) => Ok(res),
-                Err(e) => {
+                .map_err(|e| {
                     tracing::error!(%e);
-                    Err(Error::DeepLX(e))
-                }
-            }
+                    Error::DeepLX(e)
+                })
         })
     }
 }

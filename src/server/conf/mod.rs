@@ -89,7 +89,7 @@ impl Manager {
         F: Future<Output = ()> + Send + 'static,
     {
         WithWatcher {
-            config: self.config.clone(),
+            config: Arc::clone(&self.config),
             path: self.path.clone(),
             signal,
         }
@@ -97,7 +97,7 @@ impl Manager {
 
     #[allow(dead_code)]
     pub fn config(&self) -> Arc<RwLock<Config>> {
-        self.config.clone()
+        Arc::clone(&self.config)
     }
 }
 
@@ -119,7 +119,7 @@ pub struct WithWatcher<F> {
 impl<F> WithWatcher<F> {
     #[allow(dead_code)]
     pub fn config(&self) -> Arc<RwLock<Config>> {
-        self.config.clone()
+        Arc::clone(&self.config)
     }
 }
 
@@ -150,7 +150,7 @@ where
                 .watch(Path::new(path.as_str()), RecursiveMode::NonRecursive)
                 .unwrap_or_else(|e| panic!("Failed to watch config directory '{}': {}", path, e));
 
-            let config_clone = config.clone();
+            let config_clone = Arc::clone(&config);
             let path_clone = path.clone();
             let task = tokio::task::spawn_blocking(move || {
                 loop {

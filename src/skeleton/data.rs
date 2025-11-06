@@ -68,11 +68,11 @@ impl Default for DeepLXTranslationResult {
             code: 0,
             id: 0,
             message: None,
-            data: "".to_string(),
-            alternatives: vec![],
-            source_lang: "".to_string(),
-            target_lang: "".to_string(),
-            method: "".to_string(),
+            data: String::new(),
+            alternatives: Vec::new(),
+            source_lang: String::new(),
+            target_lang: String::new(),
+            method: String::new(),
         }
     }
 }

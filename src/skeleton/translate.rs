@@ -299,13 +299,11 @@ impl DeepLX {
 
         // collect alternatives
         // let num_beams = translations[0].beams.len();
-        let mut alternatives = Vec::new();
-        for t in &texts {
-            let alt_text = t.text.clone();
-            if !alt_text.is_empty() {
-                alternatives.push(alt_text);
-            }
-        }
+        let alternatives: Vec<String> = texts
+            .iter()
+            .map(|t| t.text.clone())
+            .filter(|alt| !alt.is_empty())
+            .collect();
 
         Ok(DeepLXTranslationResult {
             code: 200,
