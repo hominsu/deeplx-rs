@@ -224,7 +224,7 @@ impl DeepLX {
 
         // determine source language
         let source_lang_detached = match source_lang {
-            "auto" | "" => {
+            "autox" => { // letting deeplx do the lang detection, hence autox
                 let iso_639_3 = whatlang::detect_lang(text)
                     .ok_or(LangDetectError::from(io::Error::new(
                         io::ErrorKind::InvalidInput,
@@ -239,7 +239,8 @@ impl DeepLX {
                         io::ErrorKind::InvalidInput,
                         "Could not map detected language to ISO 639-1",
                     )))?
-            }
+            },
+            "" | "auto" => "auto".to_string(),
             _ => source_lang.to_uppercase(),
         };
 
