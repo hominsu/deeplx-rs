@@ -40,7 +40,7 @@ pub(crate) struct PostData<'a> {
 ///
 /// This struct aggregates all necessary information after a translation request,
 /// including the translated text, alternatives, source language, target language, and more.
-#[derive(Debug, Serialize)]
+#[derive(Debug, Default, Serialize)]
 #[serde(rename_all = "snake_case")]
 pub struct DeepLXTranslationResult {
     /// The HTTP-like status code. `200` indicates success, other values indicate various errors or failure states.
@@ -60,21 +60,6 @@ pub struct DeepLXTranslationResult {
     pub target_lang: String,
     /// Indicates the method used, for example "Pro" or "Free".
     pub method: String,
-}
-
-impl Default for DeepLXTranslationResult {
-    fn default() -> Self {
-        DeepLXTranslationResult {
-            code: 0,
-            id: 0,
-            message: None,
-            data: String::new(),
-            alternatives: Vec::new(),
-            source_lang: String::new(),
-            target_lang: String::new(),
-            method: String::new(),
-        }
-    }
 }
 
 #[derive(Debug, Serialize, Deserialize)]
