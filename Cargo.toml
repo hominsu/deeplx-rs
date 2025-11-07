@@ -64,7 +64,7 @@ thiserror = { version = "2" }
 
 # internationalization & language detection
 isolang = { version = "2.4.0" }
-whatlang = { version = "0.16" }
+whatlang = { version = "0.18" }
 
 # http client
 reqwest = { version = "0.12", default-features = false, features = [
@@ -103,7 +103,7 @@ tokio = { version = "1", optional = true, features = ["io-util", "macros", "net"
 # web stuff
 tower-http = { version = "0.6", optional = true, features = ["trace"] }
 axum = { version = "0.8", optional = true, features = ["tracing", "macros"] }
-axum-extra = { version = "0.10", optional = true, features = ["typed-header"] }
+axum-extra = { version = "0.12", optional = true, features = ["typed-header"] }
 
 [dev-dependencies]
 lazy_static = { version = "1" }
