@@ -34,12 +34,9 @@ impl Default for Config {
 
 impl Config {
     pub fn new(path: &str) -> Result<Self, ConfigError> {
-        let pattern = Path::new(path).join("*");
-        let pattern_str = pattern
-            .to_str()
-            .ok_or_else(|| ConfigError::Message("Config path contains invalid UTF-8".into()))?;
+        let pattern = Path::new(path).join("*").to_string_lossy().into_owned();
 
-        let glob_entries = glob(pattern_str)
+        let glob_entries = glob(&pattern)
             .map_err(|e| ConfigError::Message(format!("Invalid glob pattern: {}", e)))?;
 
         config::Config::builder()
