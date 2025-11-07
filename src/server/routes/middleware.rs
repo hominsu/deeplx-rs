@@ -14,6 +14,7 @@ use axum_extra::{
 #[derive(serde::Deserialize)]
 struct QueryParams {
     key: Option<String>,
+    token: Option<String>,
 }
 
 pub struct RequireAuth {}
@@ -48,7 +49,14 @@ where
             Err(_) => None,
         };
 
-        let token = query.key.as_deref().or(bearer.as_deref());
+        // Priority: bearer > token > key
+        let token = [
+            bearer.as_deref(),
+            query.token.as_deref(),
+            query.key.as_deref(),
+        ]
+        .into_iter()
+        .find_map(|t| t);
 
         if token != Some(auth.as_str()) {
             return Err(Error::InvalidAccessToken);
