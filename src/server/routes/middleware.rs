@@ -37,8 +37,10 @@ where
             guard.auth.clone()
         };
 
-        let Some(auth) = auth_option else {
-            return Ok(Self {});
+        let auth = match auth_option {
+            None => return Ok(Self {}),
+            Some(ref s) if s.is_empty() => return Ok(Self {}),
+            Some(s) => s,
         };
 
         let query: Query<QueryParams> =
