@@ -69,8 +69,8 @@ impl Default for Config {
 /// The main entry point for interacting with the DeepL translation service.
 ///
 /// `DeepLX` provides methods to create a translation client and perform translation
-/// requests. You can optionally specify a proxy (with default feature `proxy`),
-/// choose source and target languages, and handle text with or without HTML/XML tags.
+/// requests. You can optionally specify a proxy (on non‑wasm32 targets),
+/// choose source and target languages, and retrieve alternative translations.
 #[derive(Clone)]
 pub struct DeepLX {
     base_url: String,
@@ -171,7 +171,6 @@ impl DeepLX {
     /// * `source_lang` - The source language code, e.g. `"en"`. Use `"auto"` to let the system detect the language.
     /// * `target_lang` - The target language code, e.g. `"zh"` or `"EN-GB"` for a regional variant.
     /// * `text` - The text to translate. Cannot be empty.
-    /// * `tag_handling` - An optional parameter specifying the handling of tags, e.g. `"html"`, `"xml"`, or `None`.
     /// * `deepl_session` - An optional session string. If `None`, the "Free" method is used; otherwise "Pro".
     ///
     /// # Returns
