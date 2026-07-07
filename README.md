@@ -33,8 +33,10 @@
 
 ## Features
 
-- **Docker support** for easy deployment.
-- **Proxy support** by default (can be disabled via features).
+- **DeepL Chrome extension oneshot transport**.
+- **Typed library API** with `Client`, `TranslateRequest`, `Auth`, and strong errors.
+- **Optional server binary** behind the `server` feature.
+- **Proxy support** on native targets.
 
 ## Usage
 
@@ -53,7 +55,7 @@
 ### Install with Cargo
 
 ```shell
-cargo install
+cargo install deeplx --features server,mimalloc
 ```
 
 ## Integration
@@ -69,23 +71,29 @@ deeplx = { version = "2", default-features = false }
 
 ### Configuration
 
-deeplx is configured via the Config struct. You can specify options such as proxy, timeout, and more. For example:
+deeplx is configured through `Client::builder()`:
 
 ```rust
-use deeplx::{Config, DeepLX};
+use std::time::Duration;
 
-let translator = DeepLX::new(Config {
-    proxy: Some("http://pro.xy".to_string()),
-    ..Default::default()
-});
+use deeplx::{Auth, Client};
+
+let client = Client::builder()
+    .auth(Auth::Anonymous)
+    .timeout(Duration::from_secs(20))
+    .proxy("http://127.0.0.1:7890".parse().unwrap())
+    .build()?;
 ```
 
-Or you can simply omit the proxy field:
+For Pro requests, use a Bearer token:
 
 ```rust
-use deeplx::{Config, DeepLX};
+use deeplx::{Auth, Client};
+use secrecy::SecretString;
 
-let translator = DeepLX::new(Config::default ());
+let client = Client::builder()
+    .auth(Auth::Bearer(SecretString::from("token".to_string())))
+    .build()?;
 ```
 
 ### Usage
@@ -93,23 +101,35 @@ let translator = DeepLX::new(Config::default ());
 Below is an example using tokio for async execution:
 
 ```rust
-use deeplx::{Config, DeepLX};
+use deeplx::{Auth, Client, SourceLang, TargetLang, TranslateRequest};
 
 #[tokio::main]
-async fn main() {
-    let translator = DeepLX::new(Config {
-        proxy: Some("http://pro.xy".to_string()),
-        ..Default::default()
-    });
-    // Or without proxy:
-    // let translator = DeepLX::new(Config::default());
+async fn main() -> Result<(), deeplx::Error> {
+    let client = Client::builder().auth(Auth::Anonymous).build()?;
+    let request = TranslateRequest::builder()
+        .text("Hello, world!")?
+        .source(SourceLang::Auto)
+        .target(TargetLang::parse("ZH-HANS")?)
+        .build()?;
 
-    match translator.translate("auto", "zh", "Hello, world!", None).await {
-        Ok(res) => println!("Translated: {}", res.data),
-        Err(e) => eprintln!("Error: {}", e),
-    }
+    let response = client.translate(request).await?;
+    println!("{}", response.translations[0].text);
+
+    Ok(())
 }
 ```
+
+### Server
+
+The HTTP server is optional:
+
+```shell
+cargo run --features server,mimalloc -- run --conf ./configs
+```
+
+`/translate` uses anonymous oneshot requests. `/v1/translate` accepts
+`Authorization: Bearer <token>` for Pro requests, with temporary compatibility
+for `Cookie: dl_session=<token>`.
 
 ## Reference
 

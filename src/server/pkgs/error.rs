@@ -8,11 +8,10 @@ use axum::{
 use serde::Serialize;
 
 pub enum Error {
-    DeepLX(deeplx::Error),
+    Deeplx(deeplx::Error),
     JsonRejection(JsonRejection),
     InternalServer,
     DeepLSessionMissing,
-    DeepLUnauthorized,
     InvalidAccessToken,
 }
 
@@ -25,7 +24,7 @@ impl IntoResponse for Error {
         }
 
         let (code, message) = match self {
-            Error::DeepLX(err) => (StatusCode::INTERNAL_SERVER_ERROR, err.to_string()),
+            Error::Deeplx(err) => (err.status_code(), err.to_string()),
             Error::JsonRejection(rejection) => (rejection.status(), rejection.body_text()),
             Error::InternalServer => (
                 StatusCode::INTERNAL_SERVER_ERROR,
@@ -34,14 +33,9 @@ impl IntoResponse for Error {
             Error::DeepLSessionMissing => {
                 (StatusCode::UNAUTHORIZED, "No dl_session Found".to_string())
             }
-            Error::DeepLUnauthorized => (
-                StatusCode::UNAUTHORIZED,
-                "Your account is not a Pro account. Please upgrade your account or switch to a different account.".to_string()
-            ),
-            Error::InvalidAccessToken => (
-                StatusCode::UNAUTHORIZED,
-                "Invalid access token".to_string(),
-            ),
+            Error::InvalidAccessToken => {
+                (StatusCode::UNAUTHORIZED, "Invalid access token".to_string())
+            }
         };
 
         Json(ErrorResponse {
@@ -56,5 +50,11 @@ impl IntoResponse for Error {
 impl From<JsonRejection> for Error {
     fn from(value: JsonRejection) -> Self {
         Self::JsonRejection(value)
+    }
+}
+
+impl From<deeplx::Error> for Error {
+    fn from(value: deeplx::Error) -> Self {
+        Self::Deeplx(value)
     }
 }
