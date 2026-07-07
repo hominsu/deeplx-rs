@@ -1,51 +1,45 @@
-#[cfg(test)]
-mod tests {
-    use deeplx::{Config, DeepLX};
-    use lazy_static::lazy_static;
+use deeplx::{Auth, Client, Endpoint, Error, SourceLang, TargetLang, TranslateRequest};
+use reqwest::Url;
+use secrecy::SecretString;
 
-    lazy_static! {
-        static ref TRANSLATOR: DeepLX = DeepLX::new(Config::default());
-    }
+#[test]
+fn builds_public_translate_request() {
+    let request = TranslateRequest::builder()
+        .text("Hello")
+        .unwrap()
+        .source(SourceLang::Auto)
+        .target(TargetLang::parse("ZH-HANS").unwrap())
+        .build()
+        .unwrap();
 
-    #[tokio::test]
-    async fn test_translate() {
-        match TRANSLATOR
-            .translate("auto", "zh", "Hello, world!", None)
-            .await
-        {
-            Ok(res) => {
-                assert_eq!(res.code, 200);
-                println!("{res:?}")
-            }
-            Err(e) => eprintln!("{e:?}"),
-        }
-    }
+    assert_eq!(request.text, vec!["Hello"]);
+    assert_eq!(request.target.code(), "ZH-HANS");
+}
 
-    #[tokio::test]
-    async fn test_translate_confident() {
-        match TRANSLATOR
-            .translate("en", "zh", "Hello, world!", None)
-            .await
-        {
-            Ok(res) => {
-                assert_eq!(res.code, 200);
-                println!("{res:?}")
-            }
-            Err(e) => eprintln!("{e:?}"),
-        }
-    }
+#[tokio::test]
+async fn translate_rejects_missing_custom_pro_endpoint_before_network() {
+    let client = Client::builder()
+        .endpoint(Endpoint::Custom {
+            free_url: Url::parse("http://127.0.0.1:1/free").unwrap(),
+            pro_url: None,
+        })
+        .build()
+        .unwrap();
+    let request = TranslateRequest::builder()
+        .text("Hello")
+        .unwrap()
+        .source(SourceLang::parse("EN").unwrap())
+        .target(TargetLang::parse("DE").unwrap())
+        .build()
+        .unwrap();
 
-    #[tokio::test]
-    async fn test_translate_new_line() {
-        match TRANSLATOR
-            .translate("auto", "zh", "Hello\nworld!", None)
-            .await
-        {
-            Ok(res) => {
-                assert_eq!(res.code, 200);
-                println!("{res:?}")
-            }
-            Err(e) => eprintln!("{e:?}"),
-        }
-    }
+    let err = client
+        .translate_with_auth(
+            request,
+            Auth::Bearer(SecretString::from("token.value".to_string())),
+        )
+        .await
+        .unwrap_err();
+
+    assert!(matches!(err, Error::MissingProEndpoint));
 }

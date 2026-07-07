@@ -1,26 +1,49 @@
-mod error;
 mod run;
 mod server;
 
 use clap::{Args, Parser, Subcommand};
 
-#[cfg(feature = "mimalloc")]
+#[cfg(all(
+    feature = "mimalloc",
+    not(any(
+        feature = "rpmalloc",
+        feature = "snmalloc",
+        feature = "tikv-jemallocator"
+    ))
+))]
 #[global_allocator]
 static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
 
-#[cfg(feature = "rpmalloc")]
+#[cfg(all(
+    feature = "rpmalloc",
+    not(any(
+        feature = "mimalloc",
+        feature = "snmalloc",
+        feature = "tikv-jemallocator"
+    ))
+))]
 #[global_allocator]
 static GLOBAL: rpmalloc::RpMalloc = rpmalloc::RpMalloc;
 
-#[cfg(feature = "snmalloc")]
+#[cfg(all(
+    feature = "snmalloc",
+    not(any(
+        feature = "mimalloc",
+        feature = "rpmalloc",
+        feature = "tikv-jemallocator"
+    ))
+))]
 #[global_allocator]
 static GLOBAL: snmalloc_rs::SnMalloc = snmalloc_rs::SnMalloc;
 
-#[cfg(feature = "tikv-jemallocator")]
+#[cfg(all(
+    feature = "tikv-jemallocator",
+    not(any(feature = "mimalloc", feature = "rpmalloc", feature = "snmalloc"))
+))]
 #[global_allocator]
 static GLOBAL: tikv_jemallocator::Jemalloc = tikv_jemallocator::Jemalloc;
 
-type Result<T, E = error::Error> = std::result::Result<T, E>;
+type Result<T, E = deeplx::Error> = std::result::Result<T, E>;
 
 #[derive(Parser)]
 #[clap(author, version, about, arg_required_else_help = true)]

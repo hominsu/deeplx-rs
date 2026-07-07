@@ -6,6 +6,8 @@ use axum::{
     http::{HeaderMap, header},
     response::Response,
 };
+use deeplx::Auth;
+use secrecy::SecretString;
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize)]
@@ -33,7 +35,7 @@ pub async fn translate_free(
 
     state
         .translate_uc
-        .translate(&text, &source_lang, &target_lang, None)
+        .translate(&text, &source_lang, &target_lang, Auth::Anonymous)
         .await
 }
 
@@ -45,21 +47,19 @@ pub async fn translate_pro(
     let text = payload.text;
     let source_lang = payload.source_lang;
     let target_lang = payload.target_lang;
-    let dl_session = headers
-        .get(header::COOKIE)
-        .and_then(|c| c.to_str().ok())
-        .map(|s| s.replace("dl_session=", ""));
+    let token = bearer_token(&headers)
+        .or_else(|| legacy_dl_session(&headers))
+        .ok_or(Error::DeepLSessionMissing)?;
 
-    match dl_session {
-        None => Err(Error::DeepLSessionMissing),
-        Some(ref session) if session.contains('.') => Err(Error::DeepLUnauthorized),
-        Some(ref session) => {
-            state
-                .translate_uc
-                .translate(&text, &source_lang, &target_lang, Some(session.as_str()))
-                .await
-        }
-    }
+    state
+        .translate_uc
+        .translate(
+            &text,
+            &source_lang,
+            &target_lang,
+            Auth::Bearer(SecretString::from(token)),
+        )
+        .await
 }
 
 pub async fn translate_official(
@@ -73,4 +73,29 @@ pub async fn translate_official(
         .translate_uc
         .translate_official(&text, &target_lang)
         .await
+}
+
+fn bearer_token(headers: &HeaderMap) -> Option<String> {
+    headers
+        .get(header::AUTHORIZATION)
+        .and_then(|value| value.to_str().ok())
+        .and_then(|value| value.strip_prefix("Bearer "))
+        .map(str::trim)
+        .filter(|value| !value.is_empty())
+        .map(ToOwned::to_owned)
+}
+
+fn legacy_dl_session(headers: &HeaderMap) -> Option<String> {
+    headers
+        .get(header::COOKIE)
+        .and_then(|value| value.to_str().ok())
+        .and_then(|cookies| {
+            cookies.split(';').find_map(|cookie| {
+                let cookie = cookie.trim();
+                cookie
+                    .strip_prefix("dl_session=")
+                    .filter(|value| !value.is_empty())
+                    .map(ToOwned::to_owned)
+            })
+        })
 }

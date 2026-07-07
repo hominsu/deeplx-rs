@@ -1,81 +1,45 @@
-//! `deeplx` is a Rust package for unlimited DeepL translation.
+//! Rust client for DeepL's Chrome extension oneshot translation endpoint.
 //!
-//! # Overview
-//!
-//! `deeplx` provides a convenient interface for interacting with DeepL.
-//!
-//! Proxy support is available on non-wasm32 targets and can be configured via the `proxy` field of [`Config`].
-//! On wasm32 targets, the `proxy` field is not available due to platform limitations.
-//!
-//! Translations can be performed in either 'Free' or 'Pro' mode, depending on whether a DeepL session cookie is provided.
-//!
-//! The core structure of this library is [`DeepLX`], through which you can:
-//! - Create a new translation client instance using [`DeepLX::new`].
-//! - Perform text translations with [`DeepLX::translate`], automatically detecting the source language if needed, and retrieving both a primary translation and multiple alternative translations.
-//!
-//! In addition, the library defines several data structures for representing requests and responses from DeepL's API, ensuring consistency with [OwO-Network/DeepLX](https://github.com/OwO-Network/DeepLX):
-//! - [`DeepLXTranslationResult`]: Represents the translation result including status code, source and target languages, translated text, and any alternative translations.
-//!
-//! By maintaining consistency with the [OwO-Network/DeepLX](https://github.com/OwO-Network/DeepLX),
-//! this project aims to provide a familiar and straightforward experience for users looking to integrate DeepL translations into their Rust applications.
-//!
-//! # Example
-//!
-//! ## Basic usage
+//! The crate exposes a typed client API. HTTP compatibility responses are kept
+//! in the optional server layer, not in the library core.
 //!
 //! ```no_run
-//! use deeplx::{Config, DeepLX};
+//! use std::time::Duration;
 //!
-//! async fn run() {
-//!     let translator = DeepLX::new(Config::default());
-//!     match translator
-//!         .translate("auto", "zh", "Hello, world!", None)
-//!         .await
-//!     {
-//!         Ok(res) => println!("Translated: {}", res.data),
-//!         Err(e) => eprintln!("{}", e),
-//!     }
-//! }
+//! use deeplx::{Auth, Client, SourceLang, TargetLang, TranslateRequest};
 //!
-//! #[cfg(not(target_arch = "wasm32"))]
-//! #[tokio::main]
-//! async fn main() {
-//!    run().await;
-//! }
+//! async fn run() -> Result<(), deeplx::Error> {
+//!     let client = Client::builder()
+//!         .auth(Auth::Anonymous)
+//!         .timeout(Duration::from_secs(20))
+//!         .build()?;
 //!
-//! #[cfg(target_arch = "wasm32")]
-//! #[tokio::main(flavor = "current_thread")]
-//! async fn main() {
-//!    run().await;
-//! }
-//! ```
+//!     let response = client
+//!         .translate(
+//!             TranslateRequest::builder()
+//!                 .text("Hello, world!")?
+//!                 .source(SourceLang::Auto)
+//!                 .target(TargetLang::parse("ZH-HANS")?)
+//!                 .build()?,
+//!         )
+//!         .await?;
 //!
-//! ## Using a proxy (non-wasm32 only)
-//!
-//! ```no_run
-//! use deeplx::{Config, DeepLX};
-//!
-//! #[cfg(not(target_arch = "wasm32"))]
-//! async fn run_with_proxy() {
-//!     let translator = DeepLX::new(Config {
-//!         proxy: Some("http://pro.xy".to_string()),
-//!         ..Default::default()
-//!     });
-//!     match translator
-//!         .translate("auto", "zh", "Hello, world!", None)
-//!         .await
-//!     {
-//!         Ok(res) => println!("Translated: {}", res.data),
-//!         Err(e) => eprintln!("{}", e),
-//!     }
+//!     println!("{}", response.translations[0].text);
+//!     Ok(())
 //! }
 //! ```
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
-mod skeleton;
+mod client;
+mod config;
+mod error;
+mod lang;
+mod oneshot;
+mod translate;
+mod transport;
 
-pub use skeleton::{
-    data::DeepLXTranslationResult,
-    error::Error,
-    translate::{Config, DeepLX},
-};
+pub use client::Client;
+pub use config::{Auth, ClientConfig, Endpoint, Fingerprint, WarmupMode};
+pub use error::Error;
+pub use lang::{LanguageCode, SourceLang, TargetLang};
+pub use translate::{TranslateRequest, TranslateResponse, Translation};

@@ -1,13 +1,13 @@
 use std::net::SocketAddr;
 use std::{future::IntoFuture, sync::Arc};
 
-use deeplx::{Config, DeepLX};
+use deeplx::Client;
 use tokio::sync::watch;
 use tower_http::trace::TraceLayer;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 use crate::server::{biz, conf, data, pkgs::exit::shutdown_signal, routes};
-use crate::{Bootstrap, Result, error::Error};
+use crate::{Bootstrap, Result};
 
 pub fn run(args: Bootstrap) -> Result<()> {
     let manager = conf::Manager::new(args.conf.as_str());
@@ -50,10 +50,11 @@ pub fn run(args: Bootstrap) -> Result<()> {
         .build()?;
 
     runtime.block_on(async move {
-        let translator = Arc::new(DeepLX::new(Config {
-            proxy,
-            ..Config::default()
-        }));
+        let mut client = Client::builder();
+        if let Some(proxy) = proxy {
+            client = client.proxy(proxy.parse().map_err(|_| deeplx::Error::InvalidUrl)?);
+        }
+        let translator = Arc::new(client.build()?);
         let translate_repo = Arc::new(data::translate::TranslateRepo::new(translator));
         let translate_uc = Arc::new(biz::translate::TranslateUsecase::new(translate_repo));
         let state = routes::AppState {
@@ -98,7 +99,7 @@ pub fn run(args: Bootstrap) -> Result<()> {
             },
         }
 
-        Ok::<(), Error>(())
+        Ok::<(), deeplx::Error>(())
     })?;
 
     Ok(())
