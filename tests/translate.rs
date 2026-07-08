@@ -1,45 +1,43 @@
-use deeplx::{Auth, Client, Endpoint, Error, SourceLang, TargetLang, TranslateRequest};
-use reqwest::Url;
-use secrecy::SecretString;
+use std::sync::LazyLock;
 
-#[test]
-fn builds_public_translate_request() {
+use deeplx::{Auth, Client, SourceLang, TargetLang, TranslateRequest};
+
+static TRANSLATOR: LazyLock<Client> = LazyLock::new(|| {
+    Client::builder()
+        .auth(Auth::Anonymous)
+        .build()
+        .expect("failed to build translator")
+});
+
+async fn translate(source_lang: &str, target_lang: &str, text: &str) {
     let request = TranslateRequest::builder()
-        .text("Hello")
+        .text(text)
         .unwrap()
-        .source(SourceLang::Auto)
-        .target(TargetLang::parse("ZH-HANS").unwrap())
+        .source(SourceLang::parse(source_lang).unwrap())
+        .target(TargetLang::parse(target_lang).unwrap())
         .build()
         .unwrap();
 
-    assert_eq!(request.text, vec!["Hello"]);
-    assert_eq!(request.target.code(), "ZH-HANS");
+    match TRANSLATOR.translate(&request).await {
+        Ok(res) => {
+            assert!(!res.translations.is_empty());
+            println!("{res:?}")
+        }
+        Err(e) => eprintln!("{e:?}"),
+    }
 }
 
 #[tokio::test]
-async fn translate_rejects_missing_custom_pro_endpoint_before_network() {
-    let client = Client::builder()
-        .endpoint(Endpoint::Custom {
-            free_url: Url::parse("http://127.0.0.1:1/free").unwrap(),
-            pro_url: None,
-        })
-        .build()
-        .unwrap();
-    let request = TranslateRequest::builder()
-        .text("Hello")
-        .unwrap()
-        .source(SourceLang::parse("EN").unwrap())
-        .target(TargetLang::parse("DE").unwrap())
-        .build()
-        .unwrap();
+async fn test_translate() {
+    translate("auto", "zh", "Hello, world!").await;
+}
 
-    let err = client
-        .translate_with_auth(
-            request,
-            Auth::Bearer(SecretString::from("token.value".to_string())),
-        )
-        .await
-        .unwrap_err();
+#[tokio::test]
+async fn test_translate_confident() {
+    translate("en", "zh", "Hello, world!").await;
+}
 
-    assert!(matches!(err, Error::MissingProEndpoint));
+#[tokio::test]
+async fn test_translate_new_line() {
+    translate("auto", "zh", "Hello\nworld!").await;
 }

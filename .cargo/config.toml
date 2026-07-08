@@ -1,4 +1,12 @@
+[build]
+rustflags = [
+    "--cfg",
+    "reqwest_unstable",
+]
+
 [target.wasm32-unknown-unknown]
 rustflags = [
     "--cfg=getrandom_backend=\"wasm_js\"",
+    "--cfg",
+    "reqwest_unstable",
 ]

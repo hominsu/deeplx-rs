@@ -1,21 +1,16 @@
 use rand::Rng;
 use reqwest::Url;
 
-use crate::{
-    Auth, ClientConfig, Endpoint, Error, TranslateRequest, TranslateResponse, WarmupMode, oneshot,
-    transport::ReqwestTransport,
+use super::{
+    Auth, ClientConfig, Endpoint, Error, TranslateRequest, TranslateResponse, WarmupMode,
+    impit::ImpitTransport, oneshot,
 };
 
 #[derive(Clone)]
 pub struct Client {
     config: ClientConfig,
-    transport: ReqwestTransport,
+    transport: ImpitTransport,
     instance_id: String,
-}
-
-#[derive(Clone, Debug, Default)]
-pub struct ClientBuilder {
-    config: ClientConfig,
 }
 
 impl Client {
@@ -24,7 +19,7 @@ impl Client {
     }
 
     pub fn from_config(config: ClientConfig) -> Result<Self, Error> {
-        let transport = ReqwestTransport::new(&config)?;
+        let transport = ImpitTransport::new(&config)?;
 
         Ok(Self {
             config,
@@ -33,19 +28,18 @@ impl Client {
         })
     }
 
-    pub async fn translate(&self, request: TranslateRequest) -> Result<TranslateResponse, Error> {
-        self.translate_with_auth(request, self.config.auth.clone())
-            .await
+    pub async fn translate(&self, request: &TranslateRequest) -> Result<TranslateResponse, Error> {
+        self.translate_with_auth(request, &self.config.auth).await
     }
 
     pub async fn translate_with_auth(
         &self,
-        request: TranslateRequest,
-        auth: Auth,
+        request: &TranslateRequest,
+        auth: &Auth,
     ) -> Result<TranslateResponse, Error> {
-        let url = self.config.endpoint.url_for_auth(&auth)?;
-        let headers = oneshot::headers(&self.config, &auth)?;
-        let body = oneshot::build_body(&request, &self.config, &auth, &self.instance_id)?;
+        let url = self.config.endpoint.url_for_auth(auth)?;
+        let headers = oneshot::post_headers(auth)?;
+        let body = oneshot::build_body(request, auth, &self.instance_id)?;
         let response = self.transport.post(url, headers, body).await?;
 
         oneshot::parse_response(response.status, response.body.as_str(), &request.target)
@@ -54,6 +48,11 @@ impl Client {
     pub async fn warmup(&self) -> Result<(), Error> {
         self.transport.warmup().await
     }
+}
+
+#[derive(Clone, Debug, Default)]
+pub struct ClientBuilder {
+    config: ClientConfig,
 }
 
 impl ClientBuilder {
