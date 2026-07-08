@@ -63,16 +63,17 @@ secrecy = "0.10"
 thiserror = { version = "2" }
 
 # http client
-reqwest = { version = "0.12", default-features = false, features = [
-    "rustls-tls",
+impit = { git = "https://github.com/apify/impit.git", branch="master" }
+reqwest = { version = "0.13.1", default-features = false, features = [
+    "rustls",
     "charset",
     "http2",
+    "http3",
     "brotli",
     "cookies",
     "deflate",
     "gzip",
-    "json",
-    "zstd"
+    "json"
 ] }
 
 # memory allocator
@@ -106,3 +107,7 @@ tokio = { version = "1", features = ["io-util", "macros", "net", "rt", "sync", "
 
 [[test]]
 name = "translate"
+
+[patch.crates-io]
+rustls = { git="https://github.com/apify/rustls.git", branch="impit-main" }
+hyper-util = { git = "https://github.com/apify/hyper-util", rev="9b7795dfd7158fc55e7c84b65bf1dae1d2dea67d" }

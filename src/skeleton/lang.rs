@@ -1,19 +1,10 @@
-use crate::Error;
+use super::Error;
 
 #[derive(Clone, Debug, Eq, PartialEq)]
 pub struct LanguageCode {
     code: String,
     wire: &'static str,
 }
-
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub enum SourceLang {
-    Auto,
-    Known(LanguageCode),
-}
-
-#[derive(Clone, Debug, Eq, PartialEq)]
-pub struct TargetLang(LanguageCode);
 
 impl LanguageCode {
     pub fn code(&self) -> &str {
@@ -23,6 +14,13 @@ impl LanguageCode {
     pub(crate) fn wire(&self) -> &'static str {
         self.wire
     }
+}
+
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
+pub enum SourceLang {
+    #[default]
+    Auto,
+    Known(LanguageCode),
 }
 
 impl SourceLang {
@@ -49,6 +47,9 @@ impl SourceLang {
         }
     }
 }
+
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub struct TargetLang(LanguageCode);
 
 impl TargetLang {
     pub fn parse(input: &str) -> Result<Self, Error> {
@@ -99,7 +100,6 @@ fn target_wire_code(code: &str) -> Option<&'static str> {
         "DA" => Some("da"),
         "DE" => Some("de"),
         "EL" => Some("el"),
-        "EN" => Some("en-US"),
         "EN-GB" => Some("en-GB"),
         "EN-US" => Some("en-US"),
         "ES" => Some("es"),
@@ -118,7 +118,6 @@ fn target_wire_code(code: &str) -> Option<&'static str> {
         "NB" => Some("nb"),
         "NL" => Some("nl"),
         "PL" => Some("pl"),
-        "PT" => Some("pt-BR"),
         "PT-BR" => Some("pt-BR"),
         "PT-PT" => Some("pt-PT"),
         "RO" => Some("ro"),
@@ -132,6 +131,9 @@ fn target_wire_code(code: &str) -> Option<&'static str> {
         "ZH" => Some("zh-Hans"),
         "ZH-HANS" => Some("zh-Hans"),
         "ZH-HANT" => Some("zh-Hant"),
+        // Convenience aliases for legacy callers
+        "EN" => Some("en-US"),
+        "PT" => Some("pt-BR"),
         _ => None,
     }
 }

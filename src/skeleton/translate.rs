@@ -1,4 +1,4 @@
-use crate::{Error, SourceLang, TargetLang};
+use super::{Error, SourceLang, TargetLang};
 
 #[derive(Clone, Debug)]
 pub struct TranslateRequest {
@@ -25,12 +25,6 @@ pub struct TranslateRequestBuilder {
     text: Vec<String>,
     source: SourceLang,
     target: Option<TargetLang>,
-}
-
-impl Default for SourceLang {
-    fn default() -> Self {
-        Self::Auto
-    }
 }
 
 impl TranslateRequest {

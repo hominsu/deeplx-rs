@@ -41,6 +41,9 @@ pub enum Error {
     Transport(#[from] reqwest::Error),
 
     #[error(transparent)]
+    Impit(#[from] impit::errors::ImpitError),
+
+    #[error(transparent)]
     Json(#[from] serde_json::Error),
 
     #[error("invalid HTTP header")]
@@ -68,9 +71,11 @@ impl Error {
             Self::TooManyRequests => StatusCode::TOO_MANY_REQUESTS,
             Self::Timeout(_) => StatusCode::GATEWAY_TIMEOUT,
             Self::UpstreamStatus { status, .. } => *status,
-            Self::MissingTranslation | Self::Transport(_) | Self::Json(_) | Self::Io(_) => {
-                StatusCode::SERVICE_UNAVAILABLE
-            }
+            Self::MissingTranslation
+            | Self::Transport(_)
+            | Self::Impit(_)
+            | Self::Json(_)
+            | Self::Io(_) => StatusCode::SERVICE_UNAVAILABLE,
         }
     }
 }

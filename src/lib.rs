@@ -16,7 +16,7 @@
 //!
 //!     let response = client
 //!         .translate(
-//!             TranslateRequest::builder()
+//!             &TranslateRequest::builder()
 //!                 .text("Hello, world!")?
 //!                 .source(SourceLang::Auto)
 //!                 .target(TargetLang::parse("ZH-HANS")?)
@@ -30,16 +30,9 @@
 //! ```
 #![cfg_attr(docsrs, feature(doc_cfg))]
 
-mod client;
-mod config;
-mod error;
-mod lang;
-mod oneshot;
-mod translate;
-mod transport;
+mod skeleton;
 
-pub use client::Client;
-pub use config::{Auth, ClientConfig, Endpoint, Fingerprint, WarmupMode};
-pub use error::Error;
-pub use lang::{LanguageCode, SourceLang, TargetLang};
-pub use translate::{TranslateRequest, TranslateResponse, Translation};
+pub use skeleton::{
+    Auth, Client, ClientConfig, Endpoint, Error, LanguageCode, SourceLang, TargetLang,
+    TranslateRequest, TranslateResponse, Translation, WarmupMode,
+};

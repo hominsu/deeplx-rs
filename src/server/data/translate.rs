@@ -32,7 +32,7 @@ impl BizTranslateRepo for TranslateRepo {
                 .build()?;
 
             self.client
-                .translate_with_auth(request, auth)
+                .translate_with_auth(&request, &auth)
                 .await
                 .map_err(|e| {
                     tracing::error!(%e);
