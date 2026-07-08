@@ -3,7 +3,10 @@ use crate::impersonated_chrome_version;
 
 use reqwest::{
     StatusCode,
-    header::{ACCEPT, AUTHORIZATION, CONTENT_TYPE, HeaderMap, HeaderName, HeaderValue, ORIGIN},
+    header::{
+        ACCEPT, ACCEPT_ENCODING, AUTHORIZATION, CONTENT_TYPE, HeaderMap, HeaderName, HeaderValue,
+        ORIGIN,
+    },
 };
 use secrecy::ExposeSecret;
 use serde::{Deserialize, Serialize};
@@ -79,6 +82,10 @@ pub(crate) fn post_headers(auth: &Auth) -> Result<HeaderMap, Error> {
 
     headers.insert(CONTENT_TYPE, HeaderValue::from_static("application/json"));
     headers.insert(ACCEPT, HeaderValue::from_static("*/*"));
+    headers.insert(
+        ACCEPT_ENCODING,
+        HeaderValue::from_static("gzip, deflate, br"),
+    );
 
     match auth {
         Auth::Anonymous => {
@@ -184,6 +191,7 @@ mod tests {
     fn anonymous_auth_sets_authorization_none() {
         let headers = post_headers(&Auth::Anonymous).unwrap();
         assert_eq!(headers[AUTHORIZATION], "None");
+        assert_eq!(headers[ACCEPT_ENCODING], "gzip, deflate, br");
         assert!(headers.get(ORIGIN).is_some());
     }
 

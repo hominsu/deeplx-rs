@@ -111,10 +111,6 @@ mod chrome_120 {
                     ExtensionType::SupportedVersions,
                     ExtensionType::CompressCertificate,
                     ExtensionType::ApplicationSettings,
-                    // uTLS has BoringGREASEECH() here. In impit this is represented
-                    // by EchConfig below, while this GREASE entry keeps the extension
-                    // order close to the uTLS template.
-                    ExtensionType::Grease,
                     ExtensionType::Padding,
                 ],
             )
@@ -149,8 +145,6 @@ mod chrome_120 {
     /// Chrome 120 HTTP headers
     fn headers() -> Vec<(String, String)> {
         vec![
-            ("pragma".to_string(), "no-cache".to_string()),
-            ("cache-control".to_string(), "no-cache".to_string()),
             (
                 "sec-ch-ua".to_string(),
                 "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\""
@@ -158,7 +152,6 @@ mod chrome_120 {
             ),
             ("sec-ch-ua-mobile".to_string(), "?0".to_string()),
             ("sec-ch-ua-platform".to_string(), "\"macOS\"".to_string()),
-            ("upgrade-insecure-requests".to_string(), "1".to_string()),
             (
                 "user-agent".to_string(),
                 "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36".to_string(),
@@ -169,7 +162,6 @@ mod chrome_120 {
             ),
             ("sec-fetch-site".to_string(), "none".to_string()),
             ("sec-fetch-mode".to_string(), "navigate".to_string()),
-            ("sec-fetch-user".to_string(), "?1".to_string()),
             ("sec-fetch-dest".to_string(), "document".to_string()),
             ("accept-language".to_string(), "zh-CN,zh;q=0.9".to_string()),
         ]
@@ -285,6 +277,8 @@ fn headers_to_pairs(headers: HeaderMap) -> Result<Vec<(String, String)>, Error> 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::skeleton::oneshot;
+    use crate::{Auth, SourceLang, TargetLang, TranslateRequest};
 
     #[test]
     fn chrome_120_headers_match_default_fingerprint() {
@@ -305,5 +299,38 @@ mod tests {
             "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
                 .to_string()
         )));
+    }
+
+    #[tokio::test]
+    #[ignore = "sends a live request to capture server-observed headers"]
+    async fn live_capture_request_headers() {
+        let transport = ImpitTransport::new(&ClientConfig::default()).unwrap();
+        let request = TranslateRequest::builder()
+            .text("hello from deeplx header logging test")
+            .unwrap()
+            .source(SourceLang::parse("EN").unwrap())
+            .target(TargetLang::parse("ZH").unwrap())
+            .build()
+            .unwrap();
+        let headers = oneshot::post_headers(&Auth::Anonymous).unwrap();
+        let body = oneshot::build_body(
+            &request,
+            &Auth::Anonymous,
+            "00000000-0000-0000-0000-000000000000",
+        )
+        .unwrap();
+        let response = transport
+            .post(
+                Url::parse("https://tls.peet.ws/api/all").unwrap(),
+                headers,
+                body,
+            )
+            .await
+            .unwrap();
+
+        println!("status={}", response.status);
+        println!("{}", response.body);
+
+        assert!(response.status.is_success());
     }
 }
