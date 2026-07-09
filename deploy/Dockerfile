@@ -12,9 +12,8 @@ RUN apt-get update && \
 
 COPY . .
 
-RUN RUSTFLAGS='-C target-feature=+crt-static' \
-    CARGO_BUILD_TARGET=$(rustc -vV | grep host | awk '{print $2}')  \
-    cargo install --path . --features=mimalloc
+RUN CARGO_BUILD_TARGET=$(rustc -vV | grep host | awk '{print $2}')  \
+    cargo install --path . --no-default-features --features=server,mimalloc
 
 FROM scratch
 

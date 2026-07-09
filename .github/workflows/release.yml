@@ -26,8 +26,6 @@ jobs:
 
       - name: Build
         uses: hominsu/cargo-zigbuild-action@v1
-        env:
-          RUSTFLAGS: -C target-feature=+crt-static
         with:
           name: deeplx
           args: |
@@ -115,26 +113,26 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: hominsu/deeplx
 
-  crates:
-    if: startsWith(github.ref, 'refs/tags/')
-    needs: [build, dockerize]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Install stable toolchain
-        uses: dtolnay/rust-toolchain@stable
-        with:
-          toolchain: stable
-          components: rustfmt, clippy
-
-      - name: Publish to crates.io
-        uses: katyo/publish-crates@v2
-        with:
-          registry-token: ${{ secrets.CARGO_REGISTRY_TOKEN }}
+  # crates:
+  #   if: startsWith(github.ref, 'refs/tags/')
+  #   needs: [build, dockerize]
+  #   runs-on: ubuntu-latest
+  #   permissions:
+  #     contents: read
+  #
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #       with:
+  #         fetch-depth: 0
+  #
+  #     - name: Install stable toolchain
+  #       uses: dtolnay/rust-toolchain@stable
+  #       with:
+  #         toolchain: stable
+  #         components: rustfmt, clippy
+  #
+  #     - name: Publish to crates.io
+  #       uses: katyo/publish-crates@v2
+  #       with:
+  #         registry-token: ${{ secrets.CARGO_REGISTRY_TOKEN }}
