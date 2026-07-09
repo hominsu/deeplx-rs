@@ -1,15 +1,10 @@
-use std::sync::LazyLock;
-
 use deeplx::{Auth, Client, SourceLang, TargetLang, TranslateRequest};
 
-static TRANSLATOR: LazyLock<Client> = LazyLock::new(|| {
-    Client::builder()
+async fn translate(source_lang: &str, target_lang: &str, text: &str) {
+    let translator = Client::builder()
         .auth(Auth::Anonymous)
         .build()
-        .expect("failed to build translator")
-});
-
-async fn translate(source_lang: &str, target_lang: &str, text: &str) {
+        .expect("failed to build translator");
     let request = TranslateRequest::builder()
         .text(text)
         .unwrap()
@@ -18,13 +13,12 @@ async fn translate(source_lang: &str, target_lang: &str, text: &str) {
         .build()
         .unwrap();
 
-    match TRANSLATOR.translate(&request).await {
-        Ok(res) => {
-            assert!(!res.translations.is_empty());
-            println!("{res:?}")
-        }
-        Err(e) => eprintln!("{e:?}"),
-    }
+    let res = translator
+        .translate(&request)
+        .await
+        .expect("translation request failed");
+    assert!(!res.translations.is_empty());
+    println!("{res:?}");
 }
 
 #[tokio::test]

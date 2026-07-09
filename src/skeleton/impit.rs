@@ -60,12 +60,12 @@ mod chrome_120 {
                 CipherSuite::TLS_RSA_WITH_AES_128_CBC_SHA,
                 CipherSuite::TLS_RSA_WITH_AES_256_CBC_SHA,
             ],
-            // Key exchange groups (GREASE at the end for Chrome fingerprint)
+            // Key exchange groups in uTLS HelloChrome_120 order.
             vec![
+                KeyExchangeGroup::Grease,
                 KeyExchangeGroup::X25519,
                 KeyExchangeGroup::Secp256r1,
                 KeyExchangeGroup::Secp384r1,
-                KeyExchangeGroup::Grease,
             ],
             // Signature algorithms
             vec![
@@ -111,10 +111,8 @@ mod chrome_120 {
                     ExtensionType::SupportedVersions,
                     ExtensionType::CompressCertificate,
                     ExtensionType::ApplicationSettings,
-                    ExtensionType::Padding,
                 ],
-            )
-            .with_padding(true),
+            ),
             // ECH configuration (GREASE mode)
             Some(EchConfig::new(
                 EchMode::Grease {
@@ -135,9 +133,13 @@ mod chrome_120 {
                 ":authority".to_string(),
                 ":scheme".to_string(),
                 ":path".to_string(),
+                ":protocol".to_string(),
+                ":status".to_string(),
             ],
             initial_stream_window_size: Some(6_291_456),
-            initial_connection_window_size: Some(15_663_105),
+            // h2 treats this as the target connection window. Chrome's captured
+            // WINDOW_UPDATE increment is 15_663_105 on top of the default 65_535.
+            initial_connection_window_size: Some(15_728_640),
             max_header_list_size: Some(262_144),
         }
     }
@@ -312,13 +314,13 @@ mod tests {
             .target(TargetLang::parse("ZH").unwrap())
             .build()
             .unwrap();
-        let headers = oneshot::post_headers(&Auth::Anonymous).unwrap();
         let body = oneshot::build_body(
             &request,
             &Auth::Anonymous,
             "00000000-0000-0000-0000-000000000000",
         )
         .unwrap();
+        let headers = oneshot::post_headers(&Auth::Anonymous, body.len()).unwrap();
         let response = transport
             .post(
                 Url::parse("https://tls.peet.ws/api/all").unwrap(),

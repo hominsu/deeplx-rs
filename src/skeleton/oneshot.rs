@@ -4,8 +4,8 @@ use crate::impersonated_chrome_version;
 use reqwest::{
     StatusCode,
     header::{
-        ACCEPT, ACCEPT_ENCODING, AUTHORIZATION, CONTENT_TYPE, HeaderMap, HeaderName, HeaderValue,
-        ORIGIN,
+        ACCEPT, ACCEPT_ENCODING, AUTHORIZATION, CONTENT_LENGTH, CONTENT_TYPE, HeaderMap,
+        HeaderName, HeaderValue, ORIGIN, USER_AGENT,
     },
 };
 use secrecy::ExposeSecret;
@@ -18,7 +18,15 @@ const CHROME_EXTENSION_ORIGIN: &str = "chrome-extension://cofdbpoegempjloogbagkn
 const CHROME_OS: &str = "brex_macOS";
 const CHROME_OS_VERSION: &str = concat!("brex_chrome_", impersonated_chrome_version!(), ".0.0.0");
 const CHROME_APP_BUILD: &str = "chrome_web_store";
+const CHROME_USER_AGENT: &str = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36";
+const ACCEPT_LANGUAGE_VALUE: &str = "zh-CN,zh;q=0.9";
+const SEC_CH_UA_VALUE: &str =
+    "\"Not_A Brand\";v=\"8\", \"Chromium\";v=\"120\", \"Google Chrome\";v=\"120\"";
 
+const ACCEPT_LANGUAGE_HEADER: HeaderName = HeaderName::from_static("accept-language");
+const SEC_CH_UA: HeaderName = HeaderName::from_static("sec-ch-ua");
+const SEC_CH_UA_MOBILE: HeaderName = HeaderName::from_static("sec-ch-ua-mobile");
+const SEC_CH_UA_PLATFORM: HeaderName = HeaderName::from_static("sec-ch-ua-platform");
 const SEC_FETCH_DEST: HeaderName = HeaderName::from_static("sec-fetch-dest");
 const SEC_FETCH_MODE: HeaderName = HeaderName::from_static("sec-fetch-mode");
 const SEC_FETCH_SITE: HeaderName = HeaderName::from_static("sec-fetch-site");
@@ -77,15 +85,10 @@ struct OneshotTranslation {
     text: String,
 }
 
-pub(crate) fn post_headers(auth: &Auth) -> Result<HeaderMap, Error> {
+pub(crate) fn post_headers(auth: &Auth, body_len: usize) -> Result<HeaderMap, Error> {
     let mut headers = HeaderMap::new();
 
     headers.insert(CONTENT_TYPE, HeaderValue::from_static("application/json"));
-    headers.insert(ACCEPT, HeaderValue::from_static("*/*"));
-    headers.insert(
-        ACCEPT_ENCODING,
-        HeaderValue::from_static("gzip, deflate, br"),
-    );
 
     match auth {
         Auth::Anonymous => {
@@ -100,10 +103,27 @@ pub(crate) fn post_headers(auth: &Auth) -> Result<HeaderMap, Error> {
         }
     }
 
+    headers.insert(SEC_CH_UA, HeaderValue::from_static(SEC_CH_UA_VALUE));
     headers.insert(ORIGIN, HeaderValue::from_static(CHROME_EXTENSION_ORIGIN));
+    headers.insert(SEC_CH_UA_MOBILE, HeaderValue::from_static("?0"));
+    headers.insert(SEC_CH_UA_PLATFORM, HeaderValue::from_static("\"macOS\""));
+    headers.insert(USER_AGENT, HeaderValue::from_static(CHROME_USER_AGENT));
+    headers.insert(ACCEPT, HeaderValue::from_static("*/*"));
     headers.insert(SEC_FETCH_SITE, HeaderValue::from_static("cross-site"));
     headers.insert(SEC_FETCH_MODE, HeaderValue::from_static("cors"));
+    headers.insert(
+        CONTENT_LENGTH,
+        HeaderValue::from_str(&body_len.to_string()).map_err(|_| Error::InvalidHeader)?,
+    );
     headers.insert(SEC_FETCH_DEST, HeaderValue::from_static("empty"));
+    headers.insert(
+        ACCEPT_ENCODING,
+        HeaderValue::from_static("gzip, deflate, br"),
+    );
+    headers.insert(
+        ACCEPT_LANGUAGE_HEADER,
+        HeaderValue::from_static(ACCEPT_LANGUAGE_VALUE),
+    );
 
     Ok(headers)
 }
@@ -189,7 +209,7 @@ mod tests {
 
     #[test]
     fn anonymous_auth_sets_authorization_none() {
-        let headers = post_headers(&Auth::Anonymous).unwrap();
+        let headers = post_headers(&Auth::Anonymous, 300).unwrap();
         assert_eq!(headers[AUTHORIZATION], "None");
         assert_eq!(headers[ACCEPT_ENCODING], "gzip, deflate, br");
         assert!(headers.get(ORIGIN).is_some());
@@ -198,7 +218,7 @@ mod tests {
     #[test]
     fn bearer_auth_sets_authorization_bearer() {
         let token = SecretString::from("token.value".to_string());
-        let headers = post_headers(&Auth::Bearer(token)).unwrap();
+        let headers = post_headers(&Auth::Bearer(token), 300).unwrap();
         assert_eq!(headers[AUTHORIZATION], "Bearer token.value");
     }
 

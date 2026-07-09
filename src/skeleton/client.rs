@@ -38,8 +38,8 @@ impl Client {
         auth: &Auth,
     ) -> Result<TranslateResponse, Error> {
         let url = self.config.endpoint.url_for_auth(auth)?;
-        let headers = oneshot::post_headers(auth)?;
         let body = oneshot::build_body(request, auth, &self.instance_id)?;
+        let headers = oneshot::post_headers(auth, body.len())?;
         let response = self.transport.post(url, headers, body).await?;
 
         oneshot::parse_response(response.status, response.body.as_str(), &request.target)
