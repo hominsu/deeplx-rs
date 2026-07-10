@@ -66,7 +66,7 @@ Add `deeplx` to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-deeplx = { version = "2", default-features = false }
+deeplx = { version = "3", default-features = false }
 ```
 
 ### Configuration
