@@ -3,7 +3,7 @@ members = ["crates/dlx", "crates/dlx-svr"]
 resolver = "3"
 
 [workspace.package]
-version = "3.0.0"
+version = "3.0.1"
 edition = "2024"
 authors = ["Homing So <i@homing.so>"]
 license = "MIT"
