@@ -2,7 +2,7 @@ use std::future::Future;
 use std::pin::Pin;
 use std::sync::Arc;
 
-use deeplx::{Auth, Client, SourceLang, TargetLang, TranslateRequest, TranslateResponse};
+use dlx::{Auth, Client, SourceLang, TargetLang, TranslateRequest, TranslateResponse};
 
 use crate::server::{biz::translate::TranslateRepo as BizTranslateRepo, pkgs::Error};
 
@@ -36,7 +36,7 @@ impl BizTranslateRepo for TranslateRepo {
                 .await
                 .map_err(|e| {
                     tracing::error!(%e);
-                    Error::Deeplx(e)
+                    Error::Dlx(e)
                 })
         })
     }

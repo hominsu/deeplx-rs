@@ -14,14 +14,14 @@ COPY . .
 
 RUN RUSTFLAGS='--cfg reqwest_unstable -C target-feature=+crt-static' \
     CARGO_BUILD_TARGET=$(rustc -vV | grep host | awk '{print $2}')  \
-    cargo install --path . --no-default-features --features=server,mimalloc
+    cargo install --path crates/dlx-svr --features=mimalloc
 
 FROM scratch
 
 WORKDIR /app
-COPY --from=builder /usr/local/cargo/bin/deeplx /app/deeplx
+COPY --from=builder /usr/local/cargo/bin/dlx-svr /app/dlx-svr
 
 EXPOSE 3000/tcp
 VOLUME /data/conf
 
-CMD ["./deeplx", "run", "--conf", "/data/conf"]
+CMD ["./dlx-svr", "run", "--conf", "/data/conf"]

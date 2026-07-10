@@ -1,7 +1,7 @@
 use std::net::SocketAddr;
 use std::{future::IntoFuture, sync::Arc};
 
-use deeplx::Client;
+use dlx::Client;
 use tokio::sync::watch;
 use tower_http::trace::TraceLayer;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
@@ -52,7 +52,7 @@ pub fn run(args: Bootstrap) -> Result<()> {
     runtime.block_on(async move {
         let mut client = Client::builder();
         if let Some(proxy) = proxy {
-            client = client.proxy(proxy.parse().map_err(|_| deeplx::Error::InvalidUrl)?);
+            client = client.proxy(proxy.parse().map_err(|_| dlx::Error::InvalidUrl)?);
         }
         let translator = Arc::new(client.build()?);
         let translate_repo = Arc::new(data::translate::TranslateRepo::new(translator));
@@ -99,7 +99,7 @@ pub fn run(args: Bootstrap) -> Result<()> {
             },
         }
 
-        Ok::<(), deeplx::Error>(())
+        Ok::<(), dlx::Error>(())
     })?;
 
     Ok(())

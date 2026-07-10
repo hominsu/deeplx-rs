@@ -43,7 +43,7 @@ static GLOBAL: snmalloc_rs::SnMalloc = snmalloc_rs::SnMalloc;
 #[global_allocator]
 static GLOBAL: tikv_jemallocator::Jemalloc = tikv_jemallocator::Jemalloc;
 
-type Result<T, E = deeplx::Error> = std::result::Result<T, E>;
+type Result<T, E = dlx::Error> = std::result::Result<T, E>;
 
 #[derive(Parser)]
 #[clap(author, version, about, arg_required_else_help = true)]
@@ -55,7 +55,7 @@ struct Opt {
 
 #[derive(Subcommand)]
 pub enum Commands {
-    /// Run deeplx
+    /// Run dlx-svr
     Run(Bootstrap),
 }
 

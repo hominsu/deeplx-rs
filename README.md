@@ -14,7 +14,7 @@
 <!-- PROJECT LOGO -->
 <br/>
 <div align="center">
-<h3 align="center">deeplx-rs</h3>
+<h3 align="center">dlx</h3>
   <p align="center">
     A Rust package for unlimited DeepL translation
     <br/>
@@ -35,7 +35,7 @@
 
 - **DeepL Chrome extension oneshot transport**.
 - **Typed library API** with `Client`, `TranslateRequest`, `Auth`, and strong errors.
-- **Optional server binary** behind the `server` feature.
+- **Workspace split** with `dlx` for the typed library and `dlx-svr` for the HTTP server.
 - **Proxy support** on native targets.
 
 ## Usage
@@ -55,28 +55,28 @@
 ### Install with Cargo
 
 ```shell
-cargo install deeplx --features server,mimalloc
+cargo install --path crates/dlx-svr --features mimalloc
 ```
 
 ## Integration
 
 ### Installation
 
-Add `deeplx` to your `Cargo.toml`:
+Add `dlx` to your `Cargo.toml`:
 
 ```toml
 [dependencies]
-deeplx = { version = "3", default-features = false }
+dlx = { version = "3", default-features = false }
 ```
 
 ### Configuration
 
-deeplx is configured through `Client::builder()`:
+dlx is configured through `Client::builder()`:
 
 ```rust
 use std::time::Duration;
 
-use deeplx::{Auth, Client};
+use dlx::{Auth, Client};
 
 let client = Client::builder()
     .auth(Auth::Anonymous)
@@ -88,7 +88,7 @@ let client = Client::builder()
 For Pro requests, use a Bearer token:
 
 ```rust
-use deeplx::{Auth, Client};
+use dlx::{Auth, Client};
 use secrecy::SecretString;
 
 let client = Client::builder()
@@ -101,10 +101,10 @@ let client = Client::builder()
 Below is an example using tokio for async execution:
 
 ```rust
-use deeplx::{Auth, Client, SourceLang, TargetLang, TranslateRequest};
+use dlx::{Auth, Client, SourceLang, TargetLang, TranslateRequest};
 
 #[tokio::main]
-async fn main() -> Result<(), deeplx::Error> {
+async fn main() -> Result<(), dlx::Error> {
     let client = Client::builder().auth(Auth::Anonymous).build()?;
     let request = TranslateRequest::builder()
         .text("Hello, world!")?
@@ -112,7 +112,7 @@ async fn main() -> Result<(), deeplx::Error> {
         .target(TargetLang::parse("ZH-HANS")?)
         .build()?;
 
-    let response = client.translate(request).await?;
+    let response = client.translate(&request).await?;
     println!("{}", response.translations[0].text);
 
     Ok(())
@@ -124,7 +124,7 @@ async fn main() -> Result<(), deeplx::Error> {
 The HTTP server is optional:
 
 ```shell
-cargo run --features server,mimalloc -- run --conf ./configs
+cargo run -p dlx-svr --features mimalloc -- run --conf ./configs
 ```
 
 `/translate` uses anonymous oneshot requests. `/v1/translate` accepts

@@ -22,24 +22,24 @@ jobs:
 
       - name: Install dependencies
         run: |
-          apt update && apt install -y mingw-w64 sudo
+          apt update && apt install -y nasm mingw-w64 sudo
 
       - name: Build
         uses: hominsu/cargo-zigbuild-action@v1
         env:
           RUSTFLAGS: --cfg reqwest_unstable -C target-feature=+crt-static
         with:
-          name: deeplx
+          name: dlx-svr
           args: |
-            target=x86_64-unknown-linux-musl,release,no-default-features,'features=server,mimalloc'
-            target=aarch64-unknown-linux-musl,release,no-default-features,'features=server,mimalloc'
-            target=armv7-unknown-linux-musleabihf,release,no-default-features,'features=server,tikv-jemallocator'
-            target=arm-unknown-linux-musleabihf,release,no-default-features,'features=server,tikv-jemallocator'
-            target=i686-unknown-linux-musl,release,no-default-features,'features=server,tikv-jemallocator'
-            target=x86_64-apple-darwin,release,no-default-features,'features=server'
-            target=aarch64-apple-darwin,release,no-default-features,'features=server'
-            target=x86_64-pc-windows-gnu,release,no-default-features,'features=server'
-            target=i686-pc-windows-gnu,release,no-default-features,'features=server'
+            target=x86_64-unknown-linux-musl,package=dlx-svr,release,no-default-features,'features=mimalloc'
+            target=aarch64-unknown-linux-musl,package=dlx-svr,release,no-default-features,'features=mimalloc'
+            target=armv7-unknown-linux-musleabihf,package=dlx-svr,release,no-default-features,'features=tikv-jemallocator'
+            target=arm-unknown-linux-musleabihf,package=dlx-svr,release,no-default-features,'features=tikv-jemallocator'
+            target=i686-unknown-linux-musl,package=dlx-svr,release,no-default-features,'features=tikv-jemallocator'
+            target=x86_64-apple-darwin,package=dlx-svr,release,no-default-features
+            target=aarch64-apple-darwin,package=dlx-svr,release,no-default-features
+            target=x86_64-pc-windows-gnu,package=dlx-svr,release,no-default-features
+            target=i686-pc-windows-gnu,package=dlx-svr,release,no-default-features
 
       - name: Upload binaries to GitHub Release
         uses: softprops/action-gh-release@v2
@@ -69,8 +69,8 @@ jobs:
         uses: docker/metadata-action@v5
         with:
           images: |
-            ghcr.io/hominsu/deeplx
-            hominsu/deeplx
+            ghcr.io/hominsu/dlx-svr
+            hominsu/dlx-svr
           tags: |
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
@@ -105,7 +105,7 @@ jobs:
           files: |
             deploy/docker-bake.hcl
             ${{ steps.meta.outputs.bake-file }}
-          targets: deeplx
+          targets: dlx-svr
           push: true
 
       - name: Docker Hub Description
@@ -113,7 +113,7 @@ jobs:
         with:
           username: ${{ secrets.DOCKER_ID }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          repository: hominsu/deeplx
+          repository: hominsu/dlx-svr
 
   # crates:
   #   if: startsWith(github.ref, 'refs/tags/')

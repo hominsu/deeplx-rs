@@ -1,7 +1,7 @@
 services:
-  deeplx:
-    image: hominsu/deeplx:latest
-    container_name: deeplx
+  dlx-svr:
+    image: hominsu/dlx-svr:latest
+    container_name: dlx-svr
     restart: always
     environment:
       - TZ=Asia/Shanghai
@@ -12,7 +12,7 @@ services:
     networks:
       net:
         aliases:
-          - deeplx
+          - dlx-svr
 
 networks:
   net:

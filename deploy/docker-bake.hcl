@@ -2,7 +2,7 @@ target "metadata" {}
 
 group "default" {
   targets = [
-    "deeplx",
+    "dlx-svr",
   ]
 }
 
@@ -13,7 +13,7 @@ target "cross" {
   ]
 }
 
-target "deeplx" {
+target "dlx-svr" {
   inherits = ["metadata", "cross"]
   context    = "."
   dockerfile = "deploy/Dockerfile"

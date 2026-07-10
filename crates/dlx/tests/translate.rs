@@ -1,4 +1,4 @@
-use deeplx::{Auth, Client, SourceLang, TargetLang, TranslateRequest};
+use dlx::{Auth, Client, SourceLang, TargetLang, TranslateRequest};
 
 async fn translate(source_lang: &str, target_lang: &str, text: &str) {
     let translator = Client::builder()

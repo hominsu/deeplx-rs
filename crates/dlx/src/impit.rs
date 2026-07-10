@@ -279,7 +279,7 @@ fn headers_to_pairs(headers: HeaderMap) -> Result<Vec<(String, String)>, Error> 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::skeleton::oneshot;
+    use crate::oneshot;
     use crate::{Auth, SourceLang, TargetLang, TranslateRequest};
 
     #[test]
@@ -308,7 +308,7 @@ mod tests {
     async fn live_capture_request_headers() {
         let transport = ImpitTransport::new(&ClientConfig::default()).unwrap();
         let request = TranslateRequest::builder()
-            .text("hello from deeplx header logging test")
+            .text("hello from dlx header logging test")
             .unwrap()
             .source(SourceLang::parse("EN").unwrap())
             .target(TargetLang::parse("ZH").unwrap())

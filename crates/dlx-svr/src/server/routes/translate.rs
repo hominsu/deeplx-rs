@@ -6,7 +6,7 @@ use axum::{
     http::{HeaderMap, header},
     response::Response,
 };
-use deeplx::Auth;
+use dlx::Auth;
 use secrecy::SecretString;
 use serde::Deserialize;
 

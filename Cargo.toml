@@ -1,17 +1,16 @@
-[package]
-name = "deeplx"
+[workspace]
+members = ["crates/dlx", "crates/dlx-svr"]
+resolver = "3"
+
+[workspace.package]
 version = "3.0.0"
 edition = "2024"
-authors = [
-    "Homing So <i@homing.so>"
-]
-description = "A Rust package for unlimited DeepL translation"
+authors = ["Homing So <i@homing.so>"]
 license = "MIT"
 readme = "README.md"
 repository = "https://github.com/hominsu/deeplx-rs"
-keywords = ["deeplx", "translation"]
+keywords = ["dlx", "deeplx", "translation"]
 categories = ["text-processing", "internationalization"]
-exclude = ["configs", "deploy", ".*"]
 
 [profile.release]
 opt-level = 3
@@ -20,95 +19,7 @@ lto = true
 codegen-units = 1
 panic = "abort"
 
-[lib]
-name = "deeplx"
-path = "src/lib.rs"
-
-[[bin]]
-name = "deeplx"
-path = "src/main.rs"
-required-features = ["server"]
-
-[features]
-default = []
-server = [
-    "dep:clap",
-    "dep:glob",
-    "dep:notify",
-    "dep:config",
-    "dep:tracing",
-    "dep:tracing-subscriber",
-    "dep:tokio",
-    "dep:tower-http",
-    "dep:axum",
-    "dep:axum-extra",
-]
-mimalloc = ["dep:mimalloc"]
-rpmalloc = ["dep:rpmalloc"]
-snmalloc = ["dep:snmalloc-rs"]
-tikv-jemallocator = ["dep:tikv-jemallocator"]
-
-[package.metadata.docs.rs]
-all-features = true
-
-[dependencies]
-# data processing
-rand = "0.9"
-serde = { version = "1", features = ["derive"] }
-serde_json = "1"
-secrecy = "0.10"
-
-# error handling
-thiserror = { version = "2" }
-
-# http client
-impit = { git = "https://github.com/apify/impit.git", branch="master" }
-h2 = "=0.4.13"
-reqwest = { version = "0.13.4", default-features = false, features = [
-    "rustls",
-    "charset",
-    "http2",
-    "http3",
-    "brotli",
-    "cookies",
-    "deflate",
-    "gzip",
-    "json"
-] }
-
-# memory allocator
-mimalloc = { version = "0.1", optional = true }
-rpmalloc = { version = "0.2", optional = true }
-snmalloc-rs = { version = "0.3", optional = true }
-tikv-jemallocator = { version = "0.6", optional = true }
-
-# cli
-clap = { version = "4.6", optional = true, features = ["derive", "env"] }
-
-# hot reload config
-glob = { version = "0.3", optional = true }
-notify = { version = "8.2.0", optional = true }
-config = { version = "0.15", optional = true, features = ["ini", "json", "yaml", "toml", "ron", "json5"] }
-
-# logging & tracing
-tracing = { version = "0.1", optional = true }
-tracing-subscriber = { version = "0.3", optional = true, features = ["env-filter"] }
-
-# async runtime
-tokio = { version = "1", optional = true, features = ["io-util", "macros", "net", "rt-multi-thread", "signal"] }
-
-# web stuff
-tower-http = { version = "0.6", optional = true, features = ["trace"] }
-axum = { version = "0.8", optional = true, features = ["tracing", "macros"] }
-axum-extra = { version = "0.12", optional = true, features = ["typed-header"] }
-
-[dev-dependencies]
-tokio = { version = "1", features = ["io-util", "macros", "net", "rt", "sync", "time"] }
-
-[[test]]
-name = "translate"
-
 [patch.crates-io]
 h2 = { git = "https://github.com/apify/h2" }
-rustls = { git="https://github.com/apify/rustls", branch="impit-main" }
+rustls = { git = "https://github.com/apify/rustls", branch = "impit-main" }
 hyper-util = { git = "https://github.com/apify/hyper-util" }

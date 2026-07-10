@@ -7,7 +7,7 @@ use std::{
 
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
-use deeplx::{Auth, TranslateResponse};
+use dlx::{Auth, TranslateResponse};
 use serde::Serialize;
 
 use crate::server::pkgs::{Error, Json};
@@ -76,7 +76,7 @@ impl TranslateUsecase {
         let first = res
             .translations
             .first()
-            .ok_or(Error::Deeplx(deeplx::Error::MissingTranslation))?;
+            .ok_or(Error::Dlx(dlx::Error::MissingTranslation))?;
 
         Ok(Json(TranslateResult {
             code: StatusCode::OK.as_u16(),
