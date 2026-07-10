@@ -1,9 +1,5 @@
 [build]
-# Keep release and Docker builds from overriding the reqwest HTTP/3 cfg when
-# adding static-linking flags.
 rustflags = [
     "--cfg",
     "reqwest_unstable",
-    "-C",
-    "target-feature=+crt-static",
 ]

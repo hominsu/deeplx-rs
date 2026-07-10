@@ -26,6 +26,8 @@ jobs:
 
       - name: Build
         uses: hominsu/cargo-zigbuild-action@v1
+        env:
+          RUSTFLAGS: --cfg reqwest_unstable -C target-feature=+crt-static
         with:
           name: deeplx
           args: |
